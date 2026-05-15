@@ -25,7 +25,7 @@
     <div class="seed-box">
       <span class="seed-icon">🚀</span>
       <h2 style="font-size:26px;font-weight:700;margin-bottom:8px">Demo Data <span class="gradient-text">Loader</span></h2>
-      <p style="color:var(--text-muted);font-size:14px;margin-bottom:20px">25 demo employees + AI shift assignments लोड करें</p>
+      <p style="color:var(--text-muted);font-size:14px;margin-bottom:20px">50 demo employees + AI shift assignments लोड करें</p>
 
       <div class="progress-bar-wrap"><div class="progress-bar-fill" id="pbar"></div></div>
       <p id="progress-label" style="font-size:13px;color:var(--text-muted);">तैयार है – बटन दबाएं</p>
@@ -34,7 +34,7 @@
 
       <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
         <button class="btn-next" id="loadBtn" onclick="loadDemo()" style="padding:14px 36px;font-size:15px">
-          ✅ 25 Demo Entries लोड करें
+          ✅ 50 Demo Entries लोड करें
         </button>
         <button class="btn-prev" onclick="clearData()" style="padding:14px 24px;font-size:15px;border-color:#ef4444;color:#ef4444">
           🗑️ क्लियर
@@ -78,7 +78,32 @@
       { fullName:"संगीता पांडे", email:"sangeeta.pandey@demo.com", phone:"+91 9822234567", department:"volunteer", employeeId:"EMP-022", experience:2, days:["wednesday","saturday","sunday"], timeSlots:["morning","afternoon"], preferredShift:"morning", skills:["first_aid"] },
       { fullName:"मनोज तिवारी", email:"manoj.tiwari@demo.com", phone:"+91 9823234567", department:"admin", employeeId:"EMP-023", experience:16, days:["monday","tuesday","wednesday","thursday","friday"], timeSlots:["morning"], preferredShift:"morning", skills:["management","it_support"] },
       { fullName:"लक्ष्मी कुमारी", email:"laxmi.kumari@demo.com", phone:"+91 9824234567", department:"medical", employeeId:"EMP-024", experience:3, days:["tuesday","thursday","saturday","sunday"], timeSlots:["afternoon","night"], preferredShift:"afternoon", skills:["first_aid","fire_safety"] },
-      { fullName:"सुरेश गुप्ता", email:"suresh.gupta@demo.com", phone:"+91 9825234567", department:"security", employeeId:"EMP-025", experience:20, days:["monday","wednesday","friday","saturday","sunday"], timeSlots:["morning","afternoon","night"], preferredShift:"any", skills:["security","management","driving","fire_safety"] }
+      { fullName:"सुरेश गुप्ता", email:"suresh.gupta@demo.com", phone:"+91 9825234567", department:"security", employeeId:"EMP-025", experience:20, days:["monday","wednesday","friday","saturday","sunday"], timeSlots:["morning","afternoon","night"], preferredShift:"any", skills:["security","management","driving","fire_safety"] },
+      { fullName:"दीपक सिंह", email:"deepak.singh@demo.com", phone:"+91 9826234567", department:"medical", employeeId:"EMP-026", experience:4, days:["monday","tuesday","thursday","friday"], timeSlots:["morning"], preferredShift:"morning", skills:["first_aid"] },
+      { fullName:"मनीषा कुमारी", email:"manisha.kumari@demo.com", phone:"+91 9827234567", department:"admin", employeeId:"EMP-027", experience:6, days:["wednesday","thursday","saturday","sunday"], timeSlots:["afternoon"], preferredShift:"afternoon", skills:["management"] },
+      { fullName:"प्रमोद कुमार", email:"pramod.kumar@demo.com", phone:"+91 9828234567", department:"technical", employeeId:"EMP-028", experience:9, days:["monday","wednesday","friday"], timeSlots:["night"], preferredShift:"night", skills:["it_support","machinery"] },
+      { fullName:"सरिता वर्मा", email:"sarita.verma@demo.com", phone:"+91 9829234567", department:"logistics", employeeId:"EMP-029", experience:5, days:["tuesday","thursday","saturday"], timeSlots:["morning","afternoon"], preferredShift:"morning", skills:["driving"] },
+      { fullName:"अरुण प्रजापति", email:"arun.prajapati@demo.com", phone:"+91 9830234567", department:"security", employeeId:"EMP-030", experience:11, days:["monday","wednesday","friday","sunday"], timeSlots:["night"], preferredShift:"night", skills:["security","fire_safety"] },
+      { fullName:"नीलम यादव", email:"neelam.yadav@demo.com", phone:"+91 9831234567", department:"medical", employeeId:"EMP-031", experience:3, days:["tuesday","wednesday","friday","saturday"], timeSlots:["afternoon"], preferredShift:"afternoon", skills:["first_aid"] },
+      { fullName:"पवन शर्मा", email:"pawan.sharma@demo.com", phone:"+91 9832234567", department:"technical", employeeId:"EMP-032", experience:14, days:["monday","thursday","saturday","sunday"], timeSlots:["morning","night"], preferredShift:"any", skills:["it_support","machinery","management"] },
+      { fullName:"किरण देवी", email:"kiran.devi@demo.com", phone:"+91 9833234567", department:"admin", employeeId:"EMP-033", experience:2, days:["monday","tuesday","wednesday","thursday"], timeSlots:["morning"], preferredShift:"morning", skills:["management"] },
+      { fullName:"सतीश चंद्रा", email:"satish.chandra@demo.com", phone:"+91 9834234567", department:"logistics", employeeId:"EMP-034", experience:7, days:["wednesday","friday","saturday","sunday"], timeSlots:["afternoon","night"], preferredShift:"night", skills:["driving","forklift"] },
+      { fullName:"मीनाक्षी राय", email:"meenakshi.rai@demo.com", phone:"+91 9835234567", department:"medical", employeeId:"EMP-035", experience:8, days:["monday","tuesday","thursday","friday"], timeSlots:["morning","afternoon"], preferredShift:"morning", skills:["first_aid","fire_safety"] },
+      { fullName:"राजीव रंजन", email:"rajiv.ranjan@demo.com", phone:"+91 9836234567", department:"security", employeeId:"EMP-036", experience:12, days:["monday","wednesday","friday","saturday"], timeSlots:["night"], preferredShift:"night", skills:["security","driving"] },
+      { fullName:"ज्योति ठाकुर", email:"jyoti.thakur@demo.com", phone:"+91 9837234567", department:"volunteer", employeeId:"EMP-037", experience:1, days:["saturday","sunday"], timeSlots:["morning","afternoon"], preferredShift:"any", skills:["first_aid"] },
+      { fullName:"कुणाल बिष्ट", email:"kunal.bisht@demo.com", phone:"+91 9838234567", department:"technical", employeeId:"EMP-038", experience:5, days:["monday","tuesday","wednesday","friday"], timeSlots:["afternoon","night"], preferredShift:"afternoon", skills:["it_support"] },
+      { fullName:"रूपा सिंह", email:"rupa.singh@demo.com", phone:"+91 9839234567", department:"admin", employeeId:"EMP-039", experience:10, days:["monday","wednesday","thursday","friday"], timeSlots:["morning"], preferredShift:"morning", skills:["management","it_support"] },
+      { fullName:"ओम प्रकाश", email:"om.prakash@demo.com", phone:"+91 9840234567", department:"logistics", employeeId:"EMP-040", experience:18, days:["tuesday","thursday","saturday","sunday"], timeSlots:["morning","afternoon","night"], preferredShift:"any", skills:["driving","forklift","machinery"] },
+      { fullName:"श्वेता जैन", email:"shweta.jain@demo.com", phone:"+91 9841234567", department:"medical", employeeId:"EMP-041", experience:6, days:["monday","tuesday","wednesday","saturday"], timeSlots:["afternoon"], preferredShift:"afternoon", skills:["first_aid"] },
+      { fullName:"मनीष पांडे", email:"manish.pandey@demo.com", phone:"+91 9842234567", department:"security", employeeId:"EMP-042", experience:9, days:["monday","thursday","friday","sunday"], timeSlots:["night"], preferredShift:"night", skills:["security","management"] },
+      { fullName:"दिव्या गुप्ता", email:"divya.gupta@demo.com", phone:"+91 9843234567", department:"technical", employeeId:"EMP-043", experience:4, days:["tuesday","wednesday","friday","saturday"], timeSlots:["morning","afternoon"], preferredShift:"morning", skills:["it_support"] },
+      { fullName:"संदीप मौर्य", email:"sandeep.maurya@demo.com", phone:"+91 9844234567", department:"logistics", employeeId:"EMP-044", experience:11, days:["monday","wednesday","thursday","friday"], timeSlots:["morning","night"], preferredShift:"night", skills:["driving","forklift"] },
+      { fullName:"अनुराधा मिश्रा", email:"anuradha.mishra@demo.com", phone:"+91 9845234567", department:"medical", employeeId:"EMP-045", experience:7, days:["tuesday","thursday","saturday","sunday"], timeSlots:["morning","afternoon"], preferredShift:"any", skills:["first_aid","fire_safety"] },
+      { fullName:"वरुण धवन", email:"varun.dhawan@demo.com", phone:"+91 9846234567", department:"security", employeeId:"EMP-046", experience:5, days:["monday","tuesday","wednesday","friday"], timeSlots:["afternoon","night"], preferredShift:"afternoon", skills:["security"] },
+      { fullName:"खुशबू रानी", email:"khushbu.rani@demo.com", phone:"+91 9847234567", department:"admin", employeeId:"EMP-047", experience:3, days:["monday","wednesday","friday","saturday"], timeSlots:["morning"], preferredShift:"morning", skills:["management"] },
+      { fullName:"ऋषभ पंत", email:"rishabh.pant@demo.com", phone:"+91 9848234567", department:"technical", employeeId:"EMP-048", experience:6, days:["tuesday","thursday","sunday"], timeSlots:["night"], preferredShift:"night", skills:["it_support","machinery"] },
+      { fullName:"किरण बेदी", email:"kiran.bedi@demo.com", phone:"+91 9849234567", department:"security", employeeId:"EMP-049", experience:15, days:["monday","tuesday","wednesday","thursday","friday"], timeSlots:["morning","afternoon"], preferredShift:"morning", skills:["security","management"] },
+      { fullName:"सुनील शेट्टी", email:"sunil.shetty@demo.com", phone:"+91 9850234567", department:"logistics", employeeId:"EMP-050", experience:13, days:["wednesday","friday","saturday","sunday"], timeSlots:["night"], preferredShift:"night", skills:["driving","forklift","machinery"] }
     ];
 
     function log(msg, type='ok') {
@@ -114,7 +139,7 @@
         const d = DEMO_EMPLOYEES[i];
         const pct = Math.round(((i + 1) / DEMO_EMPLOYEES.length) * 100);
         document.getElementById('pbar').style.width = pct + '%';
-        document.getElementById('progress-label').textContent = `${i + 1}/25 – ${d.fullName}`;
+        document.getElementById('progress-label').textContent = `${i + 1}/50 – ${d.fullName}`;
 
         if (existingEmails.includes(d.email.toLowerCase())) {
           log(`⚠️ [${i+1}] ${d.fullName} – Already exists, skip`, 'warn');
@@ -182,7 +207,7 @@
       clearLog();
       document.getElementById('pbar').style.width = '0%';
       document.getElementById('progress-label').textContent = 'तैयार है – बटन दबाएं';
-      document.getElementById('loadBtn').textContent = '✅ 25 Demo Entries लोड करें';
+      document.getElementById('loadBtn').textContent = '✅ 50 Demo Entries लोड करें';
       log('🗑️ सभी डेटा क्लियर कर दिया गया।', 'warn');
       showToast('🗑️ डेटा क्लियर।');
     }
