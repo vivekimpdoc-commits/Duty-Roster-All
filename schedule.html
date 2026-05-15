@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+  <title>ShiftMaster Pro – साप्ताहिक शेड्यूल</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    .sched-container { overflow-x: auto; }
+    .sched-table { width: 100%; border-collapse: collapse; min-width: 700px; }
+    .sched-table th { background: rgba(108,99,255,0.25); padding: 12px 10px; font-size: 13px; font-weight: 600; text-align: center; border: 1px solid var(--border); }
+    .sched-table td { padding: 10px 8px; border: 1px solid var(--border); vertical-align: top; font-size: 12px; min-height: 60px; background: rgba(255,255,255,0.02); }
+    .sched-table .shift-label { font-size: 13px; font-weight: 700; color: var(--primary); background: rgba(108,99,255,0.1); padding: 8px 12px; border-right: 2px solid var(--primary); }
+    .emp-chip { display: inline-block; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 500; margin: 2px; }
+    .chip-morning { background: rgba(245,158,11,0.2); color: #f59e0b; border: 1px solid rgba(245,158,11,0.4); }
+    .chip-afternoon { background: rgba(0,210,255,0.2); color: #00d2ff; border: 1px solid rgba(0,210,255,0.4); }
+    .chip-night { background: rgba(167,139,250,0.2); color: #a78bfa; border: 1px solid rgba(167,139,250,0.4); }
+    .chip-empty { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.4); font-style: italic; }
+    .swap-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .swap-info { font-size: 14px; }
+    .swap-info strong { display: block; margin-bottom: 4px; }
+    .swap-info small { color: var(--text-muted); font-size: 12px; }
+    .swap-btns { display: flex; gap: 8px; }
+    .btn-approve { padding: 8px 16px; background: rgba(16,185,129,0.2); border: 1px solid var(--success); color: var(--success); border-radius: 8px; cursor: pointer; font-size: 13px; transition: .2s; }
+    .btn-approve:hover { background: var(--success); color: #fff; }
+    .btn-reject { padding: 8px 16px; background: rgba(239,68,68,0.15); border: 1px solid var(--danger); color: var(--danger); border-radius: 8px; cursor: pointer; font-size: 13px; transition: .2s; }
+    .btn-reject:hover { background: var(--danger); color: #fff; }
+    .swap-form { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+  </style>
+</head>
+<body>
+  <div class="bg-animated"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+
+  <nav class="navbar">
+    <div class="nav-brand"><span class="nav-logo">⚡</span><span class="nav-title">ShiftMaster <span class="accent">Pro</span></span></div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">रजिस्ट्रेशन</a>
+      <a href="admin.html" class="nav-link">Admin</a>
+      <a href="schedule.html" class="nav-link active">शेड्यूल</a>
+    </div>
+    <div class="nav-badge"><span class="pulse-dot"></span><span id="nav-user-count">0 कर्मचारी</span></div>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html" class="nav-link" onclick="closeMenu()">📝 रजिस्ट्रेशन</a>
+    <a href="admin.html" class="nav-link" onclick="closeMenu()">🛡️ Admin डैशबोर्ड</a>
+    <a href="schedule.html" class="nav-link active" onclick="closeMenu()">📅 शेड्यूल</a>
+  </div>
+
+  <div style="position:relative;z-index:1;padding:30px 0;">
+    <div class="container" style="max-width:1100px">
+
+      <div class="page-header">
+        <h1>📅 साप्ताहिक <span class="gradient-text">शिफ्ट शेड्यूल</span></h1>
+        <p>AI द्वारा ऑटोमैटिक जेनरेट किया गया साप्ताहिक ड्यूटी चार्ट</p>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats-row" id="schedStats"></div>
+
+      <!-- ACTIONS -->
+      <div class="glass-card admin-actions" style="margin-bottom:24px;display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+        <h3 style="flex:1">🔧 शेड्यूल टूल्स</h3>
+        <button class="btn-next" onclick="runAI()" style="font-size:13px;padding:10px 20px">🤖 AI रीजनरेट</button>
+        <button class="btn-next" onclick="exportCSV()" style="font-size:13px;padding:10px 20px;background:linear-gradient(135deg,#10b981,#059669)">📥 CSV</button>
+        <button class="btn-next" onclick="window.print()" style="font-size:13px;padding:10px 20px;background:linear-gradient(135deg,#ef4444,#b91c1c)">🖨️ Print</button>
+      </div>
+
+      <!-- SCHEDULE TABLE -->
+      <div class="glass-card" style="margin-bottom:30px">
+        <h3 style="margin-bottom:16px">📊 शिफ्ट ग्रिड – इस सप्ताह</h3>
+        <div class="sched-container" id="schedGrid">
+          <p style="color:var(--text-muted);font-size:14px">शेड्यूल लोड हो रहा है...</p>
+        </div>
+      </div>
+
+      <!-- SWAP REQUESTS -->
+      <div class="glass-card" style="margin-bottom:24px">
+        <h3 style="margin-bottom:16px">🔄 शिफ्ट स्वैप रिक्वेस्ट</h3>
+        <div id="swapList"><p style="color:var(--text-muted);font-size:14px">कोई स्वैप रिक्वेस्ट नहीं।</p></div>
+        <div class="swap-form" style="margin-top:16px">
+          <h4 style="margin-bottom:16px">नई स्वैप रिक्वेस्ट</h4>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>आपकी शिफ्ट (ID)</label>
+              <div class="inp-wrap"><span class="inp-icon">📌</span><input type="text" id="swapFrom" placeholder="ASGN-XXXX"/></div>
+            </div>
+            <div class="form-group">
+              <label>जिससे बदलें (नाम)</label>
+              <div class="inp-wrap"><span class="inp-icon">👤</span><input type="text" id="swapWith" placeholder="कर्मचारी नाम"/></div>
+            </div>
+            <div class="form-group full" style="grid-column:1/-1">
+              <label>कारण</label>
+              <textarea id="swapReason" placeholder="स्वैप का कारण..." rows="2"></textarea>
+            </div>
+          </div>
+          <button class="btn-next" onclick="submitSwap()" style="margin-top:12px;font-size:13px;padding:10px 24px">📤 स्वैप रिक्वेस्ट भेजें</button>
+        </div>
+      </div>
+
+      <!-- MY SCHEDULE LOOKUP -->
+      <div class="glass-card">
+        <h3 style="margin-bottom:16px">🔍 अपना शेड्यूल देखें</h3>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div class="inp-wrap" style="flex:1"><span class="inp-icon">📧</span><input type="email" id="lookupEmail" placeholder="अपनी ईमेल दर्ज करें..."/></div>
+          <button class="btn-next" onclick="lookupSchedule()" style="font-size:13px;padding:10px 24px">🔍 खोजें</button>
+        </div>
+        <div id="lookupResult" style="margin-top:16px"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="toast" id="toast"><span id="toast-msg"></span></div>
+  <footer class="footer"><div class="container"><p>⚡ ShiftMaster Pro – Schedule View</p></div></footer>
+
+  <script src="app.js"></script>
+  <script src="ai-scheduler.js"></script>
+  <script>
+    const DAYS_HI = { monday:'सोमवार', tuesday:'मंगलवार', wednesday:'बुधवार', thursday:'गुरुवार', friday:'शुक्रवार', saturday:'शनिवार', sunday:'रविवार' };
+    const SWAPS_KEY = 'shiftmaster_swaps';
+    function getSwaps() { return JSON.parse(localStorage.getItem(SWAPS_KEY) || '[]'); }
+    function saveSwaps(arr) { localStorage.setItem(SWAPS_KEY, JSON.stringify(arr)); }
+
+    function renderScheduleGrid() {
+      const assigns = getAssignments();
+      const days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+      const shifts = ['morning','afternoon','night'];
+      const shiftLabels = { morning: '🌅 Morning<br/><small>6AM–2PM</small>', afternoon: '☀️ Afternoon<br/><small>2PM–10PM</small>', night: '🌙 Night<br/><small>10PM–6AM</small>' };
+      const chipClass = { morning: 'chip-morning', afternoon: 'chip-afternoon', night: 'chip-night' };
+
+      let html = `<table class="sched-table"><thead><tr><th>शिफ्ट</th>${days.map(d => `<th>${DAYS_HI[d]}</th>`).join('')}</tr></thead><tbody>`;
+
+      shifts.forEach(shift => {
+        html += `<tr><td class="shift-label">${shiftLabels[shift]}</td>`;
+        days.forEach(day => {
+          const cell = assigns.filter(a => a.shift === shift && a.day === day);
+          html += `<td>`;
+          if (cell.length === 0) {
+            html += `<span class="emp-chip chip-empty">खाली</span>`;
+          } else {
+            cell.forEach(a => {
+              if (a.status === 'unassigned') html += `<span class="emp-chip chip-empty">⚠️ खाली</span>`;
+              else html += `<span class="emp-chip ${chipClass[shift]}">${a.employeeName}</span>`;
+            });
+          }
+          html += `</td>`;
+        });
+        html += `</tr>`;
+      });
+
+      html += `</tbody></table>`;
+      document.getElementById('schedGrid').innerHTML = html;
+    }
+
+    function renderStats() {
+      const emps = getEmployees();
+      const assigns = getAssignments();
+      const unassigned = assigns.filter(a => a.status === 'unassigned').length;
+      const assigned = assigns.filter(a => a.status === 'assigned').length;
+      document.getElementById('schedStats').innerHTML = `
+        <div class="stat-card"><div class="stat-card-icon">👥</div><div><div class="stat-card-val">${emps.length}</div><div class="stat-card-lbl">कर्मचारी</div></div></div>
+        <div class="stat-card"><div class="stat-card-icon">✅</div><div><div class="stat-card-val">${assigned}</div><div class="stat-card-lbl">भरी शिफ्ट</div></div></div>
+        <div class="stat-card"><div class="stat-card-icon">🚨</div><div><div class="stat-card-val">${unassigned}</div><div class="stat-card-lbl">खाली शिफ्ट</div></div></div>
+        <div class="stat-card"><div class="stat-card-icon">🔄</div><div><div class="stat-card-val">${getSwaps().length}</div><div class="stat-card-lbl">स्वैप रिक्वेस्ट</div></div></div>
+      `;
+    }
+
+    function renderSwaps() {
+      const swaps = getSwaps();
+      const container = document.getElementById('swapList');
+      if (swaps.length === 0) { container.innerHTML = '<p style="color:var(--text-muted);font-size:14px">कोई स्वैप रिक्वेस्ट नहीं।</p>'; return; }
+      container.innerHTML = swaps.map(s => `
+        <div class="swap-card">
+          <div class="swap-info">
+            <strong>🔄 ${s.fromName} → ${s.withName}</strong>
+            <small>कारण: ${s.reason} | स्टेटस: <span class="badge badge-${s.status === 'pending' ? 'warning' : s.status === 'approved' ? 'success' : 'danger'}">${s.status}</span></small>
+          </div>
+          ${s.status === 'pending' ? `<div class="swap-btns">
+            <button class="btn-approve" onclick="approveSwap('${s.id}')">✅ Approve</button>
+            <button class="btn-reject" onclick="rejectSwap('${s.id}')">❌ Reject</button>
+          </div>` : ''}
+        </div>`).join('');
+    }
+
+    function submitSwap() {
+      const from = document.getElementById('swapFrom').value.trim();
+      const withName = document.getElementById('swapWith').value.trim();
+      const reason = document.getElementById('swapReason').value.trim();
+      if (!from || !withName) { showToast('⚠️ सभी फील्ड भरें'); return; }
+      const swaps = getSwaps();
+      swaps.push({ id: 'SWP-' + Date.now(), fromName: from, withName, reason, status: 'pending', createdAt: new Date().toISOString() });
+      saveSwaps(swaps);
+      document.getElementById('swapFrom').value = '';
+      document.getElementById('swapWith').value = '';
+      document.getElementById('swapReason').value = '';
+      renderSwaps();
+      renderStats();
+      showToast('📤 स्वैप रिक्वेस्ट भेजी गई! Admin अप्रूवल का इंतज़ार करें।');
+    }
+
+    function approveSwap(id) {
+      const swaps = getSwaps();
+      const s = swaps.find(x => x.id === id);
+      if (s) { s.status = 'approved'; saveSwaps(swaps); renderSwaps(); showToast('✅ स्वैप अप्रूव!'); }
+    }
+    function rejectSwap(id) {
+      const swaps = getSwaps();
+      const s = swaps.find(x => x.id === id);
+      if (s) { s.status = 'rejected'; saveSwaps(swaps); renderSwaps(); showToast('❌ स्वैप रिजेक्ट।'); }
+    }
+
+    function lookupSchedule() {
+      const email = document.getElementById('lookupEmail').value.trim().toLowerCase();
+      const emps = getEmployees();
+      const assigns = getAssignments();
+      const emp = emps.find(e => e.email.toLowerCase() === email);
+      const result = document.getElementById('lookupResult');
+      if (!emp) { result.innerHTML = '<div class="alert-box alert-danger">❌ ईमेल नहीं मिला।</div>'; return; }
+      const myShifts = assigns.filter(a => a.employeeId === emp.id && a.status === 'assigned');
+      if (myShifts.length === 0) { result.innerHTML = '<div class="alert-box alert-warning">⚠️ अभी तक कोई शिफ्ट असाइन नहीं।</div>'; return; }
+      result.innerHTML = `<div class="alert-box alert-success" style="flex-direction:column;align-items:flex-start">
+        <strong>👤 ${emp.fullName} की शिफ्ट्स:</strong>
+        <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:8px">
+          ${myShifts.map(s => `<span class="badge badge-${s.shift}">${s.shiftIcon} ${s.shiftLabel} | ${DAYS_HI[s.day]} | ${s.date}</span>`).join('')}
+        </div>
+      </div>`;
+    }
+
+    function exportCSV() {
+      const assigns = getAssignments();
+      if (assigns.length === 0) { showToast('कोई डेटा नहीं!'); return; }
+      const header = ['Date','Day','Shift','Employee','Status'];
+      const rows = assigns.map(a => [a.date, a.day, a.shiftLabel, a.employeeName, a.status]);
+      const csv = [header, ...rows].map(r => r.join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a'); link.href = url; link.download = 'schedule.csv'; link.click();
+      showToast('📥 CSV डाउनलोड हो रहा है...');
+    }
+
+    function runAI() {
+      const emps = getEmployees();
+      if (emps.length === 0) { showToast('⚠️ कर्मचारी नहीं!'); return; }
+      const assigns = window.AIScheduler.assign(emps);
+      saveAssignments(assigns);
+      renderAll();
+      showToast('✅ AI शेड्यूल रीजनरेट हो गया!');
+    }
+
+    function renderAll() {
+      updateNavCount();
+      renderStats();
+      renderScheduleGrid();
+      renderSwaps();
+    }
+
+    renderAll();
+  </script>
+</body>
+</html>

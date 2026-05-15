@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+  <title>ShiftMaster Pro – रजिस्ट्रेशन</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div class="bg-animated"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+
+  <nav class="navbar">
+    <div class="nav-brand"><span class="nav-logo">⚡</span><span class="nav-title">ShiftMaster <span class="accent">Pro</span></span></div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link active">रजिस्ट्रेशन</a>
+      <a href="admin.html" class="nav-link">Admin</a>
+      <a href="schedule.html" class="nav-link">शेड्यूल</a>
+    </div>
+    <div class="nav-badge"><span class="pulse-dot"></span><span id="nav-user-count">0 कर्मचारी</span></div>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html" class="nav-link active" onclick="closeMenu()">📝 रजिस्ट्रेशन</a>
+    <a href="admin.html" class="nav-link" onclick="closeMenu()">🛡️ Admin डैशबोर्ड</a>
+    <a href="schedule.html" class="nav-link" onclick="closeMenu()">📅 शेड्यूल</a>
+  </div>
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">🤖 AI-Powered Shift Management</div>
+      <h1 class="hero-title">स्मार्ट शिफ्ट<br/><span class="gradient-text">मैनेजमेंट सिस्टम</span></h1>
+      <p class="hero-sub">AI आधारित स्वचालित ड्यूटी शिफ्ट असाइनमेंट। उपलब्धता, कौशल और निष्पक्षता के आधार पर।</p>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-n" id="stat-reg">0</span><span class="stat-l">रजिस्टर्ड</span></div>
+        <div class="stat-div"></div>
+        <div class="stat"><span class="stat-n">3</span><span class="stat-l">शिफ्ट्स</span></div>
+        <div class="stat-div"></div>
+        <div class="stat"><span class="stat-n" id="stat-asgn">0</span><span class="stat-l">असाइन्ड</span></div>
+      </div>
+    </div>
+    <div class="hero-cards">
+      <div class="float-card fc-1">🌅 Morning Shift <span class="badge-g">Active</span></div>
+      <div class="float-card fc-2">🌙 Night Shift <span class="badge-b">Assigned</span></div>
+      <div class="float-card fc-3">⚡ AI Score <span class="badge-p">98%</span></div>
+    </div>
+  </section>
+
+  <section class="form-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>कर्मचारी रजिस्ट्रेशन फॉर्म</h2>
+        <p>अपनी जानकारी भरें – AI आपकी शिफ्ट ऑटोमैटिक असाइन करेगा</p>
+      </div>
+
+      <div class="form-card glass-card">
+        <div class="form-progress">
+          <div class="prog-step active" id="ps-1"><div class="step-circle">1</div><span>व्यक्तिगत</span></div>
+          <div class="prog-line"></div>
+          <div class="prog-step" id="ps-2"><div class="step-circle">2</div><span>उपलब्धता</span></div>
+          <div class="prog-line"></div>
+          <div class="prog-step" id="ps-3"><div class="step-circle">3</div><span>कौशल</span></div>
+        </div>
+
+        <form id="registrationForm" novalidate>
+          <!-- STEP 1 -->
+          <div class="form-step active" id="step-1">
+            <h3 class="step-title">👤 व्यक्तिगत जानकारी</h3>
+            <div class="form-grid">
+              <div class="form-group full">
+                <label>पूरा नाम <span class="req">*</span></label>
+                <div class="inp-wrap"><span class="inp-icon">👤</span><input type="text" id="fullName" placeholder="राजेश कुमार शर्मा" required/></div>
+                <span class="err" id="err-name"></span>
+              </div>
+              <div class="form-group">
+                <label>ईमेल <span class="req">*</span></label>
+                <div class="inp-wrap"><span class="inp-icon">📧</span><input type="email" id="email" placeholder="example@email.com" required/></div>
+                <span class="err" id="err-email"></span>
+              </div>
+              <div class="form-group">
+                <label>मोबाइल नंबर <span class="req">*</span></label>
+                <div class="inp-wrap"><span class="inp-icon">📱</span><input type="tel" id="phone" placeholder="+91 9XXXXXXXXX" required maxlength="13"/></div>
+                <span class="err" id="err-phone"></span>
+              </div>
+              <div class="form-group">
+                <label>विभाग</label>
+                <div class="inp-wrap"><span class="inp-icon">🏢</span>
+                  <select id="department">
+                    <option value="">-- विभाग चुनें --</option>
+                    <option value="medical">चिकित्सा / Medical</option>
+                    <option value="security">सुरक्षा / Security</option>
+                    <option value="admin">प्रशासन / Admin</option>
+                    <option value="technical">तकनीकी / Technical</option>
+                    <option value="logistics">लॉजिस्टिक्स</option>
+                    <option value="volunteer">स्वयंसेवी</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>कर्मचारी आईडी</label>
+                <div class="inp-wrap"><span class="inp-icon">🪪</span><input type="text" id="employeeId" placeholder="EMP-0001"/></div>
+              </div>
+              <div class="form-group">
+                <label>अनुभव (वर्ष)</label>
+                <div class="inp-wrap"><span class="inp-icon">📈</span><input type="number" id="experience" min="0" max="50" placeholder="0"/></div>
+              </div>
+            </div>
+            <div class="form-actions"><button type="button" class="btn-next" onclick="nextStep(1)">अगला →</button></div>
+          </div>
+
+          <!-- STEP 2 -->
+          <div class="form-step" id="step-2">
+            <h3 class="step-title">📅 उपलब्धता</h3>
+            <div class="form-group">
+              <label>उपलब्ध दिन <span class="req">*</span></label>
+              <div class="check-grid days-grid">
+                <label class="chk-card"><input type="checkbox" name="days" value="monday"/><div class="cc"><span class="ds">सोम</span><span class="df">Mon</span></div></label>
+                <label class="chk-card"><input type="checkbox" name="days" value="tuesday"/><div class="cc"><span class="ds">मंगल</span><span class="df">Tue</span></div></label>
+                <label class="chk-card"><input type="checkbox" name="days" value="wednesday"/><div class="cc"><span class="ds">बुध</span><span class="df">Wed</span></div></label>
+                <label class="chk-card"><input type="checkbox" name="days" value="thursday"/><div class="cc"><span class="ds">गुरु</span><span class="df">Thu</span></div></label>
+                <label class="chk-card"><input type="checkbox" name="days" value="friday"/><div class="cc"><span class="ds">शुक्र</span><span class="df">Fri</span></div></label>
+                <label class="chk-card"><input type="checkbox" name="days" value="saturday"/><div class="cc"><span class="ds">शनि</span><span class="df">Sat</span></div></label>
+                <label class="chk-card"><input type="checkbox" name="days" value="sunday"/><div class="cc"><span class="ds">रवि</span><span class="df">Sun</span></div></label>
+              </div>
+              <span class="err" id="err-days"></span>
+            </div>
+            <div class="form-group">
+              <label>उपलब्ध समय <span class="req">*</span></label>
+              <div class="check-grid time-grid">
+                <label class="chk-card time-card morning"><input type="checkbox" name="timeSlots" value="morning"/><div class="cc"><span class="ti">🌅</span><span class="tn">सुबह</span><span class="tr">6AM–2PM</span></div></label>
+                <label class="chk-card time-card afternoon"><input type="checkbox" name="timeSlots" value="afternoon"/><div class="cc"><span class="ti">☀️</span><span class="tn">दोपहर</span><span class="tr">2PM–10PM</span></div></label>
+                <label class="chk-card time-card night"><input type="checkbox" name="timeSlots" value="night"/><div class="cc"><span class="ti">🌙</span><span class="tn">रात</span><span class="tr">10PM–6AM</span></div></label>
+              </div>
+              <span class="err" id="err-time"></span>
+            </div>
+            <div class="form-group">
+              <label>प्रति सप्ताह घंटे: <strong id="hrs-display">40</strong></label>
+              <input type="range" id="hoursPerWeek" min="8" max="60" value="40" step="4" oninput="document.getElementById('hrs-display').textContent=this.value" class="slider"/>
+              <div class="slider-labels"><span>8h</span><span>60h</span></div>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn-prev" onclick="prevStep(2)">← वापस</button>
+              <button type="button" class="btn-next" onclick="nextStep(2)">अगला →</button>
+            </div>
+          </div>
+
+          <!-- STEP 3 -->
+          <div class="form-step" id="step-3">
+            <h3 class="step-title">⭐ कौशल और पसंद</h3>
+            <div class="form-group">
+              <label>पसंदीदा शिफ्ट</label>
+              <div class="radio-grid">
+                <label class="radio-card"><input type="radio" name="prefShift" value="morning"/><div class="cc"><span>🌅 मॉर्निंग</span><small>6AM–2PM</small></div></label>
+                <label class="radio-card"><input type="radio" name="prefShift" value="afternoon"/><div class="cc"><span>☀️ आफ्टरनून</span><small>2PM–10PM</small></div></label>
+                <label class="radio-card"><input type="radio" name="prefShift" value="night"/><div class="cc"><span>🌙 नाइट</span><small>10PM–6AM</small></div></label>
+                <label class="radio-card"><input type="radio" name="prefShift" value="any" checked/><div class="cc"><span>🔄 कोई भी</span><small>लचीला</small></div></label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>विशेष कौशल / प्रमाणन</label>
+              <div class="check-grid skills-grid">
+                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="first_aid"/><div class="cc">🚑 प्राथमिक चिकित्सा</div></label>
+                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="machinery"/><div class="cc">⚙️ मशीनरी ऑपरेशन</div></label>
+                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="it_support"/><div class="cc">💻 IT सपोर्ट</div></label>
+                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="fire_safety"/><div class="cc">🔥 फायर सेफ्टी</div></label>
+                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="security"/><div class="cc">🛡️ सुरक्षा प्रशिक्षण</div></label>
+                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="driving"/><div class="cc">🚗 ड्राइविंग</div></label>
+                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="forklift"/><div class="cc">🏗️ फोर्कलिफ्ट</div></label>
+                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="management"/><div class="cc">📊 मैनेजमेंट</div></label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>अतिरिक्त टिप्पणी</label>
+              <textarea id="additionalNotes" placeholder="कोई विशेष आवश्यकता या जानकारी..." rows="3"></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn-prev" onclick="prevStep(3)">← वापस</button>
+              <button type="submit" class="btn-submit">✅ रजिस्ट्रेशन पूरा करें</button>
+            </div>
+          </div>
+        </form>
+
+        <div class="success-msg" id="successMsg" style="display:none">
+          <div class="success-icon">🎉</div>
+          <h3>रजिस्ट्रेशन सफल!</h3>
+          <p>AI जल्द ही आपकी शिफ्ट असाइन करेगा।</p>
+          <div id="successDetails" class="success-details"></div>
+          <div class="success-btns">
+            <button onclick="resetForm()" class="btn-sec">नया रजिस्ट्रेशन</button>
+            <a href="schedule.html" class="btn-pri-link">शेड्यूल देखें →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features-section">
+    <div class="container">
+      <div class="feat-grid">
+        <div class="feat-card"><div class="feat-icon">🤖</div><h3>AI ऑटो-असाइनमेंट</h3><p>उपलब्धता, कौशल और निष्पक्षता के आधार पर</p></div>
+        <div class="feat-card"><div class="feat-icon">⚖️</div><h3>निष्पक्ष वितरण</h3><p>सभी पर समान भार सुनिश्चित</p></div>
+        <div class="feat-card"><div class="feat-icon">📊</div><h3>लाइव डैशबोर्ड</h3><p>रियल-टाइम शेड्यूल और अलर्ट</p></div>
+        <div class="feat-card"><div class="feat-icon">📤</div><h3>CSV/PDF एक्सपोर्ट</h3><p>शेड्यूल डाउनलोड करें</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="toast" id="toast"><span id="toast-msg"></span></div>
+
+  <footer class="footer"><div class="container"><p>⚡ ShiftMaster Pro – AI-Powered Duty Management</p></div></footer>
+
+  <script src="app.js"></script>
+  <script src="ai-scheduler.js"></script>
+  <script>
+    function toggleMenu(){const h=document.getElementById('hamburger');const n=document.getElementById('mobileNav');h.classList.toggle('open');n.classList.toggle('open');}
+    function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('mobileNav').classList.remove('open');}
+  </script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+  <title>ShiftMaster Pro – Admin डैशबोर्ड</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div class="bg-animated"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+
+  <nav class="navbar">
+    <div class="nav-brand"><span class="nav-logo">⚡</span><span class="nav-title">ShiftMaster <span class="accent">Pro</span></span></div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">रजिस्ट्रेशन</a>
+      <a href="admin.html" class="nav-link active">Admin</a>
+      <a href="schedule.html" class="nav-link">शेड्यूल</a>
+    </div>
+    <div class="nav-badge"><span class="pulse-dot"></span><span id="nav-user-count">0 कर्मचारी</span></div>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html" class="nav-link" onclick="closeMenu()">📝 रजिस्ट्रेशन</a>
+    <a href="admin.html" class="nav-link active" onclick="closeMenu()">🛡️ Admin डैशबोर्ड</a>
+    <a href="schedule.html" class="nav-link" onclick="closeMenu()">📅 शेड्यूल</a>
+  </div>
+
+  <div style="position:relative;z-index:1;padding:30px 0;">
+    <div class="container" style="max-width:1100px">
+
+      <div class="page-header">
+        <h1>🛡️ Admin <span class="gradient-text">डैशबोर्ड</span></h1>
+        <p>कर्मचारी प्रबंधन, शिफ्ट असाइनमेंट और AI अलर्ट</p>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats-row" id="statsRow"></div>
+
+      <!-- ALERTS -->
+      <div class="glass-card" style="margin-bottom:24px">
+        <h3 style="margin-bottom:16px">🚨 AI अलर्ट्स</h3>
+        <div id="alertsContainer"><p style="color:var(--text-muted);font-size:14px">कोई अलर्ट नहीं। सब ठीक है ✅</p></div>
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="glass-card admin-actions" style="margin-bottom:24px;display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+        <h3 style="flex:1">⚙️ प्रबंधन</h3>
+        <button class="btn-next" onclick="runAI()" style="font-size:13px;padding:10px 20px">🤖 AI रन करें</button>
+        <button class="btn-next" onclick="exportCSV()" style="font-size:13px;padding:10px 20px;background:linear-gradient(135deg,#10b981,#059669)">📥 CSV एक्सपोर्ट</button>
+        <button class="btn-next" onclick="exportPDF()" style="font-size:13px;padding:10px 20px;background:linear-gradient(135deg,#ef4444,#b91c1c)">📄 PDF प्रिंट</button>
+        <button class="btn-prev" onclick="clearAll()" style="font-size:13px;padding:10px 20px;border-color:#ef4444;color:#ef4444">🗑️ डेटा क्लियर</button>
+      </div>
+
+      <!-- EMPLOYEES TABLE -->
+      <div class="glass-card" style="margin-bottom:24px">
+        <h3 style="margin-bottom:16px">👥 रजिस्टर्ड कर्मचारी</h3>
+        <div class="table-wrap" id="empTableWrap">
+          <p style="color:var(--text-muted);font-size:14px;padding:20px">कोई कर्मचारी नहीं। <a href="index.html" style="color:var(--primary)">पहले रजिस्टर करें →</a></p>
+        </div>
+      </div>
+
+      <!-- ASSIGNMENTS TABLE -->
+      <div class="glass-card">
+        <h3 style="margin-bottom:16px">📋 शिफ्ट असाइनमेंट</h3>
+        <div class="table-wrap" id="assignTableWrap">
+          <p style="color:var(--text-muted);font-size:14px;padding:20px">कोई असाइनमेंट नहीं। AI रन करें।</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div id="editModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;align-items:center;justify-content:center;">
+    <div class="glass-card" style="width:90%;max-width:480px;position:relative">
+      <h3 style="margin-bottom:20px">✏️ असाइनमेंट एडिट करें</h3>
+      <div class="form-group" style="margin-bottom:16px">
+        <label>कर्मचारी का नाम</label>
+        <div class="inp-wrap"><span class="inp-icon">👤</span><input type="text" id="editName"/></div>
+      </div>
+      <div class="form-group" style="margin-bottom:16px">
+        <label>शिफ्ट बदलें</label>
+        <div class="inp-wrap"><span class="inp-icon">⏰</span>
+          <select id="editShift">
+            <option value="morning">🌅 Morning – 6AM–2PM</option>
+            <option value="afternoon">☀️ Afternoon – 2PM–10PM</option>
+            <option value="night">🌙 Night – 10PM–6AM</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:16px">
+        <label>स्टेटस</label>
+        <div class="inp-wrap"><span class="inp-icon">📌</span>
+          <select id="editStatus">
+            <option value="assigned">Assigned</option>
+            <option value="unassigned">Unassigned</option>
+            <option value="swapped">Swapped</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:flex-end">
+        <button class="btn-prev" onclick="closeModal()">रद्द करें</button>
+        <button class="btn-next" onclick="saveEdit()" style="padding:12px 24px;font-size:14px">💾 सेव करें</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"><span id="toast-msg"></span></div>
+  <footer class="footer"><div class="container"><p>⚡ ShiftMaster Pro – Admin Panel</p></div></footer>
+
+  <script src="app.js"></script>
+  <script src="ai-scheduler.js"></script>
+  <script>
+    let editingId = null;
+
+    function renderStats() {
+      const emps = getEmployees();
+      const assigns = getAssignments();
+      const unassigned = assigns.filter(a => a.status === 'unassigned').length;
+      const assigned = assigns.filter(a => a.status === 'assigned').length;
+      document.getElementById('statsRow').innerHTML = `
+        <div class="stat-card"><div class="stat-card-icon">👥</div><div><div class="stat-card-val">${emps.length}</div><div class="stat-card-lbl">कुल कर्मचारी</div></div></div>
+        <div class="stat-card"><div class="stat-card-icon">✅</div><div><div class="stat-card-val">${assigned}</div><div class="stat-card-lbl">असाइन्ड शिफ्ट</div></div></div>
+        <div class="stat-card"><div class="stat-card-icon">⚠️</div><div><div class="stat-card-val">${unassigned}</div><div class="stat-card-lbl">खाली शिफ्ट</div></div></div>
+        <div class="stat-card"><div class="stat-card-icon">📅</div><div><div class="stat-card-val">7</div><div class="stat-card-lbl">दिन का शेड्यूल</div></div></div>
+      `;
+    }
+
+    function renderAlerts() {
+      const emps = getEmployees();
+      const assigns = getAssignments();
+      const alerts = window.AIScheduler.detectImbalances(emps, assigns);
+      const container = document.getElementById('alertsContainer');
+      if (alerts.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted);font-size:14px">कोई अलर्ट नहीं। सब ठीक है ✅</p>';
+      } else {
+        container.innerHTML = alerts.map(a =>
+          `<div class="alert-box alert-${a.type}">${a.msg}</div>`
+        ).join('');
+      }
+    }
+
+    function renderEmployees() {
+      const emps = getEmployees();
+      const wrap = document.getElementById('empTableWrap');
+      if (emps.length === 0) {
+        wrap.innerHTML = '<p style="color:var(--text-muted);font-size:14px;padding:20px">कोई कर्मचारी नहीं। <a href="index.html" style="color:var(--primary)">पहले रजिस्टर करें →</a></p>';
+        return;
+      }
+      wrap.innerHTML = `<table>
+        <thead><tr><th>#</th><th>नाम</th><th>ईमेल</th><th>विभाग</th><th>शिफ्ट पसंद</th><th>कौशल</th><th>दिन</th><th>Action</th></tr></thead>
+        <tbody>${emps.map((e, i) => `
+          <tr>
+            <td>${i + 1}</td>
+            <td><strong>${e.fullName}</strong><br/><small style="color:var(--text-muted)">${e.id}</small></td>
+            <td>${e.email}</td>
+            <td>${e.department || '–'}</td>
+            <td><span class="badge badge-${e.preferredShift === 'morning' ? 'morning' : e.preferredShift === 'afternoon' ? 'afternoon' : e.preferredShift === 'night' ? 'night' : 'success'}">${e.preferredShift}</span></td>
+            <td>${e.skills.length > 0 ? e.skills.slice(0,2).map(s => `<span class="badge badge-success" style="margin:1px">${s}</span>`).join('') : '–'}</td>
+            <td style="font-size:11px">${e.days.slice(0,3).join(', ')}${e.days.length > 3 ? '...' : ''}</td>
+            <td><button onclick="deleteEmployee('${e.id}')" style="background:rgba(239,68,68,0.2);border:1px solid #ef4444;color:#ef4444;padding:5px 10px;border-radius:8px;cursor:pointer;font-size:12px">🗑️</button></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>`;
+    }
+
+    function renderAssignments() {
+      const assigns = getAssignments();
+      const wrap = document.getElementById('assignTableWrap');
+      if (assigns.length === 0) {
+        wrap.innerHTML = '<p style="color:var(--text-muted);font-size:14px;padding:20px">कोई असाइनमेंट नहीं।</p>';
+        return;
+      }
+      wrap.innerHTML = `<table>
+        <thead><tr><th>तारीख</th><th>दिन</th><th>शिफ्ट</th><th>कर्मचारी</th><th>AI स्कोर</th><th>स्टेटस</th><th>Action</th></tr></thead>
+        <tbody>${assigns.map(a => `
+          <tr>
+            <td>${a.date}</td>
+            <td>${a.day}</td>
+            <td>${a.shiftIcon} <span class="badge badge-${a.shift}">${a.shiftLabel}</span></td>
+            <td>${a.employeeName}</td>
+            <td>${a.aiScore}</td>
+            <td><span class="badge badge-${a.status === 'assigned' ? 'success' : a.status === 'unassigned' ? 'danger' : 'warning'}">${a.status}</span>${a.manualOverride ? ' <span style="font-size:10px;color:var(--warning)">✏️ Manual</span>' : ''}</td>
+            <td><button onclick="openEdit('${a.id}')" style="background:rgba(108,99,255,0.2);border:1px solid var(--primary);color:var(--primary);padding:5px 10px;border-radius:8px;cursor:pointer;font-size:12px">✏️ एडिट</button></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>`;
+    }
+
+    function runAI() {
+      const emps = getEmployees();
+      if (emps.length === 0) { showToast('⚠️ पहले कर्मचारी रजिस्टर करें!'); return; }
+      const assigns = window.AIScheduler.assign(emps);
+      saveAssignments(assigns);
+      renderAll();
+      showToast('✅ AI ने शिफ्ट असाइनमेंट पूरा किया!');
+    }
+
+    function openEdit(id) {
+      const assigns = getAssignments();
+      const a = assigns.find(x => x.id === id);
+      if (!a) return;
+      editingId = id;
+      document.getElementById('editName').value = a.employeeName;
+      document.getElementById('editShift').value = a.shift;
+      document.getElementById('editStatus').value = a.status;
+      document.getElementById('editModal').style.display = 'flex';
+    }
+
+    function closeModal() { document.getElementById('editModal').style.display = 'none'; editingId = null; }
+
+    function saveEdit() {
+      const assigns = getAssignments();
+      const idx = assigns.findIndex(x => x.id === editingId);
+      if (idx === -1) return;
+      const shift = document.getElementById('editShift').value;
+      const shiftMap = { morning: { label: 'Morning Shift', icon: '🌅', time: '6AM–2PM' }, afternoon: { label: 'Afternoon Shift', icon: '☀️', time: '2PM–10PM' }, night: { label: 'Night Shift', icon: '🌙', time: '10PM–6AM' } };
+      assigns[idx].employeeName = document.getElementById('editName').value;
+      assigns[idx].shift = shift;
+      assigns[idx].shiftLabel = shiftMap[shift].label;
+      assigns[idx].shiftIcon = shiftMap[shift].icon;
+      assigns[idx].shiftTime = shiftMap[shift].time;
+      assigns[idx].status = document.getElementById('editStatus').value;
+      assigns[idx].manualOverride = true;
+      saveAssignments(assigns);
+      closeModal();
+      renderAll();
+      showToast('✅ असाइनमेंट अपडेट हो गया!');
+    }
+
+    function deleteEmployee(id) {
+      if (!confirm('क्या आप इस कर्मचारी को हटाना चाहते हैं?')) return;
+      let emps = getEmployees().filter(e => e.id !== id);
+      saveEmployees(emps);
+      let assigns = getAssignments().filter(a => a.employeeId !== id);
+      saveAssignments(assigns);
+      renderAll();
+      showToast('🗑️ कर्मचारी हटा दिया गया।');
+    }
+
+    function clearAll() {
+      if (!confirm('सभी डेटा क्लियर करें? यह पूर्ववत नहीं होगा।')) return;
+      saveEmployees([]); saveAssignments([]);
+      renderAll();
+      showToast('🗑️ सभी डेटा क्लियर।');
+    }
+
+    function exportCSV() {
+      const assigns = getAssignments();
+      if (assigns.length === 0) { showToast('कोई डेटा नहीं!'); return; }
+      const header = ['Date', 'Day', 'Shift', 'Employee', 'Status', 'AI Score', 'Manual'];
+      const rows = assigns.map(a => [a.date, a.day, a.shiftLabel, a.employeeName, a.status, a.aiScore, a.manualOverride]);
+      const csv = [header, ...rows].map(r => r.join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url; link.download = 'shift-schedule.csv'; link.click();
+      showToast('📥 CSV डाउनलोड हो रहा है...');
+    }
+
+    function exportPDF() { window.print(); }
+
+    function renderAll() {
+      updateNavCount();
+      renderStats();
+      renderAlerts();
+      renderEmployees();
+      renderAssignments();
+    }
+
+    renderAll();
+
+    function toggleMenu(){const h=document.getElementById('hamburger');const n=document.getElementById('mobileNav');h.classList.toggle('open');n.classList.toggle('open');}
+    function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('mobileNav').classList.remove('open');}
+  </script>
+</body>
+</html>

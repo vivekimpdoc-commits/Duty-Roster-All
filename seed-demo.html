@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>ShiftMaster – Demo Data Loader</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    .seed-wrap{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;}
+    .seed-box{background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:24px;padding:48px 40px;max-width:640px;width:90%;text-align:center;}
+    .seed-icon{font-size:64px;margin-bottom:20px;display:block;}
+    .log-area{background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left;max-height:260px;overflow-y:auto;font-size:12px;font-family:monospace;line-height:1.8;margin:20px 0;}
+    .log-ok{color:#10b981;}
+    .log-warn{color:#f59e0b;}
+    .log-info{color:#00d2ff;}
+    .progress-bar-wrap{background:rgba(255,255,255,0.1);border-radius:50px;height:8px;margin:16px 0;overflow:hidden;}
+    .progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--secondary));border-radius:50px;transition:width .3s ease;width:0%;}
+  </style>
+</head>
+<body>
+  <div class="bg-animated"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+
+  <div class="seed-wrap">
+    <div class="seed-box">
+      <span class="seed-icon">🚀</span>
+      <h2 style="font-size:26px;font-weight:700;margin-bottom:8px">Demo Data <span class="gradient-text">Loader</span></h2>
+      <p style="color:var(--text-muted);font-size:14px;margin-bottom:20px">25 demo employees + AI shift assignments लोड करें</p>
+
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" id="pbar"></div></div>
+      <p id="progress-label" style="font-size:13px;color:var(--text-muted);">तैयार है – बटन दबाएं</p>
+
+      <div class="log-area" id="logArea"><span class="log-info">▶ यहाँ logs दिखेंगे...</span></div>
+
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn-next" id="loadBtn" onclick="loadDemo()" style="padding:14px 36px;font-size:15px">
+          ✅ 25 Demo Entries लोड करें
+        </button>
+        <button class="btn-prev" onclick="clearData()" style="padding:14px 24px;font-size:15px;border-color:#ef4444;color:#ef4444">
+          🗑️ क्लियर
+        </button>
+      </div>
+
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap">
+        <a href="admin.html" class="btn-pri-link">🛡️ Admin डैशबोर्ड</a>
+        <a href="schedule.html" class="btn-pri-link" style="background:linear-gradient(135deg,#10b981,#059669)">📅 शेड्यूल देखें</a>
+        <a href="index.html" class="btn-pri-link" style="background:linear-gradient(135deg,#f59e0b,#d97706)">📝 फॉर्म</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"><span id="toast-msg"></span></div>
+  <script src="app.js"></script>
+  <script src="ai-scheduler.js"></script>
+  <script>
+    const DEMO_EMPLOYEES = [
+      { fullName:"राजेश कुमार शर्मा", email:"rajesh.sharma@demo.com", phone:"+91 9801234567", department:"medical", employeeId:"EMP-001", experience:8, days:["monday","tuesday","wednesday","thursday","friday"], timeSlots:["morning","afternoon"], preferredShift:"morning", skills:["first_aid","management"] },
+      { fullName:"प्रिया सिंह", email:"priya.singh@demo.com", phone:"+91 9802234567", department:"security", employeeId:"EMP-002", experience:5, days:["monday","wednesday","friday","saturday","sunday"], timeSlots:["night"], preferredShift:"night", skills:["security","fire_safety"] },
+      { fullName:"अमित वर्मा", email:"amit.verma@demo.com", phone:"+91 9803234567", department:"technical", employeeId:"EMP-003", experience:12, days:["tuesday","thursday","saturday"], timeSlots:["morning","afternoon"], preferredShift:"any", skills:["it_support","machinery"] },
+      { fullName:"सुनीता देवी", email:"sunita.devi@demo.com", phone:"+91 9804234567", department:"admin", employeeId:"EMP-004", experience:3, days:["monday","tuesday","wednesday","thursday","friday"], timeSlots:["afternoon"], preferredShift:"afternoon", skills:["management"] },
+      { fullName:"विकास यादव", email:"vikas.yadav@demo.com", phone:"+91 9805234567", department:"logistics", employeeId:"EMP-005", experience:6, days:["monday","wednesday","friday","sunday"], timeSlots:["morning","night"], preferredShift:"morning", skills:["driving","forklift"] },
+      { fullName:"अनीता गुप्ता", email:"anita.gupta@demo.com", phone:"+91 9806234567", department:"medical", employeeId:"EMP-006", experience:10, days:["tuesday","thursday","saturday","sunday"], timeSlots:["morning","afternoon"], preferredShift:"morning", skills:["first_aid"] },
+      { fullName:"संजय पटेल", email:"sanjay.patel@demo.com", phone:"+91 9807234567", department:"security", employeeId:"EMP-007", experience:7, days:["monday","tuesday","friday","saturday"], timeSlots:["afternoon","night"], preferredShift:"night", skills:["security","driving"] },
+      { fullName:"कविता तिवारी", email:"kavita.tiwari@demo.com", phone:"+91 9808234567", department:"volunteer", employeeId:"EMP-008", experience:1, days:["saturday","sunday"], timeSlots:["morning","afternoon"], preferredShift:"any", skills:["first_aid"] },
+      { fullName:"रोहन मिश्रा", email:"rohan.mishra@demo.com", phone:"+91 9809234567", department:"technical", employeeId:"EMP-009", experience:4, days:["monday","wednesday","thursday","friday"], timeSlots:["afternoon","night"], preferredShift:"afternoon", skills:["it_support"] },
+      { fullName:"पूजा राय", email:"pooja.rai@demo.com", phone:"+91 9810234567", department:"admin", employeeId:"EMP-010", experience:9, days:["monday","tuesday","wednesday","friday"], timeSlots:["morning"], preferredShift:"morning", skills:["management","first_aid"] },
+      { fullName:"दिनेश चौधरी", email:"dinesh.chaudhary@demo.com", phone:"+91 9811234567", department:"logistics", employeeId:"EMP-011", experience:15, days:["tuesday","thursday","saturday","sunday"], timeSlots:["morning","afternoon","night"], preferredShift:"any", skills:["driving","forklift","machinery"] },
+      { fullName:"ममता शुक्ला", email:"mamta.shukla@demo.com", phone:"+91 9812234567", department:"medical", employeeId:"EMP-012", experience:6, days:["monday","wednesday","friday","saturday"], timeSlots:["afternoon"], preferredShift:"afternoon", skills:["first_aid","fire_safety"] },
+      { fullName:"नितिन जोशी", email:"nitin.joshi@demo.com", phone:"+91 9813234567", department:"security", employeeId:"EMP-013", experience:11, days:["monday","tuesday","wednesday"], timeSlots:["night"], preferredShift:"night", skills:["security","management"] },
+      { fullName:"रेखा त्रिपाठी", email:"rekha.tripathi@demo.com", phone:"+91 9814234567", department:"technical", employeeId:"EMP-014", experience:2, days:["thursday","friday","saturday","sunday"], timeSlots:["morning","afternoon"], preferredShift:"morning", skills:["it_support"] },
+      { fullName:"अजय कुमार", email:"ajay.kumar@demo.com", phone:"+91 9815234567", department:"volunteer", employeeId:"EMP-015", experience:0, days:["saturday","sunday"], timeSlots:["morning"], preferredShift:"morning", skills:[] },
+      { fullName:"शालिनी वर्मा", email:"shalini.verma@demo.com", phone:"+91 9816234567", department:"admin", employeeId:"EMP-016", experience:7, days:["monday","tuesday","thursday","friday"], timeSlots:["afternoon","night"], preferredShift:"afternoon", skills:["management"] },
+      { fullName:"हरीश कुमार", email:"harish.kumar@demo.com", phone:"+91 9817234567", department:"logistics", employeeId:"EMP-017", experience:13, days:["wednesday","thursday","friday","saturday","sunday"], timeSlots:["morning","night"], preferredShift:"night", skills:["driving","forklift"] },
+      { fullName:"नेहा सिंह", email:"neha.singh@demo.com", phone:"+91 9818234567", department:"medical", employeeId:"EMP-018", experience:4, days:["monday","tuesday","wednesday","saturday"], timeSlots:["morning","afternoon"], preferredShift:"any", skills:["first_aid","machinery"] },
+      { fullName:"भूपेंद्र शर्मा", email:"bhupendra.sharma@demo.com", phone:"+91 9819234567", department:"security", employeeId:"EMP-019", experience:9, days:["tuesday","wednesday","thursday","sunday"], timeSlots:["night"], preferredShift:"night", skills:["security","fire_safety"] },
+      { fullName:"आरती देवी", email:"aarti.devi@demo.com", phone:"+91 9820234567", department:"technical", employeeId:"EMP-020", experience:5, days:["monday","friday","saturday","sunday"], timeSlots:["afternoon"], preferredShift:"afternoon", skills:["it_support","management"] },
+      { fullName:"विजय रावत", email:"vijay.rawat@demo.com", phone:"+91 9821234567", department:"logistics", employeeId:"EMP-021", experience:8, days:["monday","tuesday","thursday","friday"], timeSlots:["morning","afternoon","night"], preferredShift:"any", skills:["driving","machinery","forklift"] },
+      { fullName:"संगीता पांडे", email:"sangeeta.pandey@demo.com", phone:"+91 9822234567", department:"volunteer", employeeId:"EMP-022", experience:2, days:["wednesday","saturday","sunday"], timeSlots:["morning","afternoon"], preferredShift:"morning", skills:["first_aid"] },
+      { fullName:"मनोज तिवारी", email:"manoj.tiwari@demo.com", phone:"+91 9823234567", department:"admin", employeeId:"EMP-023", experience:16, days:["monday","tuesday","wednesday","thursday","friday"], timeSlots:["morning"], preferredShift:"morning", skills:["management","it_support"] },
+      { fullName:"लक्ष्मी कुमारी", email:"laxmi.kumari@demo.com", phone:"+91 9824234567", department:"medical", employeeId:"EMP-024", experience:3, days:["tuesday","thursday","saturday","sunday"], timeSlots:["afternoon","night"], preferredShift:"afternoon", skills:["first_aid","fire_safety"] },
+      { fullName:"सुरेश गुप्ता", email:"suresh.gupta@demo.com", phone:"+91 9825234567", department:"security", employeeId:"EMP-025", experience:20, days:["monday","wednesday","friday","saturday","sunday"], timeSlots:["morning","afternoon","night"], preferredShift:"any", skills:["security","management","driving","fire_safety"] }
+    ];
+
+    function log(msg, type='ok') {
+      const area = document.getElementById('logArea');
+      const line = document.createElement('div');
+      line.className = 'log-' + type;
+      line.innerHTML = msg;
+      area.appendChild(line);
+      area.scrollTop = area.scrollHeight;
+    }
+
+    function clearLog() {
+      document.getElementById('logArea').innerHTML = '';
+    }
+
+    async function loadDemo() {
+      const btn = document.getElementById('loadBtn');
+      btn.disabled = true;
+      btn.textContent = '⏳ लोड हो रहा है...';
+      clearLog();
+
+      log('🚀 Demo data load शुरू...', 'info');
+      log('─────────────────────────────', 'info');
+
+      const existing = getEmployees();
+      const existingEmails = existing.map(e => e.email.toLowerCase());
+
+      let added = 0, skipped = 0;
+
+      for (let i = 0; i < DEMO_EMPLOYEES.length; i++) {
+        await new Promise(r => setTimeout(r, 60)); // small delay for animation
+
+        const d = DEMO_EMPLOYEES[i];
+        const pct = Math.round(((i + 1) / DEMO_EMPLOYEES.length) * 100);
+        document.getElementById('pbar').style.width = pct + '%';
+        document.getElementById('progress-label').textContent = `${i + 1}/25 – ${d.fullName}`;
+
+        if (existingEmails.includes(d.email.toLowerCase())) {
+          log(`⚠️ [${i+1}] ${d.fullName} – Already exists, skip`, 'warn');
+          skipped++;
+          continue;
+        }
+
+        const emp = {
+          id: d.employeeId || ('EMP-' + Date.now() + i),
+          fullName: d.fullName,
+          email: d.email,
+          phone: d.phone,
+          department: d.department,
+          employeeId: d.employeeId,
+          experience: d.experience,
+          days: d.days,
+          timeSlots: d.timeSlots,
+          hoursPerWeek: 40,
+          preferredShift: d.preferredShift,
+          skills: d.skills,
+          notes: 'Demo entry',
+          registeredAt: new Date().toISOString(),
+          assignedShifts: 0
+        };
+
+        existing.push(emp);
+        existingEmails.push(d.email.toLowerCase());
+        log(`✅ [${i+1}] ${d.fullName} (${d.department}) – ${d.skills.length} skills`, 'ok');
+        added++;
+      }
+
+      saveEmployees(existing);
+      log('─────────────────────────────', 'info');
+      log(`📊 ${added} जोड़े | ${skipped} पहले से थे`, 'info');
+      log('🤖 AI Scheduler चल रहा है...', 'info');
+
+      await new Promise(r => setTimeout(r, 300));
+
+      const assignments = window.AIScheduler.assign(existing);
+      saveAssignments(assignments);
+
+      const filled = assignments.filter(a => a.status === 'assigned').length;
+      const empty = assignments.filter(a => a.status === 'unassigned').length;
+
+      log(`✅ ${assignments.length} असाइनमेंट जेनरेट | ${filled} भरे | ${empty} खाली`, 'ok');
+
+      const alerts = window.AIScheduler.detectImbalances(existing, assignments);
+      if (alerts.length === 0) log('✅ कोई असंतुलन नहीं! सब ठीक है।', 'ok');
+      else alerts.forEach(a => log(a.msg, a.type === 'danger' ? 'warn' : 'info'));
+
+      log('─────────────────────────────', 'info');
+      log('🎉 Demo data सफलतापूर्वक लोड!', 'ok');
+
+      document.getElementById('progress-label').textContent = `✅ पूरा! ${existing.length} कर्मचारी, ${assignments.length} शिफ्ट्स`;
+      btn.disabled = false;
+      btn.textContent = '🔁 फिर से लोड करें';
+
+      showToast(`🎉 ${added} employees + ${assignments.length} shifts लोड!`);
+    }
+
+    function clearData() {
+      if (!confirm('सभी डेटा डिलीट करें?')) return;
+      saveEmployees([]);
+      saveAssignments([]);
+      clearLog();
+      document.getElementById('pbar').style.width = '0%';
+      document.getElementById('progress-label').textContent = 'तैयार है – बटन दबाएं';
+      document.getElementById('loadBtn').textContent = '✅ 25 Demo Entries लोड करें';
+      log('🗑️ सभी डेटा क्लियर कर दिया गया।', 'warn');
+      showToast('🗑️ डेटा क्लियर।');
+    }
+
+    // Show existing count on load
+    window.addEventListener('DOMContentLoaded', () => {
+      updateNavCount();
+      const count = getEmployees().length;
+      if (count > 0) log(`ℹ️ पहले से ${count} employees हैं।`, 'info');
+    });
+  </script>
+</body>
+</html>
