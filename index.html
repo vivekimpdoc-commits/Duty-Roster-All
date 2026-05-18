@@ -28,25 +28,53 @@
     <a href="schedule.html" class="nav-link" onclick="closeMenu()">📅 शेड्यूल</a>
   </div>
 
-  <section class="hero">
-    <div class="hero-content">
-      <div class="hero-badge">🤖 AI-Powered Shift Management</div>
-      <h1 class="hero-title">स्मार्ट शिफ्ट<br/><span class="gradient-text">मैनेजमेंट सिस्टम</span></h1>
-      <p class="hero-sub">AI आधारित स्वचालित ड्यूटी शिफ्ट असाइनमेंट। उपलब्धता, कौशल और निष्पक्षता के आधार पर।</p>
-      <div class="hero-stats">
-        <div class="stat"><span class="stat-n" id="stat-reg">0</span><span class="stat-l">रजिस्टर्ड</span></div>
-        <div class="stat-div"></div>
-        <div class="stat"><span class="stat-n">3</span><span class="stat-l">शिफ्ट्स</span></div>
-        <div class="stat-div"></div>
-        <div class="stat"><span class="stat-n" id="stat-asgn">0</span><span class="stat-l">असाइन्ड</span></div>
+  <div id="loginSection" style="position:relative;z-index:2;min-height:80vh;display:flex;align-items:center;justify-content:center;">
+    <div class="glass-card" style="max-width:400px;width:90%;text-align:center;">
+      <div style="font-size:48px;margin-bottom:20px;">📝</div>
+      <h2 style="margin-bottom:8px;">Employee <span class="gradient-text">Login</span></h2>
+      <p style="color:var(--text-muted);font-size:14px;margin-bottom:24px;">रजिस्ट्रेशन फॉर्म एक्सेस करने के लिए लॉगिन करें</p>
+      
+      <div class="form-group" style="margin-bottom:16px;text-align:left;">
+        <label>Login ID</label>
+        <div class="inp-wrap"><span class="inp-icon">👤</span><input type="text" id="empLoginId" placeholder="Enter ID"/></div>
       </div>
+      
+      <div class="form-group" style="margin-bottom:24px;text-align:left;">
+        <label>Password</label>
+        <div class="inp-wrap"><span class="inp-icon">🔒</span><input type="password" id="empLoginPass" placeholder="••••••••"/></div>
+      </div>
+      
+      <button class="btn-next" onclick="handleEmpLogin()" style="width:100%;margin-bottom:16px;">🔑 लॉगिन करें</button>
+      
+      <div id="demoBox" style="display:none;background:rgba(255,255,255,0.05);border:1px dashed var(--border);border-radius:12px;padding:12px;font-size:13px;margin-top:20px;">
+        <p style="color:var(--text-muted);margin-bottom:4px;">Demo Credentials:</p>
+        <code style="color:var(--primary)">ID: emp | Pass: emp123</code>
+      </div>
+      
+      <button onclick="toggleDemo()" style="background:none;border:none;color:var(--primary);font-size:12px;cursor:pointer;text-decoration:underline;">Show Demo Credentials</button>
     </div>
-    <div class="hero-cards">
-      <div class="float-card fc-1">🌅 Morning Shift <span class="badge-g">Active</span></div>
-      <div class="float-card fc-2">🌙 Night Shift <span class="badge-b">Assigned</span></div>
-      <div class="float-card fc-3">⚡ AI Score <span class="badge-p">98%</span></div>
-    </div>
-  </section>
+  </div>
+
+  <div id="mainContent" style="display:none;">
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">🤖 AI-Powered Shift Management</div>
+        <h1 class="hero-title">स्मार्ट शिफ्ट<br/><span class="gradient-text">मैनेजमेंट सिस्टम</span></h1>
+        <p class="hero-sub">AI आधारित स्वचालित ड्यूटी शिफ्ट असाइनमेंट। उपलब्धता, कौशल और निष्पक्षता के आधार पर।</p>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-n" id="stat-reg">0</span><span class="stat-l">रजिस्टर्ड</span></div>
+          <div class="stat-div"></div>
+          <div class="stat"><span class="stat-n">3</span><span class="stat-l">शिफ्ट्स</span></div>
+          <div class="stat-div"></div>
+          <div class="stat"><span class="stat-n" id="stat-asgn">0</span><span class="stat-l">असाइन्ड</span></div>
+        </div>
+      </div>
+      <div class="hero-cards">
+        <div class="float-card fc-1">🌅 Morning Shift <span class="badge-g">Active</span></div>
+        <div class="float-card fc-2">🌙 Night Shift <span class="badge-b">Assigned</span></div>
+        <div class="float-card fc-3">⚡ AI Score <span class="badge-p">98%</span></div>
+      </div>
+    </section>
 
   <section class="form-section">
     <div class="container">
@@ -206,6 +234,7 @@
       </div>
     </div>
   </section>
+  </div>
 
   <div class="toast" id="toast"><span id="toast-msg"></span></div>
 
@@ -216,6 +245,46 @@
   <script>
     function toggleMenu(){const h=document.getElementById('hamburger');const n=document.getElementById('mobileNav');h.classList.toggle('open');n.classList.toggle('open');}
     function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('mobileNav').classList.remove('open');}
+    
+    // SIMPLE LOGIN LOGIC FOR REGISTRATION
+    function handleEmpLogin() {
+      const id = document.getElementById('empLoginId').value;
+      const pass = document.getElementById('empLoginPass').value;
+      
+      if (id === 'emp' && pass === 'emp123') {
+        sessionStorage.setItem('isEmpLoggedIn', 'true');
+        showMainContent();
+        if (typeof showToast === 'function') {
+          showToast('✅ लॉगिन सफल!');
+        } else {
+          alert('लॉगिन सफल!');
+        }
+      } else {
+        if (typeof showToast === 'function') {
+          showToast('❌ गलत ID या पासवर्ड!', 'error');
+        } else {
+          alert('गलत ID या पासवर्ड!');
+        }
+      }
+    }
+
+    function toggleDemo() {
+      const box = document.getElementById('demoBox');
+      box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function showMainContent() {
+      document.getElementById('loginSection').style.display = 'none';
+      document.getElementById('mainContent').style.display = 'block';
+    }
+
+    function checkEmpAuth() {
+      if (sessionStorage.getItem('isEmpLoggedIn') === 'true') {
+        showMainContent();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', checkEmpAuth);
   </script>
 </body>
 </html>
