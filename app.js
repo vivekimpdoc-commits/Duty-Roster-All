@@ -141,6 +141,14 @@ function showSuccess(emp) {
   const sm = document.getElementById('successMsg');
   sm.style.display = 'block';
 
+  const prog = document.querySelector('.form-progress');
+  if (prog) prog.style.display = 'none';
+
+  const iconEl = sm.querySelector('.success-icon');
+  const titleEl = sm.querySelector('h3');
+  if (iconEl) iconEl.textContent = '🎉';
+  if (titleEl) titleEl.textContent = 'रजिस्ट्रेशन सफल!';
+
   const shiftLabels = {
     morning: '🌅 मॉर्निंग (6AM–2PM)',
     afternoon: '☀️ आफ्टरनून (2PM–10PM)',
@@ -190,6 +198,10 @@ function resetForm() {
   document.getElementById('registrationForm').reset();
   document.getElementById('registrationForm').style.display = 'block';
   document.getElementById('successMsg').style.display = 'none';
+  
+  const prog = document.querySelector('.form-progress');
+  if (prog) prog.style.display = 'flex';
+
   // Reset steps
   document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
   document.getElementById('step-1').classList.add('active');

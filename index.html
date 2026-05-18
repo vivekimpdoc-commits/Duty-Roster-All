@@ -368,15 +368,30 @@
           const formEl = document.getElementById('registrationForm');
           if (formEl) formEl.style.display = 'none';
           
+          const prog = document.querySelector('.form-progress');
+          if (prog) prog.style.display = 'none';
+          
           const sm = document.getElementById('successMsg');
           if (sm) {
             sm.style.display = 'block';
+            
+            const iconEl = sm.querySelector('.success-icon');
+            const titleEl = sm.querySelector('h3');
+            if (iconEl) iconEl.textContent = '✅';
+            if (titleEl) titleEl.textContent = 'एक्सेल फ़ाइल अपलोड सफल!';
+            
             const detailsEl = document.getElementById('successDetails');
             if (detailsEl) {
               detailsEl.innerHTML = `
-                <p>📊 <strong>कुल नए रजिस्टर:</strong> ${added} जवान</p>
-                <p>🤖 <strong>AI शेड्यूलर:</strong> सभी को स्वचालित रूप से ड्यूटी असाइन कर दी गई है!</p>
-                <p>📅 शेड्यूल देखने के लिए नीचे दिए गए बटन पर क्लिक करें।</p>
+                <div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); border-radius:12px; padding:18px; margin-bottom:16px; text-align:left;">
+                  <h4 style="color:var(--success); margin-bottom:12px; font-size:16px; font-weight:700; display:flex; align-items:center; gap:8px;">📊 अपलोड समरी रिपोर्ट:</h4>
+                  <p style="margin-bottom:8px; font-size:14px;">📈 <strong>सफलतापूर्वक जोड़े गए जवान:</strong> <span style="font-size:16px; font-weight:700; color:var(--success);">${added}</span></p>
+                  <p style="margin-bottom:8px; font-size:14px;">🤖 <strong>AI रोस्टर डिप्लॉयमेंट:</strong> नया ड्यूटी चार्ट ऑटो-जेनरेट हो चुका है!</p>
+                  <p style="margin-bottom:0; font-size:14px;">🔒 <strong>ड्यूटी सिक्योरिटी:</strong> सभी जवानों का डेटा सुरक्षित रूप से डेटाबेस में सिंक कर दिया गया है।</p>
+                </div>
+                <div style="font-size:13px; color:var(--text-muted); text-align:center; margin-bottom:8px;">
+                  कृपया नीचे "शेड्यूल देखें" बटन पर क्लिक करके नया असाइनमेंट चेक करें।
+                </div>
               `;
             }
             sm.scrollIntoView({ behavior: 'smooth' });
