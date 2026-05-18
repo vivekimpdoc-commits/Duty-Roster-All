@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fullName: document.getElementById('fullName').value.trim(),
       email: document.getElementById('email').value.trim(),
       phone: document.getElementById('phone').value.trim(),
-      department: document.getElementById('department').value,
+      department: document.getElementById('subDepartment') && document.getElementById('subDepartment').value ? `${document.getElementById('department').value} (${document.getElementById('subDepartment').value})` : document.getElementById('department').value,
       employeeId: document.getElementById('employeeId').value.trim(),
       experience: parseInt(document.getElementById('experience').value || '0'),
       days,
