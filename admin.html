@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
-  <title>ShiftMaster Pro – Admin डैशबोर्ड</title>
+  <title>Police Roster Pro – Admin डैशबोर्ड</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css"/>
 </head>
@@ -11,13 +11,14 @@
   <div class="bg-animated"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
 
   <nav class="navbar">
-    <div class="nav-brand"><span class="nav-logo">⚡</span><span class="nav-title">ShiftMaster <span class="accent">Pro</span></span></div>
+    <div class="nav-brand"><span class="nav-logo">🚓</span><span class="nav-title">Police Roster <span class="accent">Pro</span></span></div>
     <div class="nav-links">
       <a href="index.html" class="nav-link">रजिस्ट्रेशन</a>
       <a href="admin.html" class="nav-link active">Admin</a>
       <a href="schedule.html" class="nav-link">शेड्यूल</a>
+      <a href="#" class="nav-link" onclick="handleLogout()" style="color:var(--danger)">लॉगआउट</a>
     </div>
-    <div class="nav-badge"><span class="pulse-dot"></span><span id="nav-user-count">0 कर्मचारी</span></div>
+    <div class="nav-badge"><span class="pulse-dot"></span><span id="nav-user-count">0 जवान</span></div>
     <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -60,7 +61,7 @@
 
       <div class="page-header">
         <h1>🛡️ Admin <span class="gradient-text">डैशबोर्ड</span></h1>
-        <p>कर्मचारी प्रबंधन, शिफ्ट असाइनमेंट और AI अलर्ट</p>
+        <p>जवान प्रबंधन, ड्यूटी असाइनमेंट और AI अलर्ट</p>
       </div>
 
       <!-- STATS -->
@@ -83,9 +84,9 @@
 
       <!-- EMPLOYEES TABLE -->
       <div class="glass-card" style="margin-bottom:24px">
-        <h3 style="margin-bottom:16px">👥 रजिस्टर्ड कर्मचारी</h3>
+        <h3 style="margin-bottom:16px">👥 रजिस्टर्ड पुलिस अधिकारी / जवान</h3>
         <div class="table-wrap" id="empTableWrap">
-          <p style="color:var(--text-muted);font-size:14px;padding:20px">कोई कर्मचारी नहीं। <a href="index.html" style="color:var(--primary)">पहले रजिस्टर करें →</a></p>
+          <p style="color:var(--text-muted);font-size:14px;padding:20px">कोई जवान नहीं। <a href="index.html" style="color:var(--primary)">पहले रजिस्टर करें →</a></p>
         </div>
       </div>
 
@@ -105,7 +106,7 @@
     <div class="glass-card" style="width:90%;max-width:480px;position:relative">
       <h3 style="margin-bottom:20px">✏️ असाइनमेंट एडिट करें</h3>
       <div class="form-group" style="margin-bottom:16px">
-        <label>कर्मचारी का नाम</label>
+        <label>अधिकारी / जवान का नाम</label>
         <div class="inp-wrap"><span class="inp-icon">👤</span><input type="text" id="editName"/></div>
       </div>
       <div class="form-group" style="margin-bottom:16px">
@@ -136,7 +137,7 @@
   </div>
 
   <div class="toast" id="toast"><span id="toast-msg"></span></div>
-  <footer class="footer"><div class="container"><p>⚡ ShiftMaster Pro – Admin Panel</p></div></footer>
+  <footer class="footer"><div class="container"><p>🚓 Police Roster Pro – Admin Panel</p></div></footer>
 
   <script src="app.js"></script>
   <script src="ai-scheduler.js"></script>
@@ -155,6 +156,12 @@
       } else {
         showToast('❌ गलत ID या पासवर्ड!', 'error');
       }
+    }
+
+    function handleLogout() {
+      sessionStorage.removeItem('isEmpLoggedIn');
+      sessionStorage.removeItem('isAdminLoggedIn');
+      window.location.reload();
     }
 
     function toggleDemo() {
@@ -182,10 +189,10 @@
       const unassigned = assigns.filter(a => a.status === 'unassigned').length;
       const assigned = assigns.filter(a => a.status === 'assigned').length;
       document.getElementById('statsRow').innerHTML = `
-        <div class="stat-card"><div class="stat-card-icon">👥</div><div><div class="stat-card-val">${emps.length}</div><div class="stat-card-lbl">कुल कर्मचारी</div></div></div>
-        <div class="stat-card"><div class="stat-card-icon">✅</div><div><div class="stat-card-val">${assigned}</div><div class="stat-card-lbl">असाइन्ड शिफ्ट</div></div></div>
+        <div class="stat-card"><div class="stat-card-icon">👥</div><div><div class="stat-card-val">${emps.length}</div><div class="stat-card-lbl">कुल जवान</div></div></div>
+        <div class="stat-card"><div class="stat-card-icon">✅</div><div><div class="stat-card-val">${assigned}</div><div class="stat-card-lbl">असाइन्ड ड्यूटी</div></div></div>
         <div class="stat-card"><div class="stat-card-icon">⚠️</div><div><div class="stat-card-val">${unassigned}</div><div class="stat-card-lbl">खाली शिफ्ट</div></div></div>
-        <div class="stat-card"><div class="stat-card-icon">📅</div><div><div class="stat-card-val">7</div><div class="stat-card-lbl">दिन का शेड्यूल</div></div></div>
+        <div class="stat-card"><div class="stat-card-icon">📅</div><div><div class="stat-card-val">7</div><div class="stat-card-lbl">दिन का रोस्टर</div></div></div>
       `;
     }
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>ShiftMaster – Demo Data Loader</title>
+  <title>Police Roster Pro – Demo Data Loader</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css"/>
   <style>
@@ -31,7 +31,7 @@
     <div class="seed-box">
       <span class="seed-icon">🚀</span>
       <h2 style="font-size:26px;font-weight:700;margin-bottom:8px">Demo Data <span class="gradient-text">Loader</span></h2>
-      <p style="color:var(--text-muted);font-size:14px;margin-bottom:20px">100 demo employees + AI shift assignments लोड करें</p>
+      <p style="color:var(--text-muted);font-size:14px;margin-bottom:20px">100 demo officers + AI patrol assignments लोड करें</p>
 
       <div class="progress-bar-wrap"><div class="progress-bar-fill" id="pbar"></div></div>
       <p id="progress-label" style="font-size:13px;color:var(--text-muted);">तैयार है – बटन दबाएं</p>
@@ -61,11 +61,11 @@
   <script>
     const firstNames = ["राजेश", "प्रिया", "अमित", "सुनीता", "विकास", "अनीता", "संजय", "कविता", "रोहन", "पूजा", "दिनेश", "ममता", "नितिन", "रेखा", "अजय", "शालिनी", "हरीश", "नेहा", "भूपेंद्र", "आरती", "विजय", "संगीता", "मनोज", "लक्ष्मी", "सुरेश", "दीपक", "मनीषा", "प्रमोद", "सरिता", "अरुण", "नीलम", "पवन", "किरण", "सतीश", "मीनाक्षी", "राजीव", "ज्योति", "कुणाल", "रूपा", "ओम प्रकाश", "श्वेता", "मनीष", "दिव्या", "संदीप", "अनुराधा", "वरुण", "खुशबू", "ऋषभ", "किरण", "सुनील"];
     const lastNames = ["शर्मा", "सिंह", "वर्मा", "देवी", "यादव", "गुप्ता", "पटेल", "तिवारी", "मिश्रा", "राय", "चौधरी", "शुक्ला", "जोशी", "त्रिपाठी", "कुमार", "पांडे", "कौर", "रावत", "बिष्ट", "जैन", "मौर्य", "धवन", "रानी", "पंत", "बेदी", "शेट्टी"];
-    const depts = ["medical", "security", "admin", "technical", "logistics", "volunteer"];
+    const depts = ["patrol", "traffic", "admin", "investigation", "control_room", "emergency"];
     const dayOptions = [["monday","tuesday","wednesday","thursday","friday"], ["monday","wednesday","friday","saturday","sunday"], ["tuesday","thursday","saturday"], ["saturday","sunday"], ["monday","tuesday","friday","saturday"], ["tuesday","thursday","saturday","sunday"]];
     const timeOptions = [["morning"], ["afternoon"], ["night"], ["morning","afternoon"], ["afternoon","night"], ["morning","night"], ["morning","afternoon","night"]];
     const prefOptions = ["morning", "afternoon", "night", "any"];
-    const skillOptions = ["first_aid", "security", "it_support", "management", "driving", "forklift", "machinery", "fire_safety"];
+    const skillOptions = ["first_aid", "riot_control", "cyber_crime", "vip_security", "driving", "marksman", "investigation", "traffic_control"];
 
     function generateEmployees(count) {
       const employees = [];
@@ -90,7 +90,7 @@
           email: email,
           phone: phone,
           department: dept,
-          employeeId: `EMP-${String(i).padStart(3, '0')}`,
+          employeeId: `PNO-${String(i).padStart(5, '0')}`,
           experience: exp,
           days: days,
           timeSlots: timeSlots,
@@ -194,7 +194,7 @@
       btn.disabled = false;
       btn.textContent = '🔁 फिर से लोड करें';
 
-      showToast(`🎉 ${added} employees + ${assignments.length} shifts लोड!`);
+      showToast(`🎉 ${added} officers + ${assignments.length} shifts लोड!`);
     }
 
     function clearData() {

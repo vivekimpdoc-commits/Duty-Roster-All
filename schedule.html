@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
-  <title>ShiftMaster Pro – साप्ताहिक शेड्यूल</title>
+  <title>Police Roster Pro – साप्ताहिक शेड्यूल</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css"/>
   <style>
@@ -33,13 +33,14 @@
   <div class="bg-animated"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
 
   <nav class="navbar">
-    <div class="nav-brand"><span class="nav-logo">⚡</span><span class="nav-title">ShiftMaster <span class="accent">Pro</span></span></div>
+    <div class="nav-brand"><span class="nav-logo">🚓</span><span class="nav-title">Police Roster <span class="accent">Pro</span></span></div>
     <div class="nav-links">
       <a href="index.html" class="nav-link">रजिस्ट्रेशन</a>
       <a href="admin.html" class="nav-link">Admin</a>
       <a href="schedule.html" class="nav-link active">शेड्यूल</a>
+      <a href="#" class="nav-link" onclick="handleLogout()" style="color:var(--danger)">लॉगआउट</a>
     </div>
-    <div class="nav-badge"><span class="pulse-dot"></span><span id="nav-user-count">0 कर्मचारी</span></div>
+    <div class="nav-badge"><span class="pulse-dot"></span><span id="nav-user-count">0 जवान</span></div>
     <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -127,7 +128,7 @@
   </div>
 
   <div class="toast" id="toast"><span id="toast-msg"></span></div>
-  <footer class="footer"><div class="container"><p>⚡ ShiftMaster Pro – Schedule View</p></div></footer>
+  <footer class="footer"><div class="container"><p>🚓 Police Roster Pro – Schedule View</p></div></footer>
 
   <script src="app.js"></script>
   <script src="ai-scheduler.js"></script>
@@ -287,6 +288,12 @@
       } else {
         document.getElementById('accessDenied').style.display = 'flex';
       }
+    }
+
+    function handleLogout() {
+      sessionStorage.removeItem('isEmpLoggedIn');
+      sessionStorage.removeItem('isAdminLoggedIn');
+      window.location.reload();
     }
 
     window.addEventListener('DOMContentLoaded', checkAuth);

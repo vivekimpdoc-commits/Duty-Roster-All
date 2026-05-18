@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
-  <title>ShiftMaster Pro – रजिस्ट्रेशन</title>
+  <title>Police Roster Pro – रजिस्ट्रेशन</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css"/>
 </head>
@@ -11,13 +11,14 @@
   <div class="bg-animated"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
 
   <nav class="navbar">
-    <div class="nav-brand"><span class="nav-logo">⚡</span><span class="nav-title">ShiftMaster <span class="accent">Pro</span></span></div>
+    <div class="nav-brand"><span class="nav-logo">🚓</span><span class="nav-title">Police Roster <span class="accent">Pro</span></span></div>
     <div class="nav-links">
       <a href="index.html" class="nav-link active">रजिस्ट्रेशन</a>
       <a href="admin.html" class="nav-link">Admin</a>
       <a href="schedule.html" class="nav-link">शेड्यूल</a>
+      <a href="#" class="nav-link" onclick="handleLogout()" style="color:var(--danger)">लॉगआउट</a>
     </div>
-    <div class="nav-badge"><span class="pulse-dot"></span><span id="nav-user-count">0 कर्मचारी</span></div>
+    <div class="nav-badge"><span class="pulse-dot"></span><span id="nav-user-count">0 जवान</span></div>
     <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -58,11 +59,11 @@
   <div id="mainContent" style="display:none;">
     <section class="hero">
       <div class="hero-content">
-        <div class="hero-badge">🤖 AI-Powered Shift Management</div>
-        <h1 class="hero-title">स्मार्ट शिफ्ट<br/><span class="gradient-text">मैनेजमेंट सिस्टम</span></h1>
-        <p class="hero-sub">AI आधारित स्वचालित ड्यूटी शिफ्ट असाइनमेंट। उपलब्धता, कौशल और निष्पक्षता के आधार पर।</p>
-        <div class="hero-stats">
-          <div class="stat"><span class="stat-n" id="stat-reg">0</span><span class="stat-l">रजिस्टर्ड</span></div>
+        <div class="hero-badge">🚔 AI-Powered Police Deployment</div>
+      <h1 class="hero-title">स्मार्ट पुलिस ड्यूटी<br/><span class="gradient-text">मैनेजमेंट सिस्टम</span></h1>
+      <p class="hero-sub">AI आधारित स्वचालित ड्यूटी असाइनमेंट। जवानों की उपलब्धता, कौशल (Skills) और समान ड्यूटी वितरण के आधार पर।</p>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-n" id="stat-reg">0</span><span class="stat-l">रजिस्टर्ड जवान</span></div>
           <div class="stat-div"></div>
           <div class="stat"><span class="stat-n">3</span><span class="stat-l">शिफ्ट्स</span></div>
           <div class="stat-div"></div>
@@ -70,17 +71,17 @@
         </div>
       </div>
       <div class="hero-cards">
-        <div class="float-card fc-1">🌅 Morning Shift <span class="badge-g">Active</span></div>
-        <div class="float-card fc-2">🌙 Night Shift <span class="badge-b">Assigned</span></div>
-        <div class="float-card fc-3">⚡ AI Score <span class="badge-p">98%</span></div>
+        <div class="float-card fc-1">🚓 Patrol Shift <span class="badge-g">Active</span></div>
+      <div class="float-card fc-2">🚦 Traffic Shift <span class="badge-b">Assigned</span></div>
+      <div class="float-card fc-3">🚨 Emergency <span class="badge-p">Ready</span></div>
       </div>
     </section>
 
   <section class="form-section">
     <div class="container">
       <div class="section-header">
-        <h2>कर्मचारी रजिस्ट्रेशन फॉर्म</h2>
-        <p>अपनी जानकारी भरें – AI आपकी शिफ्ट ऑटोमैटिक असाइन करेगा</p>
+        <h2>पुलिस अधिकारी / जवान रजिस्ट्रेशन</h2>
+        <p>अपनी जानकारी भरें – AI आपकी ड्यूटी ऑटोमैटिक असाइन करेगा</p>
       </div>
 
       <div class="form-card glass-card">
@@ -113,22 +114,22 @@
                 <span class="err" id="err-phone"></span>
               </div>
               <div class="form-group">
-                <label>विभाग</label>
+                <label>विभाग / विंग</label>
                 <div class="inp-wrap"><span class="inp-icon">🏢</span>
                   <select id="department">
-                    <option value="">-- विभाग चुनें --</option>
-                    <option value="medical">चिकित्सा / Medical</option>
-                    <option value="security">सुरक्षा / Security</option>
-                    <option value="admin">प्रशासन / Admin</option>
-                    <option value="technical">तकनीकी / Technical</option>
-                    <option value="logistics">लॉजिस्टिक्स</option>
-                    <option value="volunteer">स्वयंसेवी</option>
+                    <option value="">-- विंग चुनें --</option>
+                    <option value="patrol">गश्त (Patrol)</option>
+                    <option value="traffic">यातायात (Traffic)</option>
+                    <option value="investigation">जांच (Investigation)</option>
+                    <option value="control_room">कंट्रोल रूम (Control Room)</option>
+                    <option value="emergency">आपातकाल (Emergency Response)</option>
+                    <option value="admin">प्रशासन (Admin)</option>
                   </select>
                 </div>
               </div>
               <div class="form-group">
-                <label>कर्मचारी आईडी</label>
-                <div class="inp-wrap"><span class="inp-icon">🪪</span><input type="text" id="employeeId" placeholder="EMP-0001"/></div>
+                <label>बैज नं. / PNO</label>
+                <div class="inp-wrap"><span class="inp-icon">🪪</span><input type="text" id="employeeId" placeholder="PNO-12345"/></div>
               </div>
               <div class="form-group">
                 <label>अनुभव (वर्ष)</label>
@@ -190,13 +191,13 @@
               <label>विशेष कौशल / प्रमाणन</label>
               <div class="check-grid skills-grid">
                 <label class="chk-card skill-card"><input type="checkbox" name="skills" value="first_aid"/><div class="cc">🚑 प्राथमिक चिकित्सा</div></label>
-                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="machinery"/><div class="cc">⚙️ मशीनरी ऑपरेशन</div></label>
-                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="it_support"/><div class="cc">💻 IT सपोर्ट</div></label>
-                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="fire_safety"/><div class="cc">🔥 फायर सेफ्टी</div></label>
-                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="security"/><div class="cc">🛡️ सुरक्षा प्रशिक्षण</div></label>
-                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="driving"/><div class="cc">🚗 ड्राइविंग</div></label>
-                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="forklift"/><div class="cc">🏗️ फोर्कलिफ्ट</div></label>
-                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="management"/><div class="cc">📊 मैनेजमेंट</div></label>
+                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="riot_control"/><div class="cc">🛡️ दंगा नियंत्रण</div></label>
+                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="cyber_crime"/><div class="cc">💻 साइबर क्राइम</div></label>
+                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="vip_security"/><div class="cc">⭐ VIP सुरक्षा</div></label>
+                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="marksman"/><div class="cc">🎯 निशानेबाज़</div></label>
+                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="driving"/><div class="cc">🚓 ड्राइविंग</div></label>
+                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="traffic_control"/><div class="cc">🚦 यातायात नियंत्रण</div></label>
+                <label class="chk-card skill-card"><input type="checkbox" name="skills" value="investigation"/><div class="cc">🔍 जांच अधिकारी</div></label>
               </div>
             </div>
             <div class="form-group">
@@ -213,7 +214,7 @@
         <div class="success-msg" id="successMsg" style="display:none">
           <div class="success-icon">🎉</div>
           <h3>रजिस्ट्रेशन सफल!</h3>
-          <p>AI जल्द ही आपकी शिफ्ट असाइन करेगा।</p>
+          <p>AI जल्द ही आपकी ड्यूटी असाइन करेगा।</p>
           <div id="successDetails" class="success-details"></div>
           <div class="success-btns">
             <button onclick="resetForm()" class="btn-sec">नया रजिस्ट्रेशन</button>
@@ -227,10 +228,10 @@
   <section class="features-section">
     <div class="container">
       <div class="feat-grid">
-        <div class="feat-card"><div class="feat-icon">🤖</div><h3>AI ऑटो-असाइनमेंट</h3><p>उपलब्धता, कौशल और निष्पक्षता के आधार पर</p></div>
-        <div class="feat-card"><div class="feat-icon">⚖️</div><h3>निष्पक्ष वितरण</h3><p>सभी पर समान भार सुनिश्चित</p></div>
-        <div class="feat-card"><div class="feat-icon">📊</div><h3>लाइव डैशबोर्ड</h3><p>रियल-टाइम शेड्यूल और अलर्ट</p></div>
-        <div class="feat-card"><div class="feat-icon">📤</div><h3>CSV/PDF एक्सपोर्ट</h3><p>शेड्यूल डाउनलोड करें</p></div>
+        <div class="feat-card"><div class="feat-icon">🤖</div><h3>AI ड्यूटी असाइनमेंट</h3><p>उपलब्धता और कौशल के आधार पर</p></div>
+        <div class="feat-card"><div class="feat-icon">⚖️</div><h3>समान ड्यूटी वितरण</h3><p>कठिन शिफ्ट्स का सही बंटवारा</p></div>
+        <div class="feat-card"><div class="feat-icon">📊</div><h3>रियल-टाइम डिप्लॉयमेंट</h3><p>लाइव पुलिस ड्यूटी चार्ट और अलर्ट</p></div>
+        <div class="feat-card"><div class="feat-icon">📤</div><h3>रोस्टर एक्सपोर्ट</h3><p>CSV/PDF में ड्यूटी रोस्टर डाउनलोड करें</p></div>
       </div>
     </div>
   </section>
@@ -238,7 +239,7 @@
 
   <div class="toast" id="toast"><span id="toast-msg"></span></div>
 
-  <footer class="footer"><div class="container"><p>⚡ ShiftMaster Pro – AI-Powered Duty Management</p></div></footer>
+  <footer class="footer"><div class="container"><p>🚓 Police Roster Pro – AI-Powered Duty Management</p></div></footer>
 
   <script src="app.js"></script>
   <script src="ai-scheduler.js"></script>
@@ -266,6 +267,12 @@
           alert('गलत ID या पासवर्ड!');
         }
       }
+    }
+
+    function handleLogout() {
+      sessionStorage.removeItem('isEmpLoggedIn');
+      sessionStorage.removeItem('isAdminLoggedIn');
+      window.location.reload();
     }
 
     function toggleDemo() {
