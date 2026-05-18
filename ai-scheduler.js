@@ -1,13 +1,38 @@
 // ========== AI Scheduler – ai-scheduler.js ==========
 window.AIScheduler = (function () {
   const SHIFTS = [
-    { id: 'morning', label: 'Morning Shift', icon: '🌅', time: '6AM–2PM', requiredSkills: [] },
-    { id: 'afternoon', label: 'Afternoon Shift', icon: '☀️', time: '2PM–10PM', requiredSkills: [] },
-    { id: 'night', label: 'Night Shift', icon: '🌙', time: '10PM–6AM', requiredSkills: ['security'] }
+    { id: 'morning', label: 'Morning Shift', icon: '🌅', time: '6AM–2PM', preferredSkills: ['traffic_control', 'driving'] },
+    { id: 'afternoon', label: 'Afternoon Shift', icon: '☀️', time: '2PM–10PM', preferredSkills: ['vip_security', 'riot_control'] },
+    { id: 'night', label: 'Night Shift', icon: '🌙', time: '10PM–6AM', preferredSkills: ['marksman', 'riot_control', 'first_aid'] }
   ];
   const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
   const UP_DISTRICTS = ["Agra","Aligarh","Allahabad","Ambedkar Nagar","Amethi","Amroha","Auraiya","Azamgarh","Baghpat","Bahraich","Ballia","Balrampur","Banda","Barabanki","Bareilly","Basti","Bhadohi","Bijnor","Budaun","Bulandshahr","Chandauli","Chitrakoot","Deoria","Etah","Etawah","Faizabad","Farrukhabad","Fatehpur","Firozabad","Gautam Buddha Nagar","Ghaziabad","Ghazipur","Gonda","Gorakhpur","Hamirpur","Hapur","Hardoi","Hathras","Jalaun","Jaunpur","Jhansi","Kannauj","Kanpur Dehat","Kanpur Nagar","Kasganj","Kaushambi","Kheri","Kushinagar","Lalitpur","Lucknow","Maharajganj","Mahoba","Mainpuri","Mathura","Mau","Meerut","Mirzapur","Moradabad","Muzaffarnagar","Pilibhit","Pratapgarh","Raebareli","Rampur","Saharanpur","Sambhal","Sant Kabir Nagar","Shahjahanpur","Shamli","Shravasti","Siddharthnagar","Sitapur","Sonbhadra","Sultanpur","Unnao","Varanasi"];
-  const SPOTS = ["Checkpost 1", "Checkpost 2", "Main Chauraha", "Station Road", "Bus Stand", "Highway Toll", "City Square", "Market Area", "Sector 1", "Sector 2", "VIP Road", "Mall Road", "Civil Lines", "Cantt Area", "University Gate", "Hospital Road", "Industrial Area", "Border Post", "Cyber Cell", "Control Room"];
+  
+  const DEPARTMENT_SPOTS = {
+    civil: ['बीट गश्त (Beat Patrol)', 'थाना सुरक्षा (Station Security)', 'पिकेट ड्यूटी (Picket Duty)', 'बाज़ार गश्त (Market Patrol)', 'चेकपोस्ट सुरक्षा (Checkpost Security)'],
+    patrol: ['गश्त ड्यूटी (General Patrol)', 'हाइवे गश्त (Highway Patrol)', 'रात की गश्त (Night Patrol)', 'पिकेट सुरक्षा (Picket Security)'],
+    traffic: ['मुख्य चौराहा (Main Chauraha)', 'हाईवे टोल प्लाज़ा (Highway Toll Plaza)', 'यातायात नियंत्रण (Traffic Control Point)', 'फ्लाईओवर पॉइंट (Flyover Point)'],
+    investigation: ['साइबर सेल (Cyber Cell)', 'जांच ब्यूरो (Investigation Bureau)', 'फॉरेंसिक लैब (Forensic Lab)', 'खुफिया विंग (Intelligence Bureau)'],
+    armed: ['दंगा नियंत्रण वाहिनी (Riot Control Unit)', 'PAC बैरक (PAC Barracks)', 'अति-संवेदनशील क्षेत्र (Hypersensitive Area)', 'वीआईपी सुरक्षा (VIP Security)'],
+    emergency: ['UP-112 PRV गश्त (PRV Patrol)', 'आपातकालीन सहायता (Emergency Assistance)', 'त्वरित प्रतिक्रिया टीम (Quick Response Team)', '112 कंट्रोल पॉइंट (112 Control Point)'],
+    admin: ['कंट्रोल रूम ऑपरेटर (Control Room Operator)', 'वायरलेस कम्युनिकेशन (Wireless)', 'मुख्यालय रिकॉर्ड (HQ Records)', 'पासपोर्ट सत्यापन डेस्क (Passport Desk)'],
+    control: ['कंट्रोल रूम (Control Room)', 'वायरलेस स्टेशन (Wireless Station)', 'सीसीटीएनएस सेल (CCTNS Cell)']
+  };
+
+  const GENERAL_SPOTS = ["चेकपोस्ट-1", "चेकपोस्ट-2", "मुख्य चौराहा", "स्टेशन रोड", "बस स्टैंड", "हाईवे टोल", "सिटी स्क्वायर", "बाज़ार क्षेत्र", "वीआईपी रोड", "सिविल लाइंस", "विश्वविद्यालय गेट", "कंट्रोल रूम"];
+
+  function getSpotForDepartment(deptString) {
+    if (!deptString) return GENERAL_SPOTS[Math.floor(Math.random() * GENERAL_SPOTS.length)];
+    const dept = deptString.toLowerCase();
+    
+    for (const key in DEPARTMENT_SPOTS) {
+      if (dept.includes(key)) {
+        const spots = DEPARTMENT_SPOTS[key];
+        return spots[Math.floor(Math.random() * spots.length)];
+      }
+    }
+    return GENERAL_SPOTS[Math.floor(Math.random() * GENERAL_SPOTS.length)];
+  }
 
   function scoreEmployee(emp, shift, day, currentLoad) {
     let score = 0;
@@ -19,9 +44,9 @@ window.AIScheduler = (function () {
     if (emp.preferredShift === 'any') score += 10;
 
     // Skill match
-    if (shift.requiredSkills.length > 0) {
-      const hasSkill = shift.requiredSkills.some(s => emp.skills.includes(s));
-      if (hasSkill) score += 20;
+    if (shift.preferredSkills && shift.preferredSkills.length > 0) {
+      const matchedSkills = shift.preferredSkills.filter(s => emp.skills.includes(s));
+      score += matchedSkills.length * 15; // 15 points per matching skill!
     }
 
     // Fairness – prefer employees with fewer assigned shifts
@@ -61,7 +86,7 @@ window.AIScheduler = (function () {
           load[emp.id] = (load[emp.id] || 0) + 1;
           assignedToday.add(emp.id); // Mark employee as busy today
           const dist = emp.district && emp.district !== '' ? emp.district : UP_DISTRICTS[Math.floor(Math.random() * UP_DISTRICTS.length)];
-          const spot = SPOTS[Math.floor(Math.random() * SPOTS.length)];
+          const spot = getSpotForDepartment(emp.department);
           assignments.push({
             id: 'ASGN-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5),
             employeeId: emp.id,
