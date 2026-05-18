@@ -157,7 +157,7 @@
           } else {
             cell.forEach(a => {
               if (a.status === 'unassigned') html += `<span class="emp-chip chip-empty">⚠️ खाली</span>`;
-              else html += `<span class="emp-chip ${chipClass[shift]}">${a.employeeName}</span>`;
+              else html += `<span class="emp-chip ${chipClass[shift]}">${a.employeeName}<br/><small style="font-size:9px;color:inherit;opacity:0.8">${a.location || 'Location Not Set'}</small></span>`;
             });
           }
           html += `</td>`;

@@ -116,14 +116,22 @@
               <div class="form-group">
                 <label>विभाग / विंग</label>
                 <div class="inp-wrap"><span class="inp-icon">🏢</span>
-                  <select id="department">
+                  <select id="department" onchange="updateSubDepartments()">
                     <option value="">-- विंग चुनें --</option>
-                    <option value="patrol">गश्त (Patrol)</option>
-                    <option value="traffic">यातायात (Traffic)</option>
-                    <option value="investigation">जांच (Investigation)</option>
-                    <option value="control_room">कंट्रोल रूम (Control Room)</option>
-                    <option value="emergency">आपातकाल (Emergency Response)</option>
-                    <option value="admin">प्रशासन (Admin)</option>
+                    <option value="civil">सिविल पुलिस (Civil Police)</option>
+                    <option value="traffic">यातायात पुलिस (Traffic Police)</option>
+                    <option value="investigation">क्राइम ब्रांच / जांच (Investigation)</option>
+                    <option value="armed">सशस्त्र पुलिस (Armed Police / PAC)</option>
+                    <option value="emergency">आपातकाल (Emergency / UP-112)</option>
+                    <option value="admin">प्रशासन / कंट्रोल रूम (Admin)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>सब-विभाग / यूनिट</label>
+                <div class="inp-wrap"><span class="inp-icon">📌</span>
+                  <select id="subDepartment" disabled>
+                    <option value="">-- पहले विंग चुनें --</option>
                   </select>
                 </div>
               </div>
@@ -228,10 +236,10 @@
   <section class="features-section">
     <div class="container">
       <div class="feat-grid">
-        <div class="feat-card"><div class="feat-icon">🤖</div><h3>AI ड्यूटी असाइनमेंट</h3><p>उपलब्धता और कौशल के आधार पर</p></div>
-        <div class="feat-card"><div class="feat-icon">⚖️</div><h3>समान ड्यूटी वितरण</h3><p>कठिन शिफ्ट्स का सही बंटवारा</p></div>
-        <div class="feat-card"><div class="feat-icon">📊</div><h3>रियल-टाइम डिप्लॉयमेंट</h3><p>लाइव पुलिस ड्यूटी चार्ट और अलर्ट</p></div>
-        <div class="feat-card"><div class="feat-icon">📤</div><h3>रोस्टर एक्सपोर्ट</h3><p>CSV/PDF में ड्यूटी रोस्टर डाउनलोड करें</p></div>
+        <div class="feat-card" style="cursor:pointer;" onclick="window.location.href='admin.html'"><div class="feat-icon">🤖</div><h3>AI ड्यूटी असाइनमेंट</h3><p>उपलब्धता और कौशल के आधार पर</p></div>
+        <div class="feat-card" style="cursor:pointer;" onclick="window.location.href='schedule.html'"><div class="feat-icon">⚖️</div><h3>समान ड्यूटी वितरण</h3><p>कठिन शिफ्ट्स का सही बंटवारा</p></div>
+        <div class="feat-card" style="cursor:pointer;" onclick="window.location.href='schedule.html'"><div class="feat-icon">📊</div><h3>रियल-टाइम डिप्लॉयमेंट</h3><p>लाइव पुलिस ड्यूटी चार्ट और अलर्ट</p></div>
+        <div class="feat-card" style="cursor:pointer;" onclick="window.location.href='admin.html'"><div class="feat-icon">📤</div><h3>रोस्टर एक्सपोर्ट</h3><p>CSV/PDF में ड्यूटी रोस्टर डाउनलोड करें</p></div>
       </div>
     </div>
   </section>
@@ -267,6 +275,58 @@
           alert('गलत ID या पासवर्ड!');
         }
       }
+    }
+
+    const subDeptData = {
+      civil: [
+        {val: 'patrol', text: 'गश्त (Patrol)'},
+        {val: 'beat', text: 'बीट ड्यूटी (Beat Duty)'},
+        {val: 'station', text: 'थाना ड्यूटी (Station Duty)'}
+      ],
+      traffic: [
+        {val: 'traffic_control', text: 'ट्रैफिक कंट्रोल (Traffic Control)'},
+        {val: 'highway_patrol', text: 'हाईवे पेट्रोल (Highway Patrol)'},
+        {val: 'challan', text: 'चालान ब्रांच (Challan Branch)'}
+      ],
+      investigation: [
+        {val: 'cyber_cell', text: 'साइबर सेल (Cyber Cell)'},
+        {val: 'forensics', text: 'फॉरेंसिक (Forensics)'},
+        {val: 'intelligence', text: 'खुफिया (Intelligence)'},
+        {val: 'stf', text: 'स्पेशल टास्क फोर्स (STF)'}
+      ],
+      armed: [
+        {val: 'riot_control', text: 'दंगा नियंत्रण (Riot Control)'},
+        {val: 'vip_security', text: 'VIP सुरक्षा (VIP Security)'},
+        {val: 'pac', text: 'पीएसी बटालियन (PAC Battalion)'}
+      ],
+      emergency: [
+        {val: 'up112', text: 'यूपी-112 (PRV)'},
+        {val: 'fire', text: 'फायर सर्विस (Fire Service)'},
+        {val: 'sdrf', text: 'SDRF (Disaster Response)'}
+      ],
+      admin: [
+        {val: 'wireless', text: 'वायरलेस / रेडियो (Wireless)'},
+        {val: 'record_room', text: 'रिकॉर्ड रूम (Record Room)'},
+        {val: 'hq', text: 'मुख्यालय (Headquarters)'}
+      ]
+    };
+
+    function updateSubDepartments() {
+      const dept = document.getElementById('department').value;
+      const subDeptSelect = document.getElementById('subDepartment');
+      
+      if (!dept || !subDeptData[dept]) {
+        subDeptSelect.innerHTML = '<option value="">-- पहले विंग चुनें --</option>';
+        subDeptSelect.disabled = true;
+        return;
+      }
+      
+      subDeptSelect.disabled = false;
+      let optionsHtml = '<option value="">-- यूनिट चुनें --</option>';
+      subDeptData[dept].forEach(sub => {
+        optionsHtml += `<option value="${sub.val}">${sub.text}</option>`;
+      });
+      subDeptSelect.innerHTML = optionsHtml;
     }
 
     function handleLogout() {

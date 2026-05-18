@@ -6,6 +6,7 @@
   <title>Police Roster Pro – Admin डैशबोर्ड</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
   <div class="bg-animated"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
@@ -76,6 +77,8 @@
       <!-- ACTIONS -->
       <div class="glass-card admin-actions" style="margin-bottom:24px;display:flex;flex-wrap:wrap;gap:12px;align-items:center">
         <h3 style="flex:1">⚙️ प्रबंधन</h3>
+        <input type="file" id="fileUpload" accept=".csv, .xlsx, .xls" style="display:none" onchange="handleFileUpload(event)"/>
+        <button class="btn-next" onclick="document.getElementById('fileUpload').click()" style="font-size:13px;padding:10px 20px;background:linear-gradient(135deg,#3b82f6,#2563eb)">📤 Excel/CSV अपलोड</button>
         <button class="btn-next" onclick="runAI()" style="font-size:13px;padding:10px 20px">🤖 AI रन करें</button>
         <button class="btn-next" onclick="exportCSV()" style="font-size:13px;padding:10px 20px;background:linear-gradient(135deg,#10b981,#059669)">📥 CSV एक्सपोर्ट</button>
         <button class="btn-next" onclick="exportPDF()" style="font-size:13px;padding:10px 20px;background:linear-gradient(135deg,#ef4444,#b91c1c)">📄 PDF प्रिंट</button>
@@ -242,12 +245,13 @@
         return;
       }
       wrap.innerHTML = `<table>
-        <thead><tr><th>तारीख</th><th>दिन</th><th>शिफ्ट</th><th>कर्मचारी</th><th>AI स्कोर</th><th>स्टेटस</th><th>Action</th></tr></thead>
+        <thead><tr><th>तारीख</th><th>दिन</th><th>शिफ्ट</th><th>लोकेशन (जिला - स्पॉट)</th><th>कर्मचारी</th><th>AI स्कोर</th><th>स्टेटस</th><th>Action</th></tr></thead>
         <tbody>${assigns.map(a => `
           <tr>
             <td>${a.date}</td>
             <td>${a.day}</td>
             <td>${a.shiftIcon} <span class="badge badge-${a.shift}">${a.shiftLabel}</span></td>
+            <td><small style="font-size:11px;font-weight:600;color:var(--primary-dark)">${a.location || '–'}</small></td>
             <td>${a.employeeName}</td>
             <td>${a.aiScore}</td>
             <td><span class="badge badge-${a.status === 'assigned' ? 'success' : a.status === 'unassigned' ? 'danger' : 'warning'}">${a.status}</span>${a.manualOverride ? ' <span style="font-size:10px;color:var(--warning)">✏️ Manual</span>' : ''}</td>
@@ -318,8 +322,8 @@
     function exportCSV() {
       const assigns = getAssignments();
       if (assigns.length === 0) { showToast('कोई डेटा नहीं!'); return; }
-      const header = ['Date', 'Day', 'Shift', 'Employee', 'Status', 'AI Score', 'Manual'];
-      const rows = assigns.map(a => [a.date, a.day, a.shiftLabel, a.employeeName, a.status, a.aiScore, a.manualOverride]);
+      const header = ['Date', 'Day', 'Shift', 'Location', 'Employee', 'Status', 'AI Score', 'Manual'];
+      const rows = assigns.map(a => [a.date, a.day, a.shiftLabel, a.location || '-', a.employeeName, a.status, a.aiScore, a.manualOverride]);
       const csv = [header, ...rows].map(r => r.join(',')).join('\n');
       const blob = new Blob([csv], { type: 'text/csv' });
       const url = URL.createObjectURL(blob);
@@ -329,6 +333,73 @@
     }
 
     function exportPDF() { window.print(); }
+
+    function handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, {type: 'array'});
+          const firstSheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[firstSheetName];
+          const json = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+          
+          if (json.length < 2) {
+            showToast('⚠️ फाइल खाली है!', 'error');
+            return;
+          }
+          
+          const headers = json[0].map(h => String(h).toLowerCase().trim());
+          const nameIdx = headers.findIndex(h => h.includes('name') || h.includes('नाम'));
+          const pnoIdx = headers.findIndex(h => h.includes('pno') || h.includes('badge') || h.includes('id'));
+          const deptIdx = headers.findIndex(h => h.includes('dept') || h.includes('department') || h.includes('विभाग'));
+          
+          if (nameIdx === -1) {
+            showToast('⚠️ "Name" कॉलम नहीं मिला!', 'error');
+            return;
+          }
+
+          let added = 0;
+          const emps = getEmployees();
+          
+          for (let i = 1; i < json.length; i++) {
+            const row = json[i];
+            if (!row[nameIdx]) continue;
+            
+            const newEmp = {
+              id: 'EMP-' + Date.now() + Math.random().toString(36).substr(2, 5),
+              fullName: row[nameIdx],
+              employeeId: pnoIdx !== -1 && row[pnoIdx] ? row[pnoIdx] : `PNO-U${Math.floor(Math.random()*1000)}`,
+              department: deptIdx !== -1 && row[deptIdx] ? row[deptIdx] : 'patrol',
+              email: `officer${Math.floor(Math.random()*10000)}@police.in`,
+              phone: '9999999999',
+              experience: 5,
+              days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
+              timeSlots: ['morning', 'afternoon', 'night'],
+              hoursPerWeek: 48,
+              preferredShift: 'any',
+              skills: ['first_aid'],
+              registeredAt: new Date().toISOString(),
+              assignedShifts: 0
+            };
+            emps.push(newEmp);
+            added++;
+          }
+          
+          saveEmployees(emps);
+          renderAll();
+          showToast(`✅ ${added} पुलिस अधिकारी / जवान अपलोड किए गए!`);
+        } catch (err) {
+          console.error(err);
+          showToast('❌ फाइल रीड करने में त्रुटि!', 'error');
+        }
+        // Reset input
+        document.getElementById('fileUpload').value = '';
+      };
+      reader.readAsArrayBuffer(file);
+    }
 
     function renderAll() {
       updateNavCount();

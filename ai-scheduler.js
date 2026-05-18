@@ -6,6 +6,8 @@ window.AIScheduler = (function () {
     { id: 'night', label: 'Night Shift', icon: '🌙', time: '10PM–6AM', requiredSkills: ['security'] }
   ];
   const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  const UP_DISTRICTS = ["Agra","Aligarh","Allahabad","Ambedkar Nagar","Amethi","Amroha","Auraiya","Azamgarh","Baghpat","Bahraich","Ballia","Balrampur","Banda","Barabanki","Bareilly","Basti","Bhadohi","Bijnor","Budaun","Bulandshahr","Chandauli","Chitrakoot","Deoria","Etah","Etawah","Faizabad","Farrukhabad","Fatehpur","Firozabad","Gautam Buddha Nagar","Ghaziabad","Ghazipur","Gonda","Gorakhpur","Hamirpur","Hapur","Hardoi","Hathras","Jalaun","Jaunpur","Jhansi","Kannauj","Kanpur Dehat","Kanpur Nagar","Kasganj","Kaushambi","Kheri","Kushinagar","Lalitpur","Lucknow","Maharajganj","Mahoba","Mainpuri","Mathura","Mau","Meerut","Mirzapur","Moradabad","Muzaffarnagar","Pilibhit","Pratapgarh","Raebareli","Rampur","Saharanpur","Sambhal","Sant Kabir Nagar","Shahjahanpur","Shamli","Shravasti","Siddharthnagar","Sitapur","Sonbhadra","Sultanpur","Unnao","Varanasi"];
+  const SPOTS = ["Checkpost 1", "Checkpost 2", "Main Chauraha", "Station Road", "Bus Stand", "Highway Toll", "City Square", "Market Area", "Sector 1", "Sector 2", "VIP Road", "Mall Road", "Civil Lines", "Cantt Area", "University Gate", "Hospital Road", "Industrial Area", "Border Post", "Cyber Cell", "Control Room"];
 
   function scoreEmployee(emp, shift, day, currentLoad) {
     let score = 0;
@@ -53,6 +55,8 @@ window.AIScheduler = (function () {
 
         selected.forEach(({ emp }) => {
           load[emp.id] = (load[emp.id] || 0) + 1;
+          const dist = UP_DISTRICTS[Math.floor(Math.random() * UP_DISTRICTS.length)];
+          const spot = SPOTS[Math.floor(Math.random() * SPOTS.length)];
           assignments.push({
             id: 'ASGN-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5),
             employeeId: emp.id,
@@ -63,6 +67,7 @@ window.AIScheduler = (function () {
             shiftTime: shift.time,
             day: day,
             date: date.toISOString().split('T')[0],
+            location: `${dist} – ${spot}`,
             aiScore: eligible.find(x => x.emp.id === emp.id)?.score || 0,
             status: 'assigned',
             manualOverride: false
@@ -81,6 +86,7 @@ window.AIScheduler = (function () {
             shiftTime: shift.time,
             day: day,
             date: date.toISOString().split('T')[0],
+            location: 'Unassigned',
             aiScore: 0,
             status: 'unassigned',
             manualOverride: false,
