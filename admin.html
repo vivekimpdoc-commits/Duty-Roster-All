@@ -95,7 +95,13 @@
 
       <!-- ASSIGNMENTS TABLE -->
       <div class="glass-card">
-        <h3 style="margin-bottom:16px">📋 शिफ्ट असाइनमेंट</h3>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px">
+          <h3 style="margin:0">📋 शिफ्ट असाइनमेंट</h3>
+          <div class="inp-wrap" style="max-width:300px;width:100%">
+            <span class="inp-icon">🔍</span>
+            <input type="text" id="filterLocation" placeholder="ज़िला या स्पॉट खोजें..." onkeyup="renderAssignments()" style="padding:10px 16px 10px 40px;"/>
+          </div>
+        </div>
         <div class="table-wrap" id="assignTableWrap">
           <p style="color:var(--text-muted);font-size:14px;padding:20px">कोई असाइनमेंट नहीं। AI रन करें।</p>
         </div>
@@ -240,13 +246,22 @@
     function renderAssignments() {
       const assigns = getAssignments();
       const wrap = document.getElementById('assignTableWrap');
-      if (assigns.length === 0) {
-        wrap.innerHTML = '<p style="color:var(--text-muted);font-size:14px;padding:20px">कोई असाइनमेंट नहीं।</p>';
+      
+      const filterVal = document.getElementById('filterLocation')?.value.toLowerCase() || '';
+      const filteredAssigns = assigns.filter(a => {
+        if (!filterVal) return true;
+        const loc = (a.location || '').toLowerCase();
+        const emp = (a.employeeName || '').toLowerCase();
+        return loc.includes(filterVal) || emp.includes(filterVal);
+      });
+
+      if (filteredAssigns.length === 0) {
+        wrap.innerHTML = '<p style="color:var(--text-muted);font-size:14px;padding:20px">कोई असाइनमेंट नहीं मिला।</p>';
         return;
       }
       wrap.innerHTML = `<table>
         <thead><tr><th>तारीख</th><th>दिन</th><th>शिफ्ट</th><th>लोकेशन (जिला - स्पॉट)</th><th>कर्मचारी</th><th>AI स्कोर</th><th>स्टेटस</th><th>Action</th></tr></thead>
-        <tbody>${assigns.map(a => `
+        <tbody>${filteredAssigns.map(a => `
           <tr>
             <td>${a.date}</td>
             <td>${a.day}</td>

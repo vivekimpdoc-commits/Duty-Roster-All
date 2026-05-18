@@ -88,9 +88,7 @@
         <div class="form-progress">
           <div class="prog-step active" id="ps-1"><div class="step-circle">1</div><span>व्यक्तिगत</span></div>
           <div class="prog-line"></div>
-          <div class="prog-step" id="ps-2"><div class="step-circle">2</div><span>उपलब्धता</span></div>
-          <div class="prog-line"></div>
-          <div class="prog-step" id="ps-3"><div class="step-circle">3</div><span>कौशल</span></div>
+          <div class="prog-step" id="ps-2"><div class="step-circle">2</div><span>कौशल</span></div>
         </div>
 
         <form id="registrationForm" novalidate>
@@ -157,42 +155,6 @@
 
           <!-- STEP 2 -->
           <div class="form-step" id="step-2">
-            <h3 class="step-title">📅 उपलब्धता</h3>
-            <div class="form-group">
-              <label>उपलब्ध दिन <span class="req">*</span></label>
-              <div class="check-grid days-grid">
-                <label class="chk-card"><input type="checkbox" name="days" value="monday"/><div class="cc"><span class="ds">सोम</span><span class="df">Mon</span></div></label>
-                <label class="chk-card"><input type="checkbox" name="days" value="tuesday"/><div class="cc"><span class="ds">मंगल</span><span class="df">Tue</span></div></label>
-                <label class="chk-card"><input type="checkbox" name="days" value="wednesday"/><div class="cc"><span class="ds">बुध</span><span class="df">Wed</span></div></label>
-                <label class="chk-card"><input type="checkbox" name="days" value="thursday"/><div class="cc"><span class="ds">गुरु</span><span class="df">Thu</span></div></label>
-                <label class="chk-card"><input type="checkbox" name="days" value="friday"/><div class="cc"><span class="ds">शुक्र</span><span class="df">Fri</span></div></label>
-                <label class="chk-card"><input type="checkbox" name="days" value="saturday"/><div class="cc"><span class="ds">शनि</span><span class="df">Sat</span></div></label>
-                <label class="chk-card"><input type="checkbox" name="days" value="sunday"/><div class="cc"><span class="ds">रवि</span><span class="df">Sun</span></div></label>
-              </div>
-              <span class="err" id="err-days"></span>
-            </div>
-            <div class="form-group">
-              <label>उपलब्ध समय <span class="req">*</span></label>
-              <div class="check-grid time-grid">
-                <label class="chk-card time-card morning"><input type="checkbox" name="timeSlots" value="morning"/><div class="cc"><span class="ti">🌅</span><span class="tn">सुबह</span><span class="tr">6AM–2PM</span></div></label>
-                <label class="chk-card time-card afternoon"><input type="checkbox" name="timeSlots" value="afternoon"/><div class="cc"><span class="ti">☀️</span><span class="tn">दोपहर</span><span class="tr">2PM–10PM</span></div></label>
-                <label class="chk-card time-card night"><input type="checkbox" name="timeSlots" value="night"/><div class="cc"><span class="ti">🌙</span><span class="tn">रात</span><span class="tr">10PM–6AM</span></div></label>
-              </div>
-              <span class="err" id="err-time"></span>
-            </div>
-            <div class="form-group">
-              <label>प्रति सप्ताह घंटे: <strong id="hrs-display">40</strong></label>
-              <input type="range" id="hoursPerWeek" min="8" max="60" value="40" step="4" oninput="document.getElementById('hrs-display').textContent=this.value" class="slider"/>
-              <div class="slider-labels"><span>8h</span><span>60h</span></div>
-            </div>
-            <div class="form-actions">
-              <button type="button" class="btn-prev" onclick="prevStep(2)">← वापस</button>
-              <button type="button" class="btn-next" onclick="nextStep(2)">अगला →</button>
-            </div>
-          </div>
-
-          <!-- STEP 3 -->
-          <div class="form-step" id="step-3">
             <h3 class="step-title">⭐ कौशल और पसंद</h3>
             <div class="form-group">
               <label>पसंदीदा शिफ्ट</label>
@@ -221,7 +183,7 @@
               <textarea id="additionalNotes" placeholder="कोई विशेष आवश्यकता या जानकारी..." rows="3"></textarea>
             </div>
             <div class="form-actions">
-              <button type="button" class="btn-prev" onclick="prevStep(3)">← वापस</button>
+              <button type="button" class="btn-prev" onclick="prevStep(2)">← वापस</button>
               <button type="submit" class="btn-submit">✅ रजिस्ट्रेशन पूरा करें</button>
             </div>
           </div>

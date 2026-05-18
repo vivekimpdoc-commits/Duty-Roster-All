@@ -37,7 +37,6 @@ let currentStep = 1;
 
 function nextStep(from) {
   if (from === 1 && !validateStep1()) return;
-  if (from === 2 && !validateStep2()) return;
   document.getElementById('step-' + from).classList.remove('active');
   document.getElementById('step-' + (from + 1)).classList.add('active');
   document.getElementById('ps-' + from).classList.remove('active');
@@ -82,19 +81,6 @@ function validateStep1() {
   return ok;
 }
 
-function validateStep2() {
-  let ok = true;
-  const days = [...document.querySelectorAll('input[name="days"]:checked')];
-  const times = [...document.querySelectorAll('input[name="timeSlots"]:checked')];
-  const de = document.getElementById('err-days');
-  const te = document.getElementById('err-time');
-  if (days.length === 0) { de.textContent = 'कम से कम एक दिन चुनें'; ok = false; }
-  else de.textContent = '';
-  if (times.length === 0) { te.textContent = 'कम से कम एक समय स्लॉट चुनें'; ok = false; }
-  else te.textContent = '';
-  return ok;
-}
-
 // ---- FORM SUBMIT ----
 document.addEventListener('DOMContentLoaded', () => {
   updateNavCount();
@@ -106,8 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const days = [...document.querySelectorAll('input[name="days"]:checked')].map(x => x.value);
-    const timeSlots = [...document.querySelectorAll('input[name="timeSlots"]:checked')].map(x => x.value);
+    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const timeSlots = ['morning', 'afternoon', 'night'];
     const skills = [...document.querySelectorAll('input[name="skills"]:checked')].map(x => x.value);
     const prefShift = document.querySelector('input[name="prefShift"]:checked')?.value || 'any';
 
@@ -122,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
       experience: parseInt(document.getElementById('experience').value || '0'),
       days,
       timeSlots,
-      hoursPerWeek: parseInt(document.getElementById('hoursPerWeek').value),
+      hoursPerWeek: 48,
       preferredShift: prefShift,
       skills,
       notes: document.getElementById('additionalNotes').value.trim(),
