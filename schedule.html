@@ -83,8 +83,8 @@
       </div>
 
       <!-- SCHEDULE TABLE -->
-      <div class="glass-card" style="margin-bottom:30px">
-        <h3 style="margin-bottom:16px">📊 शिफ्ट ग्रिड – इस सप्ताह</h3>
+      <div class="glass-card" style="margin-bottom:30px" id="fullScheduleCard">
+        <h3 style="margin-bottom:16px">📊 सम्पूर्ण शिफ्ट ग्रिड (Only Admin)</h3>
         <div class="sched-container" id="schedGrid">
           <p style="color:var(--text-muted);font-size:14px">शेड्यूल लोड हो रहा है...</p>
         </div>
@@ -283,6 +283,9 @@
           
           const swapApproveBtns = document.querySelectorAll('.swap-btns');
           swapApproveBtns.forEach(btn => btn.style.display = 'none');
+          
+          document.getElementById('fullScheduleCard').style.display = 'none';
+          document.getElementById('schedStats').style.display = 'none';
         }
         renderAll();
       } else {
