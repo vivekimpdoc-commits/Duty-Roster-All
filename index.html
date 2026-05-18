@@ -29,34 +29,7 @@
     <a href="schedule.html" class="nav-link" onclick="closeMenu()">📅 शेड्यूल</a>
   </div>
 
-  <div id="loginSection" style="position:relative;z-index:2;min-height:80vh;display:flex;align-items:center;justify-content:center;">
-    <div class="glass-card" style="max-width:400px;width:90%;text-align:center;">
-      <div style="font-size:48px;margin-bottom:20px;">📝</div>
-      <h2 style="margin-bottom:8px;">Employee <span class="gradient-text">Login</span></h2>
-      <p style="color:var(--text-muted);font-size:14px;margin-bottom:24px;">रजिस्ट्रेशन फॉर्म एक्सेस करने के लिए लॉगिन करें</p>
-      
-      <div class="form-group" style="margin-bottom:16px;text-align:left;">
-        <label>Login ID</label>
-        <div class="inp-wrap"><span class="inp-icon">👤</span><input type="text" id="empLoginId" placeholder="Enter ID"/></div>
-      </div>
-      
-      <div class="form-group" style="margin-bottom:24px;text-align:left;">
-        <label>Password</label>
-        <div class="inp-wrap"><span class="inp-icon">🔒</span><input type="password" id="empLoginPass" placeholder="••••••••"/></div>
-      </div>
-      
-      <button class="btn-next" onclick="handleEmpLogin()" style="width:100%;margin-bottom:16px;">🔑 लॉगिन करें</button>
-      
-      <div id="demoBox" style="display:none;background:#f1f5f9;border:1px dashed var(--border);border-radius:12px;padding:12px;font-size:13px;margin-top:20px;">
-        <p style="color:var(--text-muted);margin-bottom:4px;">Demo Credentials:</p>
-        <code style="color:var(--primary)">ID: emp | Pass: emp123</code>
-      </div>
-      
-      <button onclick="toggleDemo()" style="background:none;border:none;color:var(--primary);font-size:12px;cursor:pointer;text-decoration:underline;">Show Demo Credentials</button>
-    </div>
-  </div>
-
-  <div id="mainContent" style="display:none;">
+  <div id="mainContent">
     <section class="hero">
       <div class="hero-content">
         <div class="hero-badge">🚔 AI-Powered Police Deployment</div>
@@ -85,16 +58,9 @@
       </div>
 
       <div class="form-card glass-card">
-        <div class="form-progress">
-          <div class="prog-step active" id="ps-1"><div class="step-circle">1</div><span>व्यक्तिगत</span></div>
-          <div class="prog-line"></div>
-          <div class="prog-step" id="ps-2"><div class="step-circle">2</div><span>कौशल</span></div>
-        </div>
-
         <form id="registrationForm" novalidate>
-          <!-- STEP 1 -->
-          <div class="form-step active" id="step-1">
-            <h3 class="step-title">👤 व्यक्तिगत जानकारी</h3>
+          <div style="margin-bottom:24px">
+            <h3 style="margin-bottom:16px;color:var(--primary-dark)">👤 व्यक्तिगत जानकारी</h3>
             <div class="form-grid">
               <div class="form-group full">
                 <label>पूरा नाम <span class="req">*</span></label>
@@ -150,12 +116,11 @@
                 <div class="inp-wrap"><span class="inp-icon">📈</span><input type="number" id="experience" min="0" max="50" placeholder="0"/></div>
               </div>
             </div>
-            <div class="form-actions"><button type="button" class="btn-next" onclick="nextStep(1)">अगला →</button></div>
+            </div>
           </div>
-
-          <!-- STEP 2 -->
-          <div class="form-step" id="step-2">
-            <h3 class="step-title">⭐ कौशल और पसंद</h3>
+          
+          <div style="margin-bottom:24px">
+            <h3 style="margin-bottom:16px;color:var(--primary-dark)">⭐ कौशल और पसंद</h3>
             <div class="form-group">
               <label>पसंदीदा शिफ्ट</label>
               <div class="radio-grid">
@@ -182,9 +147,8 @@
               <label>अतिरिक्त टिप्पणी</label>
               <textarea id="additionalNotes" placeholder="कोई विशेष आवश्यकता या जानकारी..." rows="3"></textarea>
             </div>
-            <div class="form-actions">
-              <button type="button" class="btn-prev" onclick="prevStep(2)">← वापस</button>
-              <button type="submit" class="btn-submit">✅ रजिस्ट्रेशन पूरा करें</button>
+            <div class="form-actions" style="margin-top:24px;">
+              <button type="submit" class="btn-submit" style="width:100%;font-size:16px;padding:14px">✅ रजिस्ट्रेशन पूरा करें</button>
             </div>
           </div>
         </form>
@@ -225,27 +189,7 @@
     function toggleMenu(){const h=document.getElementById('hamburger');const n=document.getElementById('mobileNav');h.classList.toggle('open');n.classList.toggle('open');}
     function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('mobileNav').classList.remove('open');}
     
-    // SIMPLE LOGIN LOGIC FOR REGISTRATION
-    function handleEmpLogin() {
-      const id = document.getElementById('empLoginId').value;
-      const pass = document.getElementById('empLoginPass').value;
-      
-      if (id === 'emp' && pass === 'emp123') {
-        sessionStorage.setItem('isEmpLoggedIn', 'true');
-        showMainContent();
-        if (typeof showToast === 'function') {
-          showToast('✅ लॉगिन सफल!');
-        } else {
-          alert('लॉगिन सफल!');
-        }
-      } else {
-        if (typeof showToast === 'function') {
-          showToast('❌ गलत ID या पासवर्ड!', 'error');
-        } else {
-          alert('गलत ID या पासवर्ड!');
-        }
-      }
-    }
+    function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('mobileNav').classList.remove('open');}
 
     const subDeptData = {
       civil: [
@@ -318,23 +262,11 @@
       window.location.reload();
     }
 
-    function toggleDemo() {
-      const box = document.getElementById('demoBox');
-      box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    function handleLogout() {
+      sessionStorage.removeItem('isEmpLoggedIn');
+      sessionStorage.removeItem('isAdminLoggedIn');
+      window.location.reload();
     }
-
-    function showMainContent() {
-      document.getElementById('loginSection').style.display = 'none';
-      document.getElementById('mainContent').style.display = 'block';
-    }
-
-    function checkEmpAuth() {
-      if (sessionStorage.getItem('isEmpLoggedIn') === 'true') {
-        showMainContent();
-      }
-    }
-
-    window.addEventListener('DOMContentLoaded', checkEmpAuth);
   </script>
 </body>
 </html>

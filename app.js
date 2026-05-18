@@ -32,33 +32,7 @@ function updateHeroStats() {
   if (sa) sa.textContent = assigns.length;
 }
 
-// ---- STEP NAVIGATION ----
-let currentStep = 1;
-
-function nextStep(from) {
-  if (from === 1 && !validateStep1()) {
-    showToast('⚠️ कृपया सभी ज़रूरी जानकारी सही-सही भरें!', 'warning');
-    return;
-  }
-  document.getElementById('step-' + from).classList.remove('active');
-  document.getElementById('step-' + (from + 1)).classList.add('active');
-  document.getElementById('ps-' + from).classList.remove('active');
-  document.getElementById('ps-' + from).classList.add('done');
-  document.getElementById('ps-' + (from + 1)).classList.add('active');
-  currentStep = from + 1;
-  window.scrollTo({ top: 300, behavior: 'smooth' });
-}
-
-function prevStep(from) {
-  document.getElementById('step-' + from).classList.remove('active');
-  document.getElementById('step-' + (from - 1)).classList.add('active');
-  document.getElementById('ps-' + from).classList.remove('active');
-  document.getElementById('ps-' + (from - 1)).classList.remove('done');
-  document.getElementById('ps-' + (from - 1)).classList.add('active');
-  currentStep = from - 1;
-}
-
-// ---- VALIDATION ----
+// ---- FORM VALIDATION ----
 function validateStep1() {
   let ok = true;
   const name = document.getElementById('fullName').value.trim();
@@ -94,6 +68,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+    
+    if (!validateStep1()) {
+      showToast('⚠️ कृपया सभी ज़रूरी जानकारी सही-सही भरें!', 'warning');
+      return;
+    }
 
     const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const timeSlots = ['morning', 'afternoon', 'night'];
@@ -157,11 +136,5 @@ function resetForm() {
   document.getElementById('registrationForm').reset();
   document.getElementById('registrationForm').style.display = 'block';
   document.getElementById('successMsg').style.display = 'none';
-  // Reset steps
-  document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
-  document.getElementById('step-1').classList.add('active');
-  document.querySelectorAll('.prog-step').forEach(s => { s.classList.remove('active', 'done'); });
-  document.getElementById('ps-1').classList.add('active');
-  currentStep = 1;
   window.scrollTo({ top: 300, behavior: 'smooth' });
 }
