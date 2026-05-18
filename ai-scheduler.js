@@ -43,9 +43,13 @@ window.AIScheduler = (function () {
     DAYS.forEach((day, dayIdx) => {
       const date = new Date(today);
       date.setDate(today.getDate() + dayIdx);
+      
+      // Track employees who already got a shift assigned today
+      const assignedToday = new Set();
 
       SHIFTS.forEach(shift => {
         const eligible = employees
+          .filter(emp => !assignedToday.has(emp.id)) // Enforce unique date assignment
           .map(emp => ({ emp, score: scoreEmployee(emp, shift, day, load) }))
           .filter(x => x.score >= 0)
           .sort((a, b) => b.score - a.score);
@@ -55,6 +59,7 @@ window.AIScheduler = (function () {
 
         selected.forEach(({ emp }) => {
           load[emp.id] = (load[emp.id] || 0) + 1;
+          assignedToday.add(emp.id); // Mark employee as busy today
           const dist = emp.district && emp.district !== '' ? emp.district : UP_DISTRICTS[Math.floor(Math.random() * UP_DISTRICTS.length)];
           const spot = SPOTS[Math.floor(Math.random() * SPOTS.length)];
           assignments.push({
