@@ -34,10 +34,24 @@ window.AIScheduler = (function () {
     return GENERAL_SPOTS[Math.floor(Math.random() * GENERAL_SPOTS.length)];
   }
 
-  function scoreEmployee(emp, shift, day, currentLoad) {
+  function scoreEmployee(emp, shift, day, currentLoad, lastShift) {
     let score = 0;
     if (!emp.days.includes(day)) return -1;
     if (!emp.timeSlots.includes(shift.id)) return -1;
+
+    // Shift Rotation Rules (cyclic transition & rest periods):
+    const prev = lastShift[emp.id];
+    if (prev) {
+      // 1. Safety Rest Rule: Cannot work Morning shift right after Night shift! (sleep constraint)
+      if (prev === 'night' && shift.id === 'morning') return -1;
+      
+      // 2. Continuous Shift Rotation: High penalty for working the same shift consecutively
+      if (prev === shift.id) score -= 25;
+      
+      // 3. Cyclic Forward Rotation Bonus: Morning -> Afternoon -> Night
+      if (prev === 'morning' && shift.id === 'afternoon') score += 12;
+      if (prev === 'afternoon' && shift.id === 'night') score += 12;
+    }
 
     // Preference bonus
     if (emp.preferredShift === shift.id) score += 30;
@@ -61,7 +75,12 @@ window.AIScheduler = (function () {
   function assign(employees) {
     const assignments = [];
     const load = {};
-    employees.forEach(e => (load[e.id] = 0));
+    const lastShift = {}; // Track employee's last assigned shift to enforce rotation!
+    
+    employees.forEach(e => {
+      load[e.id] = 0;
+      lastShift[e.id] = 'off'; // Initially all resting
+    });
 
     const today = new Date();
 
@@ -75,7 +94,7 @@ window.AIScheduler = (function () {
       SHIFTS.forEach(shift => {
         const eligible = employees
           .filter(emp => !assignedToday.has(emp.id)) // Enforce unique date assignment
-          .map(emp => ({ emp, score: scoreEmployee(emp, shift, day, load) }))
+          .map(emp => ({ emp, score: scoreEmployee(emp, shift, day, load, lastShift) }))
           .filter(x => x.score >= 0)
           .sort((a, b) => b.score - a.score);
 
@@ -85,6 +104,8 @@ window.AIScheduler = (function () {
         selected.forEach(({ emp }) => {
           load[emp.id] = (load[emp.id] || 0) + 1;
           assignedToday.add(emp.id); // Mark employee as busy today
+          lastShift[emp.id] = shift.id; // Record today's shift to rotate tomorrow!
+          
           const dist = emp.district && emp.district !== '' ? emp.district : UP_DISTRICTS[Math.floor(Math.random() * UP_DISTRICTS.length)];
           const spot = getSpotForDepartment(emp.department);
           assignments.push({
@@ -122,6 +143,13 @@ window.AIScheduler = (function () {
             manualOverride: false,
             alert: 'कोई कर्मचारी उपलब्ध नहीं'
           });
+        }
+      });
+
+      // Reset lastShift to 'off' for everyone who got a rest day today!
+      employees.forEach(emp => {
+        if (!assignedToday.has(emp.id)) {
+          lastShift[emp.id] = 'off';
         }
       });
     });
