@@ -75,15 +75,34 @@
       </div>
 
       <!-- ACTIONS -->
-      <div class="glass-card admin-actions" style="margin-bottom:24px;display:flex;flex-wrap:wrap;gap:12px;align-items:center">
-        <h3 style="flex:1">⚙️ प्रबंधन</h3>
-        <input type="file" id="fileUpload" accept=".csv, .xlsx, .xls" style="display:none" onchange="handleFileUpload(event)"/>
-        <button class="btn-next" onclick="document.getElementById('fileUpload').click()" style="font-size:13px;padding:10px 20px;background:linear-gradient(135deg,#3b82f6,#2563eb)">📤 Excel/CSV अपलोड</button>
-        <button class="btn-next" onclick="runAI()" style="font-size:13px;padding:10px 20px">🤖 AI रन करें</button>
-        <button class="btn-reject" onclick="triggerSOS()" style="font-size:13px;padding:10px 20px;background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;border:none">🚨 SOS डिप्लॉयमेंट</button>
-        <button class="btn-next" onclick="exportCSV()" style="font-size:13px;padding:10px 20px;background:linear-gradient(135deg,#10b981,#059669)">📥 CSV एक्सपोर्ट</button>
-        <button class="btn-next" onclick="exportPDF()" style="font-size:13px;padding:10px 20px;background:linear-gradient(135deg,#ef4444,#b91c1c)">📄 PDF प्रिंट</button>
-        <button class="btn-prev" onclick="clearAll()" style="font-size:13px;padding:10px 20px;border-color:#ef4444;color:#ef4444">🗑️ डेटा क्लियर</button>
+      <div class="glass-card" style="margin-bottom:24px">
+        <h3 style="margin-bottom:16px;display:flex;align-items:center;gap:8px">⚙️ प्रशासनिक नियंत्रण पैनल (Admin Command Center)</h3>
+        
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:16px">
+          
+          <!-- AI scheduling cluster -->
+          <div style="background:#f8fafc;border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px">
+            <h4 style="font-size:14px;color:var(--primary);margin:0;font-weight:700">🤖 AI शेड्यूलिंग इंजन</h4>
+            <button class="btn-next" onclick="runAI()" style="font-size:13px;padding:10px 16px;width:100%;text-align:center">⚡ AI रोस्टर जनरेट करें</button>
+            <button class="btn-reject" onclick="triggerSOS()" style="font-size:13px;padding:10px 16px;background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;border:none;width:100%;text-align:center">🚨 आपातकालीन SOS तैनात करें</button>
+          </div>
+
+          <!-- Data transfer cluster -->
+          <div style="background:#f8fafc;border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px">
+            <h4 style="font-size:14px;color:var(--success);margin:0;font-weight:700">📤 डेटा इम्पोर्ट / एक्सपोर्ट</h4>
+            <input type="file" id="fileUpload" accept=".csv, .xlsx, .xls" style="display:none" onchange="handleFileUpload(event)"/>
+            <button class="btn-next" onclick="document.getElementById('fileUpload').click()" style="font-size:13px;padding:10px 16px;background:linear-gradient(135deg,#3b82f6,#2563eb);width:100%;text-align:center">📤 एक्सेल (Excel) अपलोड</button>
+            <button class="btn-next" onclick="exportCSV()" style="font-size:13px;padding:10px 16px;background:linear-gradient(135deg,#10b981,#059669);width:100%;text-align:center">📥 CSV डेटा डाउनलोड</button>
+          </div>
+
+          <!-- Reporting and reset cluster -->
+          <div style="background:#f8fafc;border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px">
+            <h4 style="font-size:14px;color:var(--warning);margin:0;font-weight:700">📄 रिपोर्टिंग और सुरक्षा</h4>
+            <button class="btn-next" onclick="exportPDF()" style="font-size:13px;padding:10px 16px;background:linear-gradient(135deg,#6b7280,#4b5563);width:100%;text-align:center">📄 PDF रिपोर्ट प्रिंट</button>
+            <button class="btn-prev" onclick="clearAll()" style="font-size:13px;padding:10px 16px;border-color:#ef4444;color:#ef4444;width:100%;text-align:center">🗑️ संपूर्ण डेटा साफ़ करें</button>
+          </div>
+
+        </div>
       </div>
 
       <!-- EMPLOYEES TABLE -->
@@ -244,14 +263,14 @@
         <thead><tr><th>#</th><th>नाम</th><th>ईमेल</th><th>विभाग</th><th>शिफ्ट पसंद</th><th>कौशल</th><th>दिन</th><th>Action</th></tr></thead>
         <tbody>${emps.map((e, i) => `
           <tr>
-            <td>${i + 1}</td>
-            <td><strong>${e.fullName}</strong><br/><small style="color:var(--text-muted)">${e.id}</small></td>
-            <td>${e.email}</td>
-            <td>${e.department || '–'}</td>
-            <td><span class="badge badge-${e.preferredShift === 'morning' ? 'morning' : e.preferredShift === 'afternoon' ? 'afternoon' : e.preferredShift === 'night' ? 'night' : 'success'}">${e.preferredShift}</span></td>
-            <td>${e.skills.length > 0 ? e.skills.slice(0,2).map(s => `<span class="badge badge-success" style="margin:1px">${s}</span>`).join('') : '–'}</td>
-            <td style="font-size:11px">${e.days.slice(0,3).join(', ')}${e.days.length > 3 ? '...' : ''}</td>
-            <td><button onclick="deleteEmployee('${e.id}')" style="background:rgba(239,68,68,0.2);border:1px solid #ef4444;color:#ef4444;padding:5px 10px;border-radius:8px;cursor:pointer;font-size:12px">🗑️</button></td>
+            <td data-label="#">${i + 1}</td>
+            <td data-label="नाम"><strong>${e.fullName}</strong><br/><small style="color:var(--text-muted)">${e.id}</small></td>
+            <td data-label="ईमेल">${e.email}</td>
+            <td data-label="विभाग">${e.department || '–'}</td>
+            <td data-label="शिफ्ट पसंद"><span class="badge badge-${e.preferredShift === 'morning' ? 'morning' : e.preferredShift === 'afternoon' ? 'afternoon' : e.preferredShift === 'night' ? 'night' : 'success'}">${e.preferredShift}</span></td>
+            <td data-label="कौशल">${e.skills.length > 0 ? e.skills.slice(0,2).map(s => `<span class="badge badge-success" style="margin:1px">${s}</span>`).join('') : '–'}</td>
+            <td data-label="उपलब्धता" style="font-size:11px">${e.days.slice(0,3).join(', ')}${e.days.length > 3 ? '...' : ''}</td>
+            <td data-label="कार्रवाई"><button onclick="deleteEmployee('${e.id}')" style="background:rgba(239,68,68,0.2);border:1px solid #ef4444;color:#ef4444;padding:5px 10px;border-radius:8px;cursor:pointer;font-size:12px">🗑️</button></td>
           </tr>`).join('')}
         </tbody>
       </table>`;
@@ -277,14 +296,14 @@
         <thead><tr><th>तारीख</th><th>दिन</th><th>शिफ्ट</th><th>लोकेशन (जिला - स्पॉट)</th><th>कर्मचारी</th><th>AI स्कोर</th><th>स्टेटस</th><th>Action</th></tr></thead>
         <tbody>${filteredAssigns.map(a => `
           <tr>
-            <td>${a.date}</td>
-            <td>${a.day}</td>
-            <td>${a.shiftIcon} <span class="badge badge-${a.shift}">${a.shiftLabel}</span></td>
-            <td><small style="font-size:11px;font-weight:600;color:var(--primary-dark)">${a.location || '–'}</small></td>
-            <td>${a.employeeName}</td>
-            <td>${a.aiScore}</td>
-            <td><span class="badge badge-${a.status === 'assigned' ? 'success' : a.status === 'unassigned' ? 'danger' : 'warning'}">${a.status}</span>${a.manualOverride ? ' <span style="font-size:10px;color:var(--warning)">✏️ Manual</span>' : ''}</td>
-            <td><button onclick="openEdit('${a.id}')" style="background:rgba(108,99,255,0.2);border:1px solid var(--primary);color:var(--primary);padding:5px 10px;border-radius:8px;cursor:pointer;font-size:12px">✏️ एडिट</button></td>
+            <td data-label="तारीख">${a.date}</td>
+            <td data-label="दिन">${a.day}</td>
+            <td data-label="शिफ्ट">${a.shiftIcon} <span class="badge badge-${a.shift}">${a.shiftLabel}</span></td>
+            <td data-label="लोकेशन"><small style="font-size:11px;font-weight:600;color:var(--primary-dark)">${a.location || '–'}</small></td>
+            <td data-label="जवान का नाम">${a.employeeName}</td>
+            <td data-label="AI स्कोर">${a.aiScore}</td>
+            <td data-label="स्टेटस"><span class="badge badge-${a.status === 'assigned' ? 'success' : a.status === 'unassigned' ? 'danger' : 'warning'}">${a.status}</span>${a.manualOverride ? ' <span style="font-size:10px;color:var(--warning)">✏️ Manual</span>' : ''}</td>
+            <td data-label="कार्रवाई"><button onclick="openEdit('${a.id}')" style="background:rgba(108,99,255,0.2);border:1px solid var(--primary);color:var(--primary);padding:5px 10px;border-radius:8px;cursor:pointer;font-size:12px">✏️ एडिट</button></td>
           </tr>`).join('')}
         </tbody>
       </table>`;
@@ -497,12 +516,12 @@
         <thead><tr><th>नाम</th><th>पद (Designation)</th><th>विभाग</th><th>ज़िला (District)</th><th>स्थान</th><th>फ़ोन नंबर</th></tr></thead>
         <tbody>${filtered.map(c => `
           <tr>
-            <td><strong>${c.name}</strong></td>
-            <td>${c.designation}</td>
-            <td><span class="badge badge-success">${c.dept}</span></td>
-            <td>${c.district}</td>
-            <td><small style="font-weight:600;color:var(--primary-dark)">${c.location}</small></td>
-            <td><a href="tel:${c.phone}" style="color:var(--primary);text-decoration:none">📞 ${c.phone}</a></td>
+            <td data-label="नाम"><strong>${c.name}</strong></td>
+            <td data-label="पद (Designation)">${c.designation}</td>
+            <td data-label="विभाग"><span class="badge badge-success">${c.dept}</span></td>
+            <td data-label="ज़िला (District)">${c.district}</td>
+            <td data-label="स्थान"><small style="font-weight:600;color:var(--primary-dark)">${c.location}</small></td>
+            <td data-label="फ़ोन नंबर"><a href="tel:${c.phone}" style="color:var(--primary);text-decoration:none">📞 ${c.phone}</a></td>
           </tr>`).join('')}
         </tbody>
       </table>`;

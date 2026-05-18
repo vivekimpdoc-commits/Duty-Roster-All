@@ -191,11 +191,15 @@ tr:hover td{background:rgba(0,0,0,0.02);}
 
 /* STATS CARDS (admin) */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:30px;}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;display:flex;align-items:center;gap:16px;transition:.3s;}
-.stat-card:hover{transform:translateY(-4px);border-color:var(--primary);}
-.stat-card-icon{font-size:32px;width:56px;height:56px;display:flex;align-items:center;justify-content:center;background:rgba(108,99,255,0.15);border-radius:12px;}
-.stat-card-val{font-size:28px;font-weight:800;}
-.stat-card-lbl{font-size:13px;color:var(--text-muted);}
+.stat-card{background:linear-gradient(135deg, #ffffff, #f8fafc);border:1px solid var(--border);border-radius:18px;padding:24px;display:flex;align-items:center;gap:16px;transition:.3s;box-shadow: 0 4px 20px rgba(30, 58, 138, 0.03);}
+.stat-card:hover{transform:translateY(-4px);box-shadow: 0 10px 25px rgba(30, 58, 138, 0.08);border-color:var(--primary);}
+.stat-card-icon{font-size:26px;width:52px;height:52px;display:flex;align-items:center;justify-content:center;border-radius:14px;color:#fff;}
+.stat-card:nth-child(1) .stat-card-icon { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+.stat-card:nth-child(2) .stat-card-icon { background: linear-gradient(135deg, #10b981, #047857); }
+.stat-card:nth-child(3) .stat-card-icon { background: linear-gradient(135deg, #f59e0b, #b45309); }
+.stat-card:nth-child(4) .stat-card-icon { background: linear-gradient(135deg, #ec4899, #be185d); }
+.stat-card-val{font-size:28px;font-weight:800;background:linear-gradient(135deg, var(--primary-dark), var(--primary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.stat-card-lbl{font-size:12px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
 
 /* ALERT BOX */
 .alert-box{border-radius:12px;padding:14px 18px;font-size:14px;display:flex;gap:10px;align-items:flex-start;margin-bottom:12px;}
@@ -327,9 +331,47 @@ tr:hover td{background:rgba(0,0,0,0.02);}
   .stat-card-val{font-size:22px;}
   .stat-card-lbl{font-size:11px;}
 
-  /* Table */
-  th{padding:10px 12px;font-size:12px;}
-  td{padding:10px 12px;font-size:12px;}
+  /* Table Card Layout for mobile wow factor! */
+  .table-wrap table, .table-wrap thead, .table-wrap tbody, .table-wrap th, .table-wrap td, .table-wrap tr {
+    display: block;
+  }
+  .table-wrap thead {
+    display: none;
+  }
+  .table-wrap tr {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 15px rgba(30, 58, 138, 0.03);
+  }
+  .table-wrap tr:hover td {
+    background: transparent;
+  }
+  .table-wrap td {
+    border: none;
+    border-bottom: 1px dashed rgba(0,0,0,0.05);
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    text-align: right;
+  }
+  .table-wrap td:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .table-wrap td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 12px;
+    text-align: left;
+    margin-right: 12px;
+  }
 
   /* Admin action bar */
   .admin-actions{flex-direction:column !important;}
