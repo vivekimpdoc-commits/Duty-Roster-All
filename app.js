@@ -32,6 +32,32 @@ function updateHeroStats() {
   if (sa) sa.textContent = assigns.length;
 }
 
+// ---- STEP NAVIGATION ----
+let currentStep = 1;
+
+function nextStep(from) {
+  if (from === 1 && !validateStep1()) {
+    showToast('⚠️ कृपया सभी ज़रूरी जानकारी सही-सही भरें!', 'warning');
+    return;
+  }
+  document.getElementById('step-' + from).classList.remove('active');
+  document.getElementById('step-' + (from + 1)).classList.add('active');
+  document.getElementById('ps-' + from).classList.remove('active');
+  document.getElementById('ps-' + from).classList.add('done');
+  document.getElementById('ps-' + (from + 1)).classList.add('active');
+  currentStep = from + 1;
+  window.scrollTo({ top: 300, behavior: 'smooth' });
+}
+
+function prevStep(from) {
+  document.getElementById('step-' + from).classList.remove('active');
+  document.getElementById('step-' + (from - 1)).classList.add('active');
+  document.getElementById('ps-' + from).classList.remove('active');
+  document.getElementById('ps-' + (from - 1)).classList.remove('done');
+  document.getElementById('ps-' + (from - 1)).classList.add('active');
+  currentStep = from - 1;
+}
+
 // ---- FORM VALIDATION ----
 function validateStep1() {
   let ok = true;
@@ -68,11 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    
-    if (!validateStep1()) {
-      showToast('⚠️ कृपया सभी ज़रूरी जानकारी सही-सही भरें!', 'warning');
-      return;
-    }
 
     const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const timeSlots = ['morning', 'afternoon', 'night'];
@@ -119,15 +140,48 @@ function showSuccess(emp) {
   document.getElementById('registrationForm').style.display = 'none';
   const sm = document.getElementById('successMsg');
   sm.style.display = 'block';
+
+  const shiftLabels = {
+    morning: '🌅 मॉर्निंग (6AM–2PM)',
+    afternoon: '☀️ आफ्टरनून (2PM–10PM)',
+    night: '🌙 नाइट (10PM–6AM)',
+    any: '🔄 कोई भी (लचीला)'
+  };
+
+  const skillLabels = {
+    first_aid: '🚑 प्राथमिक चिकित्सा',
+    riot_control: '🛡️ दंगा नियंत्रण',
+    cyber_crime: '💻 साइबर क्राइम',
+    vip_security: '⭐ VIP सुरक्षा',
+    marksman: '🎯 निशानेबाज़',
+    driving: '🚓 ड्राइविंग',
+    traffic_control: '🚦 यातायात नियंत्रण',
+    investigation: '🔍 जांच अधिकारी'
+  };
+
+  const dayLabels = {
+    monday: 'सोमवार', tuesday: 'मंगलवार', wednesday: 'बुधवार',
+    thursday: 'गुरुवार', friday: 'शुक्रवार', saturday: 'शनिवार', sunday: 'रविवार'
+  };
+
+  const timeLabels = {
+    morning: 'सुबह', afternoon: 'दोपहर', night: 'रात'
+  };
+
+  const transDays = emp.days.map(d => dayLabels[d] || d).join(', ');
+  const transTimes = emp.timeSlots.map(t => timeLabels[t] || t).join(', ');
+  const transShift = shiftLabels[emp.preferredShift] || emp.preferredShift;
+  const transSkills = emp.skills.map(s => skillLabels[s] || s).join(', ');
+
   document.getElementById('successDetails').innerHTML = `
     <p>👤 <strong>नाम:</strong> ${emp.fullName}</p>
     <p>📧 <strong>ईमेल:</strong> ${emp.email}</p>
-    <p>🪪 <strong>ID:</strong> ${emp.id}</p>
+    <p>🪪 <strong>ID:</strong> ${emp.employeeId || emp.id}</p>
     <p>📍 <strong>ज़िला:</strong> ${emp.district}</p>
-    <p>📅 <strong>उपलब्धता:</strong> ${emp.days.join(', ')}</p>
-    <p>⏰ <strong>समय:</strong> ${emp.timeSlots.join(', ')}</p>
-    <p>⭐ <strong>पसंदीदा:</strong> ${emp.preferredShift}</p>
-    ${emp.skills.length > 0 ? `<p>🎯 <strong>कौशल:</strong> ${emp.skills.join(', ')}</p>` : ''}
+    <p>📅 <strong>उपलब्धता:</strong> ${transDays}</p>
+    <p>⏰ <strong>समय:</strong> ${transTimes}</p>
+    <p>⭐ <strong>पसंदीदा:</strong> ${transShift}</p>
+    ${emp.skills.length > 0 ? `<p>🎯 <strong>कौशल:</strong> ${transSkills}</p>` : ''}
   `;
   sm.scrollIntoView({ behavior: 'smooth' });
 }
@@ -136,5 +190,11 @@ function resetForm() {
   document.getElementById('registrationForm').reset();
   document.getElementById('registrationForm').style.display = 'block';
   document.getElementById('successMsg').style.display = 'none';
+  // Reset steps
+  document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step-1').classList.add('active');
+  document.querySelectorAll('.prog-step').forEach(s => { s.classList.remove('active', 'done'); });
+  document.getElementById('ps-1').classList.add('active');
+  currentStep = 1;
   window.scrollTo({ top: 300, behavior: 'smooth' });
 }

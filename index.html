@@ -58,8 +58,15 @@
       </div>
 
       <div class="form-card glass-card">
+        <div class="form-progress">
+          <div class="prog-step active" id="ps-1"><div class="step-circle">1</div><span>व्यक्तिगत</span></div>
+          <div class="prog-line"></div>
+          <div class="prog-step" id="ps-2"><div class="step-circle">2</div><span>कौशल</span></div>
+        </div>
+
         <form id="registrationForm" novalidate>
-          <div style="margin-bottom:24px">
+          <!-- STEP 1 -->
+          <div class="form-step active" id="step-1">
             <h3 class="step-title">👤 व्यक्तिगत जानकारी</h3>
             <div class="form-grid">
               <div class="form-group full">
@@ -116,9 +123,12 @@
                 <div class="inp-wrap"><span class="inp-icon">📈</span><input type="number" id="experience" min="0" max="50" placeholder="0"/></div>
               </div>
             </div>
+            </div>
+            <div class="form-actions"><button type="button" class="btn-next" onclick="nextStep(1)">अगला →</button></div>
           </div>
           
-          <div style="margin-bottom:24px">
+          <!-- STEP 2 -->
+          <div class="form-step" id="step-2">
             <h3 class="step-title">⭐ कौशल और पसंद</h3>
             <div class="form-group">
               <label>पसंदीदा शिफ्ट</label>
@@ -146,8 +156,9 @@
               <label>अतिरिक्त टिप्पणी</label>
               <textarea id="additionalNotes" placeholder="कोई विशेष आवश्यकता या जानकारी..." rows="3"></textarea>
             </div>
-            <div class="form-actions" style="margin-top:24px;">
-              <button type="submit" class="btn-submit" style="width:100%;font-size:16px;padding:14px">✅ रजिस्ट्रेशन पूरा करें</button>
+            <div class="form-actions">
+              <button type="button" class="btn-prev" onclick="prevStep(2)">← वापस</button>
+              <button type="submit" class="btn-submit">✅ रजिस्ट्रेशन पूरा करें</button>
             </div>
           </div>
         </form>
