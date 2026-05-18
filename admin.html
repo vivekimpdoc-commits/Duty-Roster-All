@@ -264,7 +264,7 @@
         <tbody>${emps.map((e, i) => `
           <tr>
             <td data-label="#">${i + 1}</td>
-            <td data-label="नाम"><strong>${e.fullName}</strong><br/><small style="color:var(--text-muted)">${e.id}</small></td>
+            <td data-label="नाम"><strong>${e.fullName}</strong><br/><span style="font-size:11px;color:var(--primary);font-weight:700;background:rgba(30,58,138,0.06);padding:2px 6px;border-radius:4px;">🎖️ ${e.rank || 'कांस्टेबल'}</span></td>
             <td data-label="ईमेल">${e.email}</td>
             <td data-label="विभाग">${e.department || '–'}</td>
             <td data-label="शिफ्ट पसंद"><span class="badge badge-${e.preferredShift === 'morning' ? 'morning' : e.preferredShift === 'afternoon' ? 'afternoon' : e.preferredShift === 'night' ? 'night' : 'success'}">${e.preferredShift}</span></td>
@@ -332,7 +332,7 @@
         assigns.unshift({
           id: 'SOS-' + Date.now() + Math.random().toString(36).substr(2, 5),
           employeeId: emp.id,
-          employeeName: emp.fullName,
+          employeeName: emp.rank ? `${emp.rank} ${emp.fullName}` : emp.fullName,
           shift: 'morning',
           shiftLabel: '🚨 EMERGENCY',
           shiftIcon: '🚨',
@@ -435,6 +435,7 @@
           const nameIdx = headers.findIndex(h => h.includes('name') || h.includes('नाम'));
           const pnoIdx = headers.findIndex(h => h.includes('pno') || h.includes('badge') || h.includes('id'));
           const deptIdx = headers.findIndex(h => h.includes('dept') || h.includes('department') || h.includes('विभाग'));
+          const rankIdx = headers.findIndex(h => h.includes('rank') || h.includes('post') || h.includes('पद') || h.includes('designation'));
           
           if (nameIdx === -1) {
             showToast('⚠️ "Name" कॉलम नहीं मिला!', 'error');
@@ -453,6 +454,7 @@
               fullName: row[nameIdx],
               employeeId: pnoIdx !== -1 && row[pnoIdx] ? row[pnoIdx] : `PNO-U${Math.floor(Math.random()*1000)}`,
               department: deptIdx !== -1 && row[deptIdx] ? row[deptIdx] : 'patrol',
+              rank: rankIdx !== -1 && row[rankIdx] ? row[rankIdx] : 'कांस्टेबल',
               email: `officer${Math.floor(Math.random()*10000)}@police.in`,
               phone: '9999999999',
               experience: 5,

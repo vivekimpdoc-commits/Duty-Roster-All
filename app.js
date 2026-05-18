@@ -107,6 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
       phone: document.getElementById('phone').value.trim(),
       district: document.getElementById('district')?.value || 'Lucknow',
       department: document.getElementById('subDepartment') && document.getElementById('subDepartment').value ? `${document.getElementById('department').value} (${document.getElementById('subDepartment').value})` : document.getElementById('department').value,
+      rank: document.getElementById('rank')?.value || 'कांस्टेबल',
       employeeId: document.getElementById('employeeId').value.trim(),
       experience: parseInt(document.getElementById('experience').value || '0'),
       days,

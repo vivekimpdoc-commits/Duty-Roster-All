@@ -111,7 +111,7 @@ window.AIScheduler = (function () {
           assignments.push({
             id: 'ASGN-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5),
             employeeId: emp.id,
-            employeeName: emp.fullName,
+            employeeName: emp.rank ? `${emp.rank} ${emp.fullName}` : emp.fullName,
             shift: shift.id,
             shiftLabel: shift.label,
             shiftIcon: shift.icon,

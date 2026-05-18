@@ -31,7 +31,7 @@
     <div class="seed-box">
       <span class="seed-icon">🚀</span>
       <h2 style="font-size:26px;font-weight:700;margin-bottom:8px">Demo Data <span class="gradient-text">Loader</span></h2>
-      <p style="color:var(--text-muted);font-size:14px;margin-bottom:20px">100 demo officers + AI patrol assignments लोड करें</p>
+      <p style="color:var(--text-muted);font-size:14px;margin-bottom:20px">20 demo officers + AI patrol assignments लोड करें</p>
 
       <div class="progress-bar-wrap"><div class="progress-bar-fill" id="pbar"></div></div>
       <p id="progress-label" style="font-size:13px;color:var(--text-muted);">तैयार है – बटन दबाएं</p>
@@ -40,7 +40,7 @@
 
       <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
         <button class="btn-next" id="loadBtn" onclick="loadDemo()" style="padding:14px 36px;font-size:15px">
-          ✅ 100 Demo Entries लोड करें
+          ✅ 20 Demo Entries लोड करें
         </button>
         <button class="btn-prev" onclick="clearData()" style="padding:14px 24px;font-size:15px;border-color:#ef4444;color:#ef4444">
           🗑️ क्लियर
@@ -66,6 +66,7 @@
     const dayOptions = [["monday","tuesday","wednesday","thursday","friday"], ["monday","wednesday","friday","saturday","sunday"], ["tuesday","thursday","saturday"], ["saturday","sunday"], ["monday","tuesday","friday","saturday"], ["tuesday","thursday","saturday","sunday"]];
     const timeOptions = [["morning"], ["afternoon"], ["night"], ["morning","afternoon"], ["afternoon","night"], ["morning","night"], ["morning","afternoon","night"]];
     const prefOptions = ["morning", "afternoon", "night", "any"];
+    const rankOptions = ["कांस्टेबल", "हेड कांस्टेबल", "उप-निरीक्षक", "निरीक्षक", "CO / DSP"];
     const skillOptions = ["first_aid", "riot_control", "cyber_crime", "vip_security", "driving", "marksman", "investigation", "traffic_control"];
 
     function generateEmployees(count) {
@@ -92,6 +93,7 @@
           phone: phone,
           district: UP_DISTRICTS[Math.floor(Math.random() * UP_DISTRICTS.length)],
           department: dept,
+          rank: rankOptions[i % rankOptions.length],
           employeeId: `PNO-${String(i).padStart(5, '0')}`,
           experience: exp,
           days: days,
@@ -103,7 +105,7 @@
       return employees;
     }
 
-    const DEMO_EMPLOYEES = generateEmployees(100);
+    const DEMO_EMPLOYEES = generateEmployees(20);
 
     function log(msg, type='ok') {
       const area = document.getElementById('logArea');
@@ -138,7 +140,7 @@
         const d = DEMO_EMPLOYEES[i];
         const pct = Math.round(((i + 1) / DEMO_EMPLOYEES.length) * 100);
         document.getElementById('pbar').style.width = pct + '%';
-        document.getElementById('progress-label').textContent = `${i + 1}/100 – ${d.fullName}`;
+        document.getElementById('progress-label').textContent = `${i + 1}/20 – ${d.fullName}`;
 
         if (existingEmails.includes(d.email.toLowerCase())) {
           log(`⚠️ [${i+1}] ${d.fullName} – Already exists, skip`, 'warn');
@@ -152,6 +154,7 @@
           email: d.email,
           phone: d.phone,
           department: d.department,
+          rank: d.rank,
           employeeId: d.employeeId,
           experience: d.experience,
           days: d.days,
@@ -206,7 +209,7 @@
       clearLog();
       document.getElementById('pbar').style.width = '0%';
       document.getElementById('progress-label').textContent = 'तैयार है – बटन दबाएं';
-      document.getElementById('loadBtn').textContent = '✅ 100 Demo Entries लोड करें';
+      document.getElementById('loadBtn').textContent = '✅ 20 Demo Entries लोड करें';
       log('🗑️ सभी डेटा क्लियर कर दिया गया।', 'warn');
       showToast('🗑️ डेटा क्लियर।');
     }
