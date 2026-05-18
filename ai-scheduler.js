@@ -55,7 +55,7 @@ window.AIScheduler = (function () {
 
         selected.forEach(({ emp }) => {
           load[emp.id] = (load[emp.id] || 0) + 1;
-          const dist = UP_DISTRICTS[Math.floor(Math.random() * UP_DISTRICTS.length)];
+          const dist = emp.district && emp.district !== '' ? emp.district : UP_DISTRICTS[Math.floor(Math.random() * UP_DISTRICTS.length)];
           const spot = SPOTS[Math.floor(Math.random() * SPOTS.length)];
           assignments.push({
             id: 'ASGN-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5),

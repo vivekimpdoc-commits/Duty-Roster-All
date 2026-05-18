@@ -116,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fullName: document.getElementById('fullName').value.trim(),
       email: document.getElementById('email').value.trim(),
       phone: document.getElementById('phone').value.trim(),
+      district: document.getElementById('district')?.value || 'Lucknow',
       department: document.getElementById('subDepartment') && document.getElementById('subDepartment').value ? `${document.getElementById('department').value} (${document.getElementById('subDepartment').value})` : document.getElementById('department').value,
       employeeId: document.getElementById('employeeId').value.trim(),
       experience: parseInt(document.getElementById('experience').value || '0'),
@@ -154,6 +155,7 @@ function showSuccess(emp) {
     <p>👤 <strong>नाम:</strong> ${emp.fullName}</p>
     <p>📧 <strong>ईमेल:</strong> ${emp.email}</p>
     <p>🪪 <strong>ID:</strong> ${emp.id}</p>
+    <p>📍 <strong>ज़िला:</strong> ${emp.district}</p>
     <p>📅 <strong>उपलब्धता:</strong> ${emp.days.join(', ')}</p>
     <p>⏰ <strong>समय:</strong> ${emp.timeSlots.join(', ')}</p>
     <p>⭐ <strong>पसंदीदा:</strong> ${emp.preferredShift}</p>

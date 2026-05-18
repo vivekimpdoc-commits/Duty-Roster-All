@@ -114,6 +114,14 @@
                 <span class="err" id="err-phone"></span>
               </div>
               <div class="form-group">
+                <label>तैनाती का ज़िला (District)</label>
+                <div class="inp-wrap"><span class="inp-icon">📍</span>
+                  <select id="district">
+                    <option value="">-- ज़िला चुनें --</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
                 <label>विभाग / विंग</label>
                 <div class="inp-wrap"><span class="inp-icon">🏢</span>
                   <select id="department" onchange="updateSubDepartments()">
@@ -328,6 +336,19 @@
       });
       subDeptSelect.innerHTML = optionsHtml;
     }
+
+    const UP_DISTRICTS = ["Agra","Aligarh","Allahabad","Ambedkar Nagar","Amethi","Amroha","Auraiya","Azamgarh","Baghpat","Bahraich","Ballia","Balrampur","Banda","Barabanki","Bareilly","Basti","Bhadohi","Bijnor","Budaun","Bulandshahr","Chandauli","Chitrakoot","Deoria","Etah","Etawah","Faizabad","Farrukhabad","Fatehpur","Firozabad","Gautam Buddha Nagar","Ghaziabad","Ghazipur","Gonda","Gorakhpur","Hamirpur","Hapur","Hardoi","Hathras","Jalaun","Jaunpur","Jhansi","Kannauj","Kanpur Dehat","Kanpur Nagar","Kasganj","Kaushambi","Kheri","Kushinagar","Lalitpur","Lucknow","Maharajganj","Mahoba","Mainpuri","Mathura","Mau","Meerut","Mirzapur","Moradabad","Muzaffarnagar","Pilibhit","Pratapgarh","Raebareli","Rampur","Saharanpur","Sambhal","Sant Kabir Nagar","Shahjahanpur","Shamli","Shravasti","Siddharthnagar","Sitapur","Sonbhadra","Sultanpur","Unnao","Varanasi"];
+    window.addEventListener('DOMContentLoaded', () => {
+      const distSelect = document.getElementById('district');
+      if (distSelect) {
+        UP_DISTRICTS.forEach(d => {
+          const opt = document.createElement('option');
+          opt.value = d;
+          opt.textContent = d;
+          distSelect.appendChild(opt);
+        });
+      }
+    });
 
     function handleLogout() {
       sessionStorage.removeItem('isEmpLoggedIn');

@@ -61,6 +61,7 @@
   <script>
     const firstNames = ["राजेश", "प्रिया", "अमित", "सुनीता", "विकास", "अनीता", "संजय", "कविता", "रोहन", "पूजा", "दिनेश", "ममता", "नितिन", "रेखा", "अजय", "शालिनी", "हरीश", "नेहा", "भूपेंद्र", "आरती", "विजय", "संगीता", "मनोज", "लक्ष्मी", "सुरेश", "दीपक", "मनीषा", "प्रमोद", "सरिता", "अरुण", "नीलम", "पवन", "किरण", "सतीश", "मीनाक्षी", "राजीव", "ज्योति", "कुणाल", "रूपा", "ओम प्रकाश", "श्वेता", "मनीष", "दिव्या", "संदीप", "अनुराधा", "वरुण", "खुशबू", "ऋषभ", "किरण", "सुनील"];
     const lastNames = ["शर्मा", "सिंह", "वर्मा", "देवी", "यादव", "गुप्ता", "पटेल", "तिवारी", "मिश्रा", "राय", "चौधरी", "शुक्ला", "जोशी", "त्रिपाठी", "कुमार", "पांडे", "कौर", "रावत", "बिष्ट", "जैन", "मौर्य", "धवन", "रानी", "पंत", "बेदी", "शेट्टी"];
+    const UP_DISTRICTS = ["Agra","Aligarh","Allahabad","Ambedkar Nagar","Amethi","Amroha","Auraiya","Azamgarh","Baghpat","Bahraich","Ballia","Balrampur","Banda","Barabanki","Bareilly","Basti","Bhadohi","Bijnor","Budaun","Bulandshahr","Chandauli","Chitrakoot","Deoria","Etah","Etawah","Faizabad","Farrukhabad","Fatehpur","Firozabad","Gautam Buddha Nagar","Ghaziabad","Ghazipur","Gonda","Gorakhpur","Hamirpur","Hapur","Hardoi","Hathras","Jalaun","Jaunpur","Jhansi","Kannauj","Kanpur Dehat","Kanpur Nagar","Kasganj","Kaushambi","Kheri","Kushinagar","Lalitpur","Lucknow","Maharajganj","Mahoba","Mainpuri","Mathura","Mau","Meerut","Mirzapur","Moradabad","Muzaffarnagar","Pilibhit","Pratapgarh","Raebareli","Rampur","Saharanpur","Sambhal","Sant Kabir Nagar","Shahjahanpur","Shamli","Shravasti","Siddharthnagar","Sitapur","Sonbhadra","Sultanpur","Unnao","Varanasi"];
     const depts = ["patrol", "traffic", "admin", "investigation", "control_room", "emergency"];
     const dayOptions = [["monday","tuesday","wednesday","thursday","friday"], ["monday","wednesday","friday","saturday","sunday"], ["tuesday","thursday","saturday"], ["saturday","sunday"], ["monday","tuesday","friday","saturday"], ["tuesday","thursday","saturday","sunday"]];
     const timeOptions = [["morning"], ["afternoon"], ["night"], ["morning","afternoon"], ["afternoon","night"], ["morning","night"], ["morning","afternoon","night"]];
@@ -89,6 +90,7 @@
           fullName: `${fn} ${ln}`,
           email: email,
           phone: phone,
+          district: UP_DISTRICTS[Math.floor(Math.random() * UP_DISTRICTS.length)],
           department: dept,
           employeeId: `PNO-${String(i).padStart(5, '0')}`,
           experience: exp,
