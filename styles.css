@@ -475,15 +475,21 @@ tr:hover td{background:rgba(0,0,0,0.02);}
   .hero-title {
     font-size: clamp(32px, 3.2vw, 44px) !important;
     line-height: 1.15;
-    margin: 12px 0;
+    margin: 8px 0 12px;
   }
   .hero-sub {
     font-size: 14px;
     margin-bottom: 20px;
+    line-height: 1.6;
   }
   .hero-stats {
     margin-top: 15px;
-    padding: 14px 20px;
+    padding: 12px 18px;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(30, 58, 138, 0.02);
   }
   .hero-cards {
     display: none;
@@ -492,11 +498,91 @@ tr:hover td{background:rgba(0,0,0,0.02);}
     padding: 0;
   }
   .form-card {
-    padding: 24px;
+    padding: 24px 28px;
     max-height: 78vh;
     overflow-y: auto;
     border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02), 0 20px 40px rgba(30, 58, 138, 0.05);
+    backdrop-filter: blur(16px);
   }
+  
+  /* Beautiful custom scrollbar for the form card */
+  .form-card::-webkit-scrollbar {
+    width: 6px;
+  }
+  .form-card::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .form-card::-webkit-scrollbar-thumb {
+    background: rgba(30, 58, 138, 0.15);
+    border-radius: 10px;
+  }
+  .form-card::-webkit-scrollbar-thumb:hover {
+    background: rgba(30, 58, 138, 0.3);
+  }
+
+  /* Compact form spacing on desktop to keep everything on the viewport screen */
+  .form-progress {
+    margin-bottom: 24px;
+  }
+  .step-circle {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+  .prog-step span {
+    font-size: 11px;
+  }
+  .step-title {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+  .form-grid {
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .form-group {
+    gap: 4px;
+  }
+  .form-group label {
+    font-size: 12px;
+  }
+  .inp-wrap input, .inp-wrap select, .inp-wrap textarea {
+    padding: 10px 14px 10px 40px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+  textarea {
+    padding: 10px 14px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+  .inp-icon {
+    left: 12px;
+    font-size: 14px;
+  }
+  .skills-grid .chk-card {
+    flex: 0 0 calc(50% - 6px); /* Perfect 2-column layout to fit nicely */
+  }
+  .skill-card .cc {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+  .radio-grid {
+    gap: 8px;
+  }
+  .radio-card .cc {
+    padding: 10px;
+    font-size: 12px;
+  }
+  .btn-next, .btn-submit, .btn-prev {
+    padding: 10px 20px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
   .features-section {
     display: none;
   }
