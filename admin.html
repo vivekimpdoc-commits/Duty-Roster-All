@@ -80,6 +80,7 @@
         <input type="file" id="fileUpload" accept=".csv, .xlsx, .xls" style="display:none" onchange="handleFileUpload(event)"/>
         <button class="btn-next" onclick="document.getElementById('fileUpload').click()" style="font-size:13px;padding:10px 20px;background:linear-gradient(135deg,#3b82f6,#2563eb)">📤 Excel/CSV अपलोड</button>
         <button class="btn-next" onclick="runAI()" style="font-size:13px;padding:10px 20px">🤖 AI रन करें</button>
+        <button class="btn-reject" onclick="triggerSOS()" style="font-size:13px;padding:10px 20px;background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;border:none">🚨 SOS डिप्लॉयमेंट</button>
         <button class="btn-next" onclick="exportCSV()" style="font-size:13px;padding:10px 20px;background:linear-gradient(135deg,#10b981,#059669)">📥 CSV एक्सपोर्ट</button>
         <button class="btn-next" onclick="exportPDF()" style="font-size:13px;padding:10px 20px;background:linear-gradient(135deg,#ef4444,#b91c1c)">📄 PDF प्रिंट</button>
         <button class="btn-prev" onclick="clearAll()" style="font-size:13px;padding:10px 20px;border-color:#ef4444;color:#ef4444">🗑️ डेटा क्लियर</button>
@@ -296,6 +297,38 @@
       saveAssignments(assigns);
       renderAll();
       showToast('✅ AI ने शिफ्ट असाइनमेंट पूरा किया!');
+    }
+
+    function triggerSOS() {
+      if(!confirm("क्या आप इमरजेंसी (SOS) डिप्लॉयमेंट करना चाहते हैं? यह तुरंत 5 जवानों को इमरजेंसी ड्यूटी पर भेज देगा!")) return;
+      const emps = getEmployees();
+      if(emps.length < 5) return showToast('⚠️ पर्याप्त जवान नहीं हैं!');
+      
+      const assigns = getAssignments();
+      const shuffled = [...emps].sort(() => 0.5 - Math.random());
+      const selected = shuffled.slice(0, 5);
+      const date = new Date().toISOString().split('T')[0];
+
+      selected.forEach(emp => {
+        assigns.unshift({
+          id: 'SOS-' + Date.now() + Math.random().toString(36).substr(2, 5),
+          employeeId: emp.id,
+          employeeName: emp.fullName,
+          shift: 'morning',
+          shiftLabel: '🚨 EMERGENCY',
+          shiftIcon: '🚨',
+          shiftTime: 'IMMEDIATE',
+          day: 'sunday',
+          date: date,
+          location: '🔴 CRITICAL HOTSPOT',
+          aiScore: 100,
+          status: 'assigned',
+          manualOverride: true
+        });
+      });
+      saveAssignments(assigns);
+      renderAll();
+      showToast('🚨 इमरजेंसी डिप्लॉयमेंट सफल! 5 जवान भेजे गए।');
     }
 
     function openEdit(id) {

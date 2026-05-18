@@ -118,7 +118,7 @@
       <div class="glass-card">
         <h3 style="margin-bottom:16px">🔍 अपना शेड्यूल देखें</h3>
         <div style="display:flex;gap:12px;flex-wrap:wrap">
-          <div class="inp-wrap" style="flex:1"><span class="inp-icon">📧</span><input type="email" id="lookupEmail" placeholder="अपनी ईमेल दर्ज करें..."/></div>
+          <div class="inp-wrap" style="flex:1"><span class="inp-icon">🪪</span><input type="text" id="lookupPNO" placeholder="अपना PNO नंबर दर्ज करें (जैसे: PNO-12345)..."/></div>
           <button class="btn-next" onclick="lookupSchedule()" style="font-size:13px;padding:10px 24px">🔍 खोजें</button>
         </div>
         <div id="lookupResult" style="margin-top:16px"></div>
@@ -227,12 +227,12 @@
     }
 
     function lookupSchedule() {
-      const email = document.getElementById('lookupEmail').value.trim().toLowerCase();
+      const pno = document.getElementById('lookupPNO').value.trim().toLowerCase();
       const emps = getEmployees();
       const assigns = getAssignments();
-      const emp = emps.find(e => e.email.toLowerCase() === email);
+      const emp = emps.find(e => (e.employeeId && e.employeeId.toLowerCase() === pno) || e.email.toLowerCase() === pno);
       const result = document.getElementById('lookupResult');
-      if (!emp) { result.innerHTML = '<div class="alert-box alert-danger">❌ ईमेल नहीं मिला।</div>'; return; }
+      if (!emp) { result.innerHTML = '<div class="alert-box alert-danger">❌ PNO या ईमेल नहीं मिला।</div>'; return; }
       const myShifts = assigns.filter(a => a.employeeId === emp.id && a.status === 'assigned');
       if (myShifts.length === 0) { result.innerHTML = '<div class="alert-box alert-warning">⚠️ अभी तक कोई शिफ्ट असाइन नहीं।</div>'; return; }
       result.innerHTML = `<div class="alert-box alert-success" style="flex-direction:column;align-items:flex-start">
