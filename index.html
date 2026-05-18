@@ -6,6 +6,7 @@
   <title>Police Roster Pro – रजिस्ट्रेशन</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
   <div class="bg-animated"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
@@ -52,9 +53,17 @@
 
   <section class="form-section">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header" style="display:flex; flex-direction:column; align-items:center; gap:12px;">
         <h2>पुलिस अधिकारी / जवान रजिस्ट्रेशन</h2>
         <p>अपनी जानकारी भरें – AI आपकी ड्यूटी ऑटोमैटिक असाइन करेगा</p>
+        
+        <!-- EXCEL BATCH UPLOAD CONTAINER -->
+        <div style="margin-top:10px; display:flex; gap:10px; justify-content:center; align-items:center; flex-wrap:wrap;">
+          <input type="file" id="excelUploadIndex" accept=".csv, .xlsx, .xls" style="display:none" onchange="handleFileUploadIndex(event)"/>
+          <button type="button" class="btn-next" onclick="document.getElementById('excelUploadIndex').click()" style="background:linear-gradient(135deg, var(--secondary), var(--primary)); font-size:13px; padding:10px 20px; border-radius:30px; box-shadow: 0 4px 15px rgba(59,130,246,0.3);">
+            📤 एक साथ एक्सेल (Excel) फ़ाइल से अपलोड करें
+          </button>
+        </div>
       </div>
 
       <div class="form-card glass-card">
@@ -272,10 +281,113 @@
       window.location.reload();
     }
 
-    function handleLogout() {
-      sessionStorage.removeItem('isEmpLoggedIn');
-      sessionStorage.removeItem('isAdminLoggedIn');
-      window.location.reload();
+    function handleFileUploadIndex(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, {type: 'array'});
+          const firstSheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[firstSheetName];
+          const json = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+          
+          if (json.length < 2) {
+            showToast('⚠️ फाइल खाली है!', 'error');
+            return;
+          }
+          
+          const headers = json[0].map(h => String(h).toLowerCase().trim());
+          const nameIdx = headers.findIndex(h => h.includes('name') || h.includes('नाम'));
+          const pnoIdx = headers.findIndex(h => h.includes('pno') || h.includes('badge') || h.includes('id') || h.includes('पीएनओ'));
+          const deptIdx = headers.findIndex(h => h.includes('dept') || h.includes('department') || h.includes('विभाग'));
+          const distIdx = headers.findIndex(h => h.includes('dist') || h.includes('district') || h.includes('जिला'));
+          const phoneIdx = headers.findIndex(h => h.includes('phone') || h.includes('mobile') || h.includes('फोन') || h.includes('मोबाइल'));
+          const emailIdx = headers.findIndex(h => h.includes('email') || h.includes('ईमेल'));
+
+          if (nameIdx === -1) {
+            showToast('⚠️ "Name" (नाम) कॉलम नहीं मिला!', 'error');
+            return;
+          }
+
+          let added = 0;
+          const emps = getEmployees();
+          const existingEmails = emps.map(emp => emp.email.toLowerCase());
+          
+          for (let i = 1; i < json.length; i++) {
+            const row = json[i];
+            if (!row[nameIdx]) continue;
+            
+            const rawEmail = emailIdx !== -1 && row[emailIdx] ? String(row[emailIdx]).trim() : `officer${Math.floor(1000 + Math.random()*9000)}@police.in`;
+            // Avoid duplicate email imports
+            if (existingEmails.includes(rawEmail.toLowerCase())) continue;
+
+            const newEmp = {
+              id: 'EMP-' + Date.now() + Math.random().toString(36).substr(2, 5),
+              fullName: String(row[nameIdx]).trim(),
+              employeeId: pnoIdx !== -1 && row[pnoIdx] ? String(row[pnoIdx]).trim() : `PNO-${Math.floor(10000 + Math.random()*90000)}`,
+              department: deptIdx !== -1 && row[deptIdx] ? String(row[deptIdx]).trim() : 'patrol',
+              email: rawEmail,
+              phone: phoneIdx !== -1 && row[phoneIdx] ? String(row[phoneIdx]).trim() : '9999999999',
+              district: distIdx !== -1 && row[distIdx] ? String(row[distIdx]).trim() : 'Lucknow',
+              experience: 5,
+              days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
+              timeSlots: ['morning', 'afternoon', 'night'],
+              hoursPerWeek: 48,
+              preferredShift: 'any',
+              skills: ['first_aid'],
+              registeredAt: new Date().toISOString(),
+              assignedShifts: 0
+            };
+            emps.push(newEmp);
+            existingEmails.push(rawEmail.toLowerCase());
+            added++;
+          }
+          
+          if (added === 0) {
+            showToast('⚠️ कोई नया कर्मचारी नहीं जोड़ा गया (या सभी पहले से मौजूद हैं)!', 'warning');
+            return;
+          }
+
+          saveEmployees(emps);
+          
+          // Run AI Scheduler immediately
+          if (window.AIScheduler) {
+            const assignments = window.AIScheduler.assign(emps);
+            saveAssignments(assignments);
+          }
+          
+          if (typeof updateNavCount === 'function') updateNavCount();
+          if (typeof updateHeroStats === 'function') updateHeroStats();
+          
+          showToast(`🎉 ${added} पुलिस अधिकारी/जवान सफलतापूर्वक एक्सेल से रजिस्टर हुए!`);
+          
+          // Show quick summary instead of form
+          const formEl = document.getElementById('registrationForm');
+          if (formEl) formEl.style.display = 'none';
+          
+          const sm = document.getElementById('successMsg');
+          if (sm) {
+            sm.style.display = 'block';
+            const detailsEl = document.getElementById('successDetails');
+            if (detailsEl) {
+              detailsEl.innerHTML = `
+                <p>📊 <strong>कुल नए रजिस्टर:</strong> ${added} जवान</p>
+                <p>🤖 <strong>AI शेड्यूलर:</strong> सभी को स्वचालित रूप से ड्यूटी असाइन कर दी गई है!</p>
+                <p>📅 शेड्यूल देखने के लिए नीचे दिए गए बटन पर क्लिक करें।</p>
+              `;
+            }
+            sm.scrollIntoView({ behavior: 'smooth' });
+          }
+
+        } catch (err) {
+          console.error(err);
+          showToast('❌ फाइल पार्स करने में गलती हुई!', 'error');
+        }
+      };
+      reader.readAsArrayBuffer(file);
     }
   </script>
 </body>
