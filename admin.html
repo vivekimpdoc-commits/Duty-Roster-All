@@ -107,6 +107,19 @@
         </div>
       </div>
 
+      <!-- VIP / GOVT CONTACTS TABLE -->
+      <div class="glass-card" style="margin-top:24px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px">
+          <h3 style="margin:0">🏛️ महत्वपूर्ण सरकारी संपर्क (VIP Directory)</h3>
+          <div class="inp-wrap" style="max-width:300px;width:100%">
+            <span class="inp-icon">🔍</span>
+            <input type="text" id="filterContacts" placeholder="ज़िला या विभाग खोजें..." onkeyup="renderContacts()" style="padding:10px 16px 10px 40px;"/>
+          </div>
+        </div>
+        <div class="table-wrap" id="contactsTableWrap">
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -416,12 +429,59 @@
       reader.readAsArrayBuffer(file);
     }
 
+    const VIP_CONTACTS = [
+      { name: "श्री सूर्यपाल गंगवार", designation: "जिलाधिकारी (DM)", dept: "प्रशासन", district: "Lucknow", location: "Collectorate", phone: "+91-9454417555" },
+      { name: "डॉ. मनोज अग्रवाल", designation: "मुख्य चिकित्सा अधिकारी (CMO)", dept: "स्वास्थ्य विभाग", district: "Lucknow", location: "Civil Hospital", phone: "+91-9454455222" },
+      { name: "श्री भानु चंद्र गोस्वामी", designation: "जिलाधिकारी (DM)", dept: "प्रशासन", district: "Agra", location: "Collectorate", phone: "+91-9454417556" },
+      { name: "श्री प्रशांत कुमार", designation: "अपर पुलिस महानिदेशक", dept: "गृह विभाग", district: "Lucknow", location: "Police HQ", phone: "+91-9454400001" },
+      { name: "श्री सुहास एल. वाई.", designation: "जिलाधिकारी (DM)", dept: "प्रशासन", district: "Gautam Buddha Nagar", location: "Surajpur", phone: "+91-9454417560" },
+      { name: "श्री संजय प्रसाद", designation: "प्रमुख सचिव (गृह)", dept: "गृह विभाग", district: "Lucknow", location: "Secretariat", phone: "+91-9454400111" },
+      { name: "फायर ऑफिसर (CFO)", designation: "मुख्य अग्निशमन अधिकारी", dept: "फायर सर्विस", district: "Varanasi", location: "Fire Station", phone: "+91-9454402222" },
+      { name: "एस.डी.एम. (SDM)", designation: "उप जिलाधिकारी", dept: "राजस्व विभाग", district: "Kanpur Nagar", location: "Tehsil HQ", phone: "+91-9454403333" },
+      { name: "श्री नवनीत सहगल", designation: "अपर मुख्य सचिव", dept: "सूचना विभाग", district: "Lucknow", location: "Lok Bhawan", phone: "+91-9454404444" },
+      { name: "कंट्रोल रूम (Emergency)", designation: "प्रभारी अधिकारी", dept: "आपदा प्रबंधन", district: "Allahabad", location: "Sangam Marg", phone: "+91-9454405555" }
+    ];
+
+    function renderContacts() {
+      const wrap = document.getElementById('contactsTableWrap');
+      const filterVal = document.getElementById('filterContacts')?.value.toLowerCase() || '';
+      
+      const filtered = VIP_CONTACTS.filter(c => {
+        if (!filterVal) return true;
+        return (c.name.toLowerCase().includes(filterVal) || 
+                c.district.toLowerCase().includes(filterVal) || 
+                c.dept.toLowerCase().includes(filterVal) ||
+                c.designation.toLowerCase().includes(filterVal) ||
+                c.location.toLowerCase().includes(filterVal));
+      });
+
+      if (filtered.length === 0) {
+        wrap.innerHTML = '<p style="color:var(--text-muted);font-size:14px;padding:20px">कोई संपर्क नहीं मिला।</p>';
+        return;
+      }
+
+      wrap.innerHTML = `<table>
+        <thead><tr><th>नाम</th><th>पद (Designation)</th><th>विभाग</th><th>ज़िला (District)</th><th>स्थान</th><th>फ़ोन नंबर</th></tr></thead>
+        <tbody>${filtered.map(c => `
+          <tr>
+            <td><strong>${c.name}</strong></td>
+            <td>${c.designation}</td>
+            <td><span class="badge badge-success">${c.dept}</span></td>
+            <td>${c.district}</td>
+            <td><small style="font-weight:600;color:var(--primary-dark)">${c.location}</small></td>
+            <td><a href="tel:${c.phone}" style="color:var(--primary);text-decoration:none">📞 ${c.phone}</a></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>`;
+    }
+
     function renderAll() {
       updateNavCount();
       renderStats();
       renderAlerts();
       renderEmployees();
       renderAssignments();
+      renderContacts();
     }
 
     renderAll();

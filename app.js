@@ -36,7 +36,10 @@ function updateHeroStats() {
 let currentStep = 1;
 
 function nextStep(from) {
-  if (from === 1 && !validateStep1()) return;
+  if (from === 1 && !validateStep1()) {
+    showToast('⚠️ कृपया सभी ज़रूरी जानकारी सही-सही भरें!', 'warning');
+    return;
+  }
   document.getElementById('step-' + from).classList.remove('active');
   document.getElementById('step-' + (from + 1)).classList.add('active');
   document.getElementById('ps-' + from).classList.remove('active');
