@@ -444,3 +444,61 @@ tr:hover td{background:rgba(0,0,0,0.02);}
   .glass-card{border:1px solid #ccc;box-shadow:none;background:#fff;}
   table{font-size:11px;}
 }
+
+/* ============ DESKTOP SINGLE VIEWPORT HEIGHT (1 Scroll Front Page) ============ */
+@media (min-width: 1024px) {
+  #mainContent {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 40px;
+    padding: 24px 48px;
+    align-items: center;
+    min-height: calc(100vh - 72px);
+    max-height: calc(100vh - 72px);
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  .hero {
+    padding: 0;
+    min-height: auto;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .hero-content {
+    max-width: 100%;
+  }
+  .hero-title {
+    font-size: clamp(32px, 3.2vw, 44px) !important;
+    line-height: 1.15;
+    margin: 12px 0;
+  }
+  .hero-sub {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  .hero-stats {
+    margin-top: 15px;
+    padding: 14px 20px;
+  }
+  .hero-cards {
+    display: none;
+  }
+  .form-section {
+    padding: 0;
+  }
+  .form-card {
+    padding: 24px;
+    max-height: 78vh;
+    overflow-y: auto;
+    border-radius: 20px;
+  }
+  .features-section {
+    display: none;
+  }
+  .footer {
+    display: none;
+  }
+}
+
