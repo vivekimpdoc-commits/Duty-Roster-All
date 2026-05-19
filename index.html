@@ -19,7 +19,7 @@
       <a href="schedule.html" class="nav-link">शेड्यूल</a>
       <a href="#" class="nav-link" onclick="handleLogout()" style="color:var(--danger)">लॉगआउट</a>
     </div>
-    <div class="nav-badge"><span class="pulse-dot"></span><span id="nav-user-count">0 जवान</span></div>
+    <div class="nav-badge"><span class="pulse-dot"></span><span id="nav-user-count">0 कर्मचारी</span></div>
     <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -30,14 +30,14 @@
     <a href="schedule.html" class="nav-link" onclick="closeMenu()">📅 शेड्यूल</a>
   </div>
 
-  <div id="mainContent">
+  <div id="mainContent" class="home-layout">
     <section class="hero">
       <div class="hero-content">
         <div class="hero-badge">🚔 AI-Powered Police Deployment</div>
       <h1 class="hero-title">स्मार्ट पुलिस ड्यूटी<br/><span class="gradient-text">मैनेजमेंट सिस्टम</span></h1>
-      <p class="hero-sub">AI आधारित स्वचालित ड्यूटी असाइनमेंट। जवानों की उपलब्धता, कौशल (Skills) और समान ड्यूटी वितरण के आधार पर।</p>
+      <p class="hero-sub">AI आधारित स्वचालित ड्यूटी असाइनमेंट। कर्मचारियों की उपलब्धता, कौशल (Skills) और समान ड्यूटी वितरण के आधार पर।</p>
       <div class="hero-stats">
-        <div class="stat"><span class="stat-n" id="stat-reg">0</span><span class="stat-l">रजिस्टर्ड जवान</span></div>
+        <div class="stat"><span class="stat-n" id="stat-reg">0</span><span class="stat-l">रजिस्टर्ड कर्मचारी</span></div>
           <div class="stat-div"></div>
           <div class="stat"><span class="stat-n">3</span><span class="stat-l">शिफ्ट्स</span></div>
           <div class="stat-div"></div>
@@ -54,7 +54,7 @@
   <section class="form-section">
     <div class="container">
       <div class="section-header" style="display:flex; flex-direction:column; align-items:center; gap:12px;">
-        <h2>पुलिस अधिकारी / जवान रजिस्ट्रेशन</h2>
+        <h2>पुलिस अधिकारी / कर्मचारी रजिस्ट्रेशन</h2>
         <p>अपनी जानकारी भरें – AI आपकी ड्यूटी ऑटोमैटिक असाइन करेगा</p>
         
         <!-- EXCEL BATCH UPLOAD CONTAINER -->
@@ -376,7 +376,7 @@
           if (typeof updateNavCount === 'function') updateNavCount();
           if (typeof updateHeroStats === 'function') updateHeroStats();
           
-          showToast(`🎉 ${added} पुलिस अधिकारी/जवान सफलतापूर्वक एक्सेल से रजिस्टर हुए!`);
+          showToast(`🎉 ${added} पुलिस अधिकारी/कर्मचारी सफलतापूर्वक एक्सेल से रजिस्टर हुए!`);
           
           // Show quick summary instead of form
           const formEl = document.getElementById('registrationForm');
@@ -399,9 +399,9 @@
               detailsEl.innerHTML = `
                 <div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); border-radius:12px; padding:18px; margin-bottom:16px; text-align:left;">
                   <h4 style="color:var(--success); margin-bottom:12px; font-size:16px; font-weight:700; display:flex; align-items:center; gap:8px;">📊 अपलोड समरी रिपोर्ट:</h4>
-                  <p style="margin-bottom:8px; font-size:14px;">📈 <strong>सफलतापूर्वक जोड़े गए जवान:</strong> <span style="font-size:16px; font-weight:700; color:var(--success);">${added}</span></p>
+                  <p style="margin-bottom:8px; font-size:14px;">📈 <strong>सफलतापूर्वक जोड़े गए कर्मचारी:</strong> <span style="font-size:16px; font-weight:700; color:var(--success);">${added}</span></p>
                   <p style="margin-bottom:8px; font-size:14px;">🤖 <strong>AI रोस्टर डिप्लॉयमेंट:</strong> नया ड्यूटी चार्ट ऑटो-जेनरेट हो चुका है!</p>
-                  <p style="margin-bottom:0; font-size:14px;">🔒 <strong>ड्यूटी सिक्योरिटी:</strong> सभी जवानों का डेटा सुरक्षित रूप से डेटाबेस में सिंक कर दिया गया है।</p>
+                  <p style="margin-bottom:0; font-size:14px;">🔒 <strong>ड्यूटी सिक्योरिटी:</strong> सभी कर्मचारियों का डेटा सुरक्षित रूप से डेटाबेस में सिंक कर दिया गया है。</p>
                 </div>
                 <div style="font-size:13px; color:var(--text-muted); text-align:center; margin-bottom:8px;">
                   कृपया नीचे "शेड्यूल देखें" बटन पर क्लिक करके नया असाइनमेंट चेक करें।

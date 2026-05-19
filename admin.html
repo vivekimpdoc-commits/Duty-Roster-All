@@ -1,265 +1,307 @@
 <!DOCTYPE html>
-<html lang="hi">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
-  <title>Police Roster Pro – Admin डैशबोर्ड</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-</head>
-<body>
-  <div class="bg-animated"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+<htyeml langyes="hi">
 
-  <nav class="navbar">
-    <div class="nav-brand"><span class="nav-logo">🚓</span><span class="nav-title">Police Roster <span class="accent">Pro</span></span></div>
-    <div class="nav-links">
-      <a href="index.html" class="nav-link">रजिस्ट्रेशन</a>
-      <a href="admin.html" class="nav-link active">Admin</a>
-      <a href="schedule.html" class="nav-link">शेड्यूल</a>
-      <a href="#" class="nav-link" onclick="handleLogout()" style="color:var(--danger)">लॉगआउट</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0" />
+    <title>Police Roster Pro – Admin डैशबोर्ड</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet">
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  </head>
+
+  <body>
+    <div class="bg-animated">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
     </div>
-    <div class="nav-badge"><span class="pulse-dot"></span><span id="nav-user-count">0 जवान</span></div>
-    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
-  <div class="mobile-nav" id="mobileNav">
-    <a href="index.html" class="nav-link" onclick="closeMenu()">📝 रजिस्ट्रेशन</a>
-    <a href="admin.html" class="nav-link active" onclick="closeMenu()">🛡️ Admin डैशबोर्ड</a>
-    <a href="schedule.html" class="nav-link" onclick="closeMenu()">📅 शेड्यूल</a>
-  </div>
 
-  <div id="loginSection" style="position:relative;z-index:2;min-height:80vh;display:flex;align-items:center;justify-content:center;">
-    <div class="glass-card" style="max-width:400px;width:90%;text-align:center;">
-      <div style="font-size:48px;margin-bottom:20px;">🛡️</div>
-      <h2 style="margin-bottom:8px;">Admin <span class="gradient-text">Login</span></h2>
-      <p style="color:var(--text-muted);font-size:14px;margin-bottom:24px;">डैशबोर्ड एक्सेस करने के लिए लॉगिन करें</p>
-      
-      <div class="form-group" style="margin-bottom:16px;text-align:left;">
-        <label>Admin ID</label>
-        <div class="inp-wrap"><span class="inp-icon">👤</span><input type="text" id="adminId" placeholder="Enter ID"/></div>
+    <nav class="navbar">
+      <div class="nav-brand"><span class="nav-logo">🚓</span><span class="nav-title">Police Roster <span
+            class="accent">Pro</span></span></div>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">रजिस्ट्रेशन</a>
+        <a href="admin.html" class="nav-link active">Admin</a>
+        <a href="schedule.html" class="nav-link">शेड्यूल</a>
+        <a href="#" class="nav-link" onclick="handleLogout()" style="color:var(--danger)">लॉगआउट</a>
       </div>
-      
-      <div class="form-group" style="margin-bottom:24px;text-align:left;">
-        <label>Password</label>
-        <div class="inp-wrap"><span class="inp-icon">🔒</span><input type="password" id="adminPass" placeholder="••••••••"/></div>
-      </div>
-      
-      <button class="btn-next" onclick="handleLogin()" style="width:100%;margin-bottom:16px;">🔑 लॉगिन करें</button>
-      
-      <div id="demoBox" style="display:none;background:#f1f5f9;border:1px dashed var(--border);border-radius:12px;padding:12px;font-size:13px;margin-top:20px;">
-        <p style="color:var(--text-muted);margin-bottom:4px;">Demo Credentials:</p>
-        <code style="color:var(--primary)">ID: admin | Pass: admin123</code>
-      </div>
-      
-      <button onclick="toggleDemo()" style="background:none;border:none;color:var(--primary);font-size:12px;cursor:pointer;text-decoration:underline;">Show Demo Credentials</button>
+      <div class="nav-badge"><span class="pulse-dot"></span><span id="nav-user-count">0 कर्मचारी</span></div>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+    <div class="mobile-nav" id="mobileNav">
+      <a href="index.html" class="nav-link" onclick="closeMenu()">📝 रजिस्ट्रेशन</a>
+      <a href="admin.html" class="nav-link active" onclick="closeMenu()">🛡️ Admin डैशबोर्ड</a>
+      <a href="schedule.html" class="nav-link" onclick="closeMenu()">📅 शेड्यूल</a>
     </div>
-  </div>
 
-  <div id="adminContent" style="position:relative;z-index:1;padding:30px 0;display:none;">
-    <div class="container" style="max-width:1100px">
+    <div id="loginSection"
+      style="position:relative;z-index:2;min-height:80vh;display:flex;align-items:center;justify-content:center;">
+      <div class="glass-card" style="max-width:400px;width:90%;text-align:center;">
+        <div style="font-size:48px;margin-bottom:20px;">🛡️</div>
+        <h2 style="margin-bottom:8px;">Admin <span class="gradient-text">Login</span></h2>
+        <p style="color:var(--text-muted);font-size:14px;margin-bottom:24px;">डैशबोर्ड एक्सेस करने के लिए लॉगिन करें</p>
 
-      <div class="page-header">
-        <h1>🛡️ Admin <span class="gradient-text">डैशबोर्ड</span></h1>
-        <p>जवान प्रबंधन, ड्यूटी असाइनमेंट और AI अलर्ट</p>
-      </div>
-
-      <!-- STATS -->
-      <div class="stats-row" id="statsRow"></div>
-
-      <!-- ALERTS -->
-      <div class="glass-card" style="margin-bottom:24px">
-        <h3 style="margin-bottom:16px">🚨 AI अलर्ट्स</h3>
-        <div id="alertsContainer"><p style="color:var(--text-muted);font-size:14px">कोई अलर्ट नहीं। सब ठीक है ✅</p></div>
-      </div>
-
-      <!-- ACTIONS -->
-      <div class="glass-card" style="margin-bottom:24px">
-        <h3 style="margin-bottom:16px;display:flex;align-items:center;gap:8px">⚙️ प्रशासनिक नियंत्रण पैनल (Admin Command Center)</h3>
-        
-        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:16px">
-          
-          <!-- AI scheduling cluster -->
-          <div style="background:#f8fafc;border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px">
-            <h4 style="font-size:14px;color:var(--primary);margin:0;font-weight:700">🤖 AI शेड्यूलिंग इंजन</h4>
-            <button class="btn-next" onclick="runAI()" style="font-size:13px;padding:10px 16px;width:100%;text-align:center">⚡ AI रोस्टर जनरेट करें</button>
-            <button class="btn-reject" onclick="triggerSOS()" style="font-size:13px;padding:10px 16px;background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;border:none;width:100%;text-align:center">🚨 आपातकालीन SOS तैनात करें</button>
-          </div>
-
-          <!-- Data transfer cluster -->
-          <div style="background:#f8fafc;border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px">
-            <h4 style="font-size:14px;color:var(--success);margin:0;font-weight:700">📤 डेटा इम्पोर्ट / एक्सपोर्ट</h4>
-            <input type="file" id="fileUpload" accept=".csv, .xlsx, .xls" style="display:none" onchange="handleFileUpload(event)"/>
-            <button class="btn-next" onclick="document.getElementById('fileUpload').click()" style="font-size:13px;padding:10px 16px;background:linear-gradient(135deg,#3b82f6,#2563eb);width:100%;text-align:center">📤 एक्सेल (Excel) अपलोड</button>
-            <button class="btn-next" onclick="exportCSV()" style="font-size:13px;padding:10px 16px;background:linear-gradient(135deg,#10b981,#059669);width:100%;text-align:center">📥 CSV डेटा डाउनलोड</button>
-          </div>
-
-          <!-- Reporting and reset cluster -->
-          <div style="background:#f8fafc;border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px">
-            <h4 style="font-size:14px;color:var(--warning);margin:0;font-weight:700">📄 रिपोर्टिंग और सुरक्षा</h4>
-            <button class="btn-next" onclick="exportPDF()" style="font-size:13px;padding:10px 16px;background:linear-gradient(135deg,#6b7280,#4b5563);width:100%;text-align:center">📄 PDF रिपोर्ट प्रिंट</button>
-            <button class="btn-prev" onclick="clearAll()" style="font-size:13px;padding:10px 16px;border-color:#ef4444;color:#ef4444;width:100%;text-align:center">🗑️ संपूर्ण डेटा साफ़ करें</button>
-          </div>
-
+        <div class="form-group" style="margin-bottom:16px;text-align:left;">
+          <label>Admin ID</label>
+          <div class="inp-wrap"><span class="inp-icon">👤</span><input type="text" id="adminId"
+              placeholder="Enter ID" /></div>
         </div>
-      </div>
 
-      <!-- EMPLOYEES TABLE -->
-      <div class="glass-card" style="margin-bottom:24px">
-        <h3 style="margin-bottom:16px">👥 रजिस्टर्ड पुलिस अधिकारी / जवान</h3>
-        <div class="table-wrap" id="empTableWrap">
-          <p style="color:var(--text-muted);font-size:14px;padding:20px">कोई जवान नहीं। <a href="index.html" style="color:var(--primary)">पहले रजिस्टर करें →</a></p>
+        <div class="form-group" style="margin-bottom:24px;text-align:left;">
+          <label>Password</label>
+          <div class="inp-wrap"><span class="inp-icon">🔒</span><input type="password" id="adminPass"
+              placeholder="••••••••" /></div>
         </div>
-      </div>
 
-      <!-- ASSIGNMENTS TABLE -->
-      <div class="glass-card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px">
-          <h3 style="margin:0">📋 शिफ्ट असाइनमेंट</h3>
-          <div class="inp-wrap" style="max-width:300px;width:100%">
-            <span class="inp-icon">🔍</span>
-            <input type="text" id="filterLocation" placeholder="ज़िला या स्पॉट खोजें..." onkeyup="renderAssignments()" style="padding:10px 16px 10px 40px;"/>
-          </div>
-        </div>
-        <div class="table-wrap" id="assignTableWrap">
-          <p style="color:var(--text-muted);font-size:14px;padding:20px">कोई असाइनमेंट नहीं। AI रन करें।</p>
-        </div>
-      </div>
+        <button class="btn-next" onclick="handleLogin()" style="width:100%;margin-bottom:16px;">🔑 लॉगिन करें</button>
 
-      <!-- VIP / GOVT CONTACTS TABLE -->
-      <div class="glass-card" style="margin-top:24px">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px">
-          <h3 style="margin:0">🏛️ महत्वपूर्ण सरकारी संपर्क (VIP Directory)</h3>
-          <div class="inp-wrap" style="max-width:300px;width:100%">
-            <span class="inp-icon">🔍</span>
-            <input type="text" id="filterContacts" placeholder="ज़िला या विभाग खोजें..." onkeyup="renderContacts()" style="padding:10px 16px 10px 40px;"/>
-          </div>
+        <div id="demoBox"
+          style="display:none;background:#f1f5f9;border:1px dashed var(--border);border-radius:12px;padding:12px;font-size:13px;margin-top:20px;">
+          <p style="color:var(--text-muted);margin-bottom:4px;">Demo Credentials:</p>
+          <code style="color:var(--primary)">ID: admin | Pass: admin123</code>
         </div>
-        <div class="table-wrap" id="contactsTableWrap">
-        </div>
-      </div>
 
-    </div>
-  </div>
-
-  <!-- Edit Modal -->
-  <div id="editModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;align-items:center;justify-content:center;">
-    <div class="glass-card" style="width:90%;max-width:480px;position:relative">
-      <h3 style="margin-bottom:20px">✏️ असाइनमेंट एडिट करें</h3>
-      <div class="form-group" style="margin-bottom:16px">
-        <label>अधिकारी / जवान का नाम</label>
-        <div class="inp-wrap"><span class="inp-icon">👤</span><input type="text" id="editName"/></div>
-      </div>
-      <div class="form-group" style="margin-bottom:16px">
-        <label>शिफ्ट बदलें</label>
-        <div class="inp-wrap"><span class="inp-icon">⏰</span>
-          <select id="editShift">
-            <option value="morning">🌅 Morning – 6AM–2PM</option>
-            <option value="afternoon">☀️ Afternoon – 2PM–10PM</option>
-            <option value="night">🌙 Night – 10PM–6AM</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group" style="margin-bottom:16px">
-        <label>स्टेटस</label>
-        <div class="inp-wrap"><span class="inp-icon">📌</span>
-          <select id="editStatus">
-            <option value="assigned">Assigned</option>
-            <option value="unassigned">Unassigned</option>
-            <option value="swapped">Swapped</option>
-          </select>
-        </div>
-      </div>
-      <div style="display:flex;gap:12px;justify-content:flex-end">
-        <button class="btn-prev" onclick="closeModal()">रद्द करें</button>
-        <button class="btn-next" onclick="saveEdit()" style="padding:12px 24px;font-size:14px">💾 सेव करें</button>
+        <button onclick="toggleDemo()"
+          style="background:none;border:none;color:var(--primary);font-size:12px;cursor:pointer;text-decoration:underline;">Show
+          Demo Credentials</button>
       </div>
     </div>
-  </div>
 
-  <div class="toast" id="toast"><span id="toast-msg"></span></div>
-  <footer class="footer"><div class="container"><p>🚓 Police Roster Pro – Admin Panel</p></div></footer>
+    <div id="adminContent" style="position:relative;z-index:1;padding:30px 0;display:none;">
+      <div class="container" style="max-width:1100px">
 
-  <script src="app.js"></script>
-  <script src="ai-scheduler.js"></script>
-  <script>
-    let editingId = null;
+        <div class="page-header">
+          <h1>🛡️ Admin <span class="gradient-text">डैशबोर्ड</span></h1>
+          <p>कर्मचारी प्रबंधन, ड्यूटी असाइनमेंट और AI अलर्ट</p>
+        </div>
 
-    // SIMPLE LOGIN LOGIC
-    function handleLogin() {
-      const id = document.getElementById('adminId').value;
-      const pass = document.getElementById('adminPass').value;
-      
-      if (id === 'admin' && pass === 'admin123') {
-        sessionStorage.setItem('isAdminLoggedIn', 'true');
-        showDashboard();
-        showToast('✅ लॉगिन सफल!');
-      } else {
-        showToast('❌ गलत ID या पासवर्ड!', 'error');
+        <!-- STATS -->
+        <div class="stats-row" id="statsRow"></div>
+
+        <!-- ALERTS -->
+        <div class="glass-card" style="margin-bottom:24px">
+          <h3 style="margin-bottom:16px">🚨 AI अलर्ट्स</h3>
+          <div id="alertsContainer">
+            <p style="color:var(--text-muted);font-size:14px">कोई अलर्ट नहीं। सब ठीक है ✅</p>
+          </div>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="glass-card" style="margin-bottom:24px">
+          <h3 style="margin-bottom:16px;display:flex;align-items:center;gap:8px">⚙️ प्रशासनिक नियंत्रण पैनल (Admin
+            Command Center)</h3>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:16px">
+
+            <!-- AI scheduling cluster -->
+            <div
+              style="background:#f8fafc;border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px">
+              <h4 style="font-size:14px;color:var(--primary);margin:0;font-weight:700">🤖 AI शेड्यूलिंग इंजन</h4>
+              <button class="btn-next" onclick="runAI()"
+                style="font-size:13px;padding:10px 16px;width:100%;text-align:center">⚡ AI रोस्टर जनरेट करें</button>
+              <button class="btn-reject" onclick="triggerSOS()"
+                style="font-size:13px;padding:10px 16px;background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;border:none;width:100%;text-align:center">🚨
+                आपातकालीन SOS तैनात करें</button>
+            </div>
+
+            <!-- Data transfer cluster -->
+            <div
+              style="background:#f8fafc;border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px">
+              <h4 style="font-size:14px;color:var(--success);margin:0;font-weight:700">📤 डेटा इम्पोर्ट / एक्सपोर्ट</h4>
+              <input type="file" id="fileUpload" accept=".csv, .xlsx, .xls" style="display:none"
+                onchange="handleFileUpload(event)" />
+              <button class="btn-next" onclick="document.getElementById('fileUpload').click()"
+                style="font-size:13px;padding:10px 16px;background:linear-gradient(135deg,#3b82f6,#2563eb);width:100%;text-align:center">📤
+                एक्सेल (Excel) अपलोड</button>
+              <button class="btn-next" onclick="exportCSV()"
+                style="font-size:13px;padding:10px 16px;background:linear-gradient(135deg,#10b981,#059669);width:100%;text-align:center">📥
+                CSV डेटा डाउनलोड</button>
+            </div>
+
+            <!-- Reporting and reset cluster -->
+            <div
+              style="background:#f8fafc;border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px">
+              <h4 style="font-size:14px;color:var(--warning);margin:0;font-weight:700">📄 रिपोर्टिंग और सुरक्षा</h4>
+              <button class="btn-next" onclick="exportPDF()"
+                style="font-size:13px;padding:10px 16px;background:linear-gradient(135deg,#6b7280,#4b5563);width:100%;text-align:center">📄
+                PDF रिपोर्ट प्रिंट</button>
+              <button class="btn-prev" onclick="clearAll()"
+                style="font-size:13px;padding:10px 16px;border-color:#ef4444;color:#ef4444;width:100%;text-align:center">🗑️
+                संपूर्ण डेटा साफ़ करें</button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- EMPLOYEES TABLE -->
+        <div class="glass-card" style="margin-bottom:24px">
+          <h3 style="margin-bottom:16px">👥 रजिस्टर्ड पुलिस अधिकारी / कर्मचारी</h3>
+          <div class="table-wrap" id="empTableWrap">
+            <p style="color:var(--text-muted);font-size:14px;padding:20px">कोई कर्मचारी नहीं। <a href="index.html"
+                style="color:var(--primary)">पहले रजिस्टर करें →</a></p>
+          </div>
+        </div>
+
+        <!-- ASSIGNMENTS TABLE -->
+        <div class="glass-card">
+          <div
+            style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px">
+            <h3 style="margin:0">📋 शिफ्ट असाइनमेंट</h3>
+            <div class="inp-wrap" style="max-width:300px;width:100%">
+              <span class="inp-icon">🔍</span>
+              <input type="text" id="filterLocation" placeholder="ज़िला या स्पॉट खोजें..." onkeyup="renderAssignments()"
+                style="padding:10px 16px 10px 40px;" />
+            </div>
+          </div>
+          <div class="table-wrap" id="assignTableWrap">
+            <p style="color:var(--text-muted);font-size:14px;padding:20px">कोई असाइनमेंट नहीं। AI रन करें।</p>
+          </div>
+        </div>
+
+        <!-- VIP / GOVT CONTACTS TABLE -->
+        <div class="glass-card" style="margin-top:24px">
+          <div
+            style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px">
+            <h3 style="margin:0">🏛️ महत्वपूर्ण सरकारी संपर्क (VIP Directory)</h3>
+            <div class="inp-wrap" style="max-width:300px;width:100%">
+              <span class="inp-icon">🔍</span>
+              <input type="text" id="filterContacts" placeholder="ज़िला या विभाग खोजें..." onkeyup="renderContacts()"
+                style="padding:10px 16px 10px 40px;" />
+            </div>
+          </div>
+          <div class="table-wrap" id="contactsTableWrap">
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal"
+      style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;align-items:center;justify-content:center;">
+      <div class="glass-card" style="width:90%;max-width:480px;position:relative">
+        <h3 style="margin-bottom:20px">✏️ असाइनमेंट एडिट करें</h3>
+        <div class="form-group" style="margin-bottom:16px">
+          <label>अधिकारी / कर्मचारी का नाम</label>
+          <div class="inp-wrap"><span class="inp-icon">👤</span><input type="text" id="editName" /></div>
+        </div>
+        <div class="form-group" style="margin-bottom:16px">
+          <label>शिफ्ट बदलें</label>
+          <div class="inp-wrap"><span class="inp-icon">⏰</span>
+            <select id="editShift">
+              <option value="morning">🌅 Morning – 6AM–2PM</option>
+              <option value="afternoon">☀️ Afternoon – 2PM–10PM</option>
+              <option value="night">🌙 Night – 10PM–6AM</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:16px">
+          <label>स्टेटस</label>
+          <div class="inp-wrap"><span class="inp-icon">📌</span>
+            <select id="editStatus">
+              <option value="assigned">Assigned</option>
+              <option value="unassigned">Unassigned</option>
+              <option value="swapped">Swapped</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;justify-content:flex-end">
+          <button class="btn-prev" onclick="closeModal()">रद्द करें</button>
+          <button class="btn-next" onclick="saveEdit()" style="padding:12px 24px;font-size:14px">💾 सेव करें</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"><span id="toast-msg"></span></div>
+    <footer class="footer">
+      <div class="container">
+        <p>🚓 Police Roster Pro – Admin Panel</p>
+      </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script src="ai-scheduler.js"></script>
+    <script>
+      let editingId = null;
+
+      // SIMPLE LOGIN LOGIC
+      function handleLogin() {
+        const id = document.getElementById('adminId').value;
+        const pass = document.getElementById('adminPass').value;
+
+        if (id === 'admin' && pass === 'admin123') {
+          sessionStorage.setItem('isAdminLoggedIn', 'true');
+          showDashboard();
+          showToast('✅ लॉगिन सफल!');
+        } else {
+          showToast('❌ गलत ID या पासवर्ड!', 'error');
+        }
       }
-    }
 
-    function handleLogout() {
-      sessionStorage.removeItem('isEmpLoggedIn');
-      sessionStorage.removeItem('isAdminLoggedIn');
-      window.location.reload();
-    }
-
-    function toggleDemo() {
-      const box = document.getElementById('demoBox');
-      box.style.display = box.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function showDashboard() {
-      document.getElementById('loginSection').style.display = 'none';
-      document.getElementById('adminContent').style.display = 'block';
-      renderAll();
-    }
-
-    function checkAuth() {
-      if (sessionStorage.getItem('isAdminLoggedIn') === 'true') {
-        showDashboard();
+      function handleLogout() {
+        sessionStorage.removeItem('isEmpLoggedIn');
+        sessionStorage.removeItem('isAdminLoggedIn');
+        window.location.reload();
       }
-    }
 
-    window.addEventListener('DOMContentLoaded', checkAuth);
+      function toggleDemo() {
+        const box = document.getElementById('demoBox');
+        box.style.display = box.style.display === 'none' ? 'block' : 'none';
+      }
 
-    function renderStats() {
-      const emps = getEmployees();
-      const assigns = getAssignments();
-      const unassigned = assigns.filter(a => a.status === 'unassigned').length;
-      const assigned = assigns.filter(a => a.status === 'assigned').length;
-      document.getElementById('statsRow').innerHTML = `
-        <div class="stat-card"><div class="stat-card-icon">👥</div><div><div class="stat-card-val">${emps.length}</div><div class="stat-card-lbl">कुल जवान</div></div></div>
+      function showDashboard() {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('adminContent').style.display = 'block';
+        renderAll();
+      }
+
+      function checkAuth() {
+        if (sessionStorage.getItem('isAdminLoggedIn') === 'true') {
+          showDashboard();
+        }
+      }
+
+      window.addEventListener('DOMContentLoaded', checkAuth);
+
+      function renderStats() {
+        const emps = getEmployees();
+        const assigns = getAssignments();
+        const unassigned = assigns.filter(a => a.status === 'unassigned').length;
+        const assigned = assigns.filter(a => a.status === 'assigned').length;
+        document.getElementById('statsRow').innerHTML = `
+        <div class="stat-card"><div class="stat-card-icon">👥</div><div><div class="stat-card-val">${emps.length}</div><div class="stat-card-lbl">कुल कर्मचारी</div></div></div>
         <div class="stat-card"><div class="stat-card-icon">✅</div><div><div class="stat-card-val">${assigned}</div><div class="stat-card-lbl">असाइन्ड ड्यूटी</div></div></div>
         <div class="stat-card"><div class="stat-card-icon">⚠️</div><div><div class="stat-card-val">${unassigned}</div><div class="stat-card-lbl">खाली शिफ्ट</div></div></div>
         <div class="stat-card"><div class="stat-card-icon">📅</div><div><div class="stat-card-val">7</div><div class="stat-card-lbl">दिन का रोस्टर</div></div></div>
       `;
-    }
-
-    function renderAlerts() {
-      const emps = getEmployees();
-      const assigns = getAssignments();
-      const alerts = window.AIScheduler.detectImbalances(emps, assigns);
-      const container = document.getElementById('alertsContainer');
-      if (alerts.length === 0) {
-        container.innerHTML = '<p style="color:var(--text-muted);font-size:14px">कोई अलर्ट नहीं। सब ठीक है ✅</p>';
-      } else {
-        container.innerHTML = alerts.map(a =>
-          `<div class="alert-box alert-${a.type}">${a.msg}</div>`
-        ).join('');
       }
-    }
 
-    function renderEmployees() {
-      const emps = getEmployees();
-      const wrap = document.getElementById('empTableWrap');
-      if (emps.length === 0) {
-        wrap.innerHTML = '<p style="color:var(--text-muted);font-size:14px;padding:20px">कोई कर्मचारी नहीं। <a href="index.html" style="color:var(--primary)">पहले रजिस्टर करें →</a></p>';
-        return;
+      function renderAlerts() {
+        const emps = getEmployees();
+        const assigns = getAssignments();
+        const alerts = window.AIScheduler.detectImbalances(emps, assigns);
+        const container = document.getElementById('alertsContainer');
+        if (alerts.length === 0) {
+          container.innerHTML = '<p style="color:var(--text-muted);font-size:14px">कोई अलर्ट नहीं। सब ठीक है ✅</p>';
+        } else {
+          container.innerHTML = alerts.map(a =>
+            `<div class="alert-box alert-${a.type}">${a.msg}</div>`
+          ).join('');
+        }
       }
-      wrap.innerHTML = `<table>
+
+      function renderEmployees() {
+        const emps = getEmployees();
+        const wrap = document.getElementById('empTableWrap');
+        if (emps.length === 0) {
+          wrap.innerHTML = '<p style="color:var(--text-muted);font-size:14px;padding:20px">कोई कर्मचारी नहीं। <a href="index.html" style="color:var(--primary)">पहले रजिस्टर करें →</a></p>';
+          return;
+        }
+        wrap.innerHTML = `<table>
         <thead><tr><th>#</th><th>नाम</th><th>ईमेल</th><th>विभाग</th><th>शिफ्ट पसंद</th><th>कौशल</th><th>दिन</th><th>Action</th></tr></thead>
         <tbody>${emps.map((e, i) => `
           <tr>
@@ -268,31 +310,31 @@
             <td data-label="ईमेल">${e.email}</td>
             <td data-label="विभाग">${e.department || '–'}</td>
             <td data-label="शिफ्ट पसंद"><span class="badge badge-${e.preferredShift === 'morning' ? 'morning' : e.preferredShift === 'afternoon' ? 'afternoon' : e.preferredShift === 'night' ? 'night' : 'success'}">${e.preferredShift}</span></td>
-            <td data-label="कौशल">${e.skills.length > 0 ? e.skills.slice(0,2).map(s => `<span class="badge badge-success" style="margin:1px">${s}</span>`).join('') : '–'}</td>
-            <td data-label="उपलब्धता" style="font-size:11px">${e.days.slice(0,3).join(', ')}${e.days.length > 3 ? '...' : ''}</td>
+            <td data-label="कौशल">${e.skills.length > 0 ? e.skills.slice(0, 2).map(s => `<span class="badge badge-success" style="margin:1px">${s}</span>`).join('') : '–'}</td>
+            <td data-label="उपलब्धता" style="font-size:11px">${e.days.slice(0, 3).join(', ')}${e.days.length > 3 ? '...' : ''}</td>
             <td data-label="कार्रवाई"><button onclick="deleteEmployee('${e.id}')" style="background:rgba(239,68,68,0.2);border:1px solid #ef4444;color:#ef4444;padding:5px 10px;border-radius:8px;cursor:pointer;font-size:12px">🗑️</button></td>
           </tr>`).join('')}
         </tbody>
       </table>`;
-    }
-
-    function renderAssignments() {
-      const assigns = getAssignments();
-      const wrap = document.getElementById('assignTableWrap');
-      
-      const filterVal = document.getElementById('filterLocation')?.value.toLowerCase() || '';
-      const filteredAssigns = assigns.filter(a => {
-        if (!filterVal) return true;
-        const loc = (a.location || '').toLowerCase();
-        const emp = (a.employeeName || '').toLowerCase();
-        return loc.includes(filterVal) || emp.includes(filterVal);
-      });
-
-      if (filteredAssigns.length === 0) {
-        wrap.innerHTML = '<p style="color:var(--text-muted);font-size:14px;padding:20px">कोई असाइनमेंट नहीं मिला।</p>';
-        return;
       }
-      wrap.innerHTML = `<table>
+
+      function renderAssignments() {
+        const assigns = getAssignments();
+        const wrap = document.getElementById('assignTableWrap');
+
+        const filterVal = document.getElementById('filterLocation')?.value.toLowerCase() || '';
+        const filteredAssigns = assigns.filter(a => {
+          if (!filterVal) return true;
+          const loc = (a.location || '').toLowerCase();
+          const emp = (a.employeeName || '').toLowerCase();
+          return loc.includes(filterVal) || emp.includes(filterVal);
+        });
+
+        if (filteredAssigns.length === 0) {
+          wrap.innerHTML = '<p style="color:var(--text-muted);font-size:14px;padding:20px">कोई असाइनमेंट नहीं मिला।</p>';
+          return;
+        }
+        wrap.innerHTML = `<table>
         <thead><tr><th>तारीख</th><th>दिन</th><th>शिफ्ट</th><th>लोकेशन (जिला - स्पॉट)</th><th>कर्मचारी</th><th>AI स्कोर</th><th>स्टेटस</th><th>Action</th></tr></thead>
         <tbody>${filteredAssigns.map(a => `
           <tr>
@@ -300,221 +342,221 @@
             <td data-label="दिन">${a.day}</td>
             <td data-label="शिफ्ट">${a.shiftIcon} <span class="badge badge-${a.shift}">${a.shiftLabel}</span></td>
             <td data-label="लोकेशन"><small style="font-size:11px;font-weight:600;color:var(--primary-dark)">${a.location || '–'}</small></td>
-            <td data-label="जवान का नाम">${a.employeeName}</td>
+            <td data-label="कर्मचारी का नाम">${a.employeeName}</td>
             <td data-label="AI स्कोर">${a.aiScore}</td>
             <td data-label="स्टेटस"><span class="badge badge-${a.status === 'assigned' ? 'success' : a.status === 'unassigned' ? 'danger' : 'warning'}">${a.status}</span>${a.manualOverride ? ' <span style="font-size:10px;color:var(--warning)">✏️ Manual</span>' : ''}</td>
             <td data-label="कार्रवाई"><button onclick="openEdit('${a.id}')" style="background:rgba(108,99,255,0.2);border:1px solid var(--primary);color:var(--primary);padding:5px 10px;border-radius:8px;cursor:pointer;font-size:12px">✏️ एडिट</button></td>
           </tr>`).join('')}
         </tbody>
       </table>`;
-    }
-
-    function runAI() {
-      const emps = getEmployees();
-      if (emps.length === 0) { showToast('⚠️ पहले कर्मचारी रजिस्टर करें!'); return; }
-      const assigns = window.AIScheduler.assign(emps);
-      saveAssignments(assigns);
-      renderAll();
-      showToast('✅ AI ने शिफ्ट असाइनमेंट पूरा किया!');
-    }
-
-    function triggerSOS() {
-      if(!confirm("क्या आप इमरजेंसी (SOS) डिप्लॉयमेंट करना चाहते हैं? यह तुरंत 5 जवानों को इमरजेंसी ड्यूटी पर भेज देगा!")) return;
-      const emps = getEmployees();
-      if(emps.length < 5) return showToast('⚠️ पर्याप्त जवान नहीं हैं!');
-      
-      const assigns = getAssignments();
-      const shuffled = [...emps].sort(() => 0.5 - Math.random());
-      const selected = shuffled.slice(0, 5);
-      const date = new Date().toISOString().split('T')[0];
-
-      selected.forEach(emp => {
-        assigns.unshift({
-          id: 'SOS-' + Date.now() + Math.random().toString(36).substr(2, 5),
-          employeeId: emp.id,
-          employeeName: emp.rank ? `${emp.rank} ${emp.fullName}` : emp.fullName,
-          shift: 'morning',
-          shiftLabel: '🚨 EMERGENCY',
-          shiftIcon: '🚨',
-          shiftTime: 'IMMEDIATE',
-          day: 'sunday',
-          date: date,
-          location: '🔴 CRITICAL HOTSPOT',
-          aiScore: 100,
-          status: 'assigned',
-          manualOverride: true
-        });
-      });
-      saveAssignments(assigns);
-      renderAll();
-      showToast('🚨 इमरजेंसी डिप्लॉयमेंट सफल! 5 जवान भेजे गए।');
-    }
-
-    function openEdit(id) {
-      const assigns = getAssignments();
-      const a = assigns.find(x => x.id === id);
-      if (!a) return;
-      editingId = id;
-      document.getElementById('editName').value = a.employeeName;
-      document.getElementById('editShift').value = a.shift;
-      document.getElementById('editStatus').value = a.status;
-      document.getElementById('editModal').style.display = 'flex';
-    }
-
-    function closeModal() { document.getElementById('editModal').style.display = 'none'; editingId = null; }
-
-    function saveEdit() {
-      const assigns = getAssignments();
-      const idx = assigns.findIndex(x => x.id === editingId);
-      if (idx === -1) return;
-      const shift = document.getElementById('editShift').value;
-      const shiftMap = { morning: { label: 'Morning Shift', icon: '🌅', time: '6AM–2PM' }, afternoon: { label: 'Afternoon Shift', icon: '☀️', time: '2PM–10PM' }, night: { label: 'Night Shift', icon: '🌙', time: '10PM–6AM' } };
-      assigns[idx].employeeName = document.getElementById('editName').value;
-      assigns[idx].shift = shift;
-      assigns[idx].shiftLabel = shiftMap[shift].label;
-      assigns[idx].shiftIcon = shiftMap[shift].icon;
-      assigns[idx].shiftTime = shiftMap[shift].time;
-      assigns[idx].status = document.getElementById('editStatus').value;
-      assigns[idx].manualOverride = true;
-      saveAssignments(assigns);
-      closeModal();
-      renderAll();
-      showToast('✅ असाइनमेंट अपडेट हो गया!');
-    }
-
-    function deleteEmployee(id) {
-      if (!confirm('क्या आप इस कर्मचारी को हटाना चाहते हैं?')) return;
-      let emps = getEmployees().filter(e => e.id !== id);
-      saveEmployees(emps);
-      let assigns = getAssignments().filter(a => a.employeeId !== id);
-      saveAssignments(assigns);
-      renderAll();
-      showToast('🗑️ कर्मचारी हटा दिया गया।');
-    }
-
-    function clearAll() {
-      if (!confirm('सभी डेटा क्लियर करें? यह पूर्ववत नहीं होगा।')) return;
-      saveEmployees([]); saveAssignments([]);
-      renderAll();
-      showToast('🗑️ सभी डेटा क्लियर।');
-    }
-
-    function exportCSV() {
-      const assigns = getAssignments();
-      if (assigns.length === 0) { showToast('कोई डेटा नहीं!'); return; }
-      const header = ['Date', 'Day', 'Shift', 'Location', 'Employee', 'Status', 'AI Score', 'Manual'];
-      const rows = assigns.map(a => [a.date, a.day, a.shiftLabel, a.location || '-', a.employeeName, a.status, a.aiScore, a.manualOverride]);
-      const csv = [header, ...rows].map(r => r.join(',')).join('\n');
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url; link.download = 'shift-schedule.csv'; link.click();
-      showToast('📥 CSV डाउनलोड हो रहा है...');
-    }
-
-    function exportPDF() { window.print(); }
-
-    function handleFileUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const data = new Uint8Array(e.target.result);
-          const workbook = XLSX.read(data, {type: 'array'});
-          const firstSheetName = workbook.SheetNames[0];
-          const worksheet = workbook.Sheets[firstSheetName];
-          const json = XLSX.utils.sheet_to_json(worksheet, {header: 1});
-          
-          if (json.length < 2) {
-            showToast('⚠️ फाइल खाली है!', 'error');
-            return;
-          }
-          
-          const headers = json[0].map(h => String(h).toLowerCase().trim());
-          const nameIdx = headers.findIndex(h => h.includes('name') || h.includes('नाम'));
-          const pnoIdx = headers.findIndex(h => h.includes('pno') || h.includes('badge') || h.includes('id'));
-          const deptIdx = headers.findIndex(h => h.includes('dept') || h.includes('department') || h.includes('विभाग'));
-          const rankIdx = headers.findIndex(h => h.includes('rank') || h.includes('post') || h.includes('पद') || h.includes('designation'));
-          
-          if (nameIdx === -1) {
-            showToast('⚠️ "Name" कॉलम नहीं मिला!', 'error');
-            return;
-          }
-
-          let added = 0;
-          const emps = getEmployees();
-          
-          for (let i = 1; i < json.length; i++) {
-            const row = json[i];
-            if (!row[nameIdx]) continue;
-            
-            const newEmp = {
-              id: 'EMP-' + Date.now() + Math.random().toString(36).substr(2, 5),
-              fullName: row[nameIdx],
-              employeeId: pnoIdx !== -1 && row[pnoIdx] ? row[pnoIdx] : `PNO-U${Math.floor(Math.random()*1000)}`,
-              department: deptIdx !== -1 && row[deptIdx] ? row[deptIdx] : 'patrol',
-              rank: rankIdx !== -1 && row[rankIdx] ? row[rankIdx] : 'कांस्टेबल',
-              email: `officer${Math.floor(Math.random()*10000)}@police.in`,
-              phone: '9999999999',
-              experience: 5,
-              days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
-              timeSlots: ['morning', 'afternoon', 'night'],
-              hoursPerWeek: 48,
-              preferredShift: 'any',
-              skills: ['first_aid'],
-              registeredAt: new Date().toISOString(),
-              assignedShifts: 0
-            };
-            emps.push(newEmp);
-            added++;
-          }
-          
-          saveEmployees(emps);
-          renderAll();
-          showToast(`✅ ${added} पुलिस अधिकारी / जवान अपलोड किए गए!`);
-        } catch (err) {
-          console.error(err);
-          showToast('❌ फाइल रीड करने में त्रुटि!', 'error');
-        }
-        // Reset input
-        document.getElementById('fileUpload').value = '';
-      };
-      reader.readAsArrayBuffer(file);
-    }
-
-    const VIP_CONTACTS = [
-      { name: "श्री सूर्यपाल गंगवार", designation: "जिलाधिकारी (DM)", dept: "प्रशासन", district: "Lucknow", location: "Collectorate", phone: "+91-9454417555" },
-      { name: "डॉ. मनोज अग्रवाल", designation: "मुख्य चिकित्सा अधिकारी (CMO)", dept: "स्वास्थ्य विभाग", district: "Lucknow", location: "Civil Hospital", phone: "+91-9454455222" },
-      { name: "श्री भानु चंद्र गोस्वामी", designation: "जिलाधिकारी (DM)", dept: "प्रशासन", district: "Agra", location: "Collectorate", phone: "+91-9454417556" },
-      { name: "श्री प्रशांत कुमार", designation: "अपर पुलिस महानिदेशक", dept: "गृह विभाग", district: "Lucknow", location: "Police HQ", phone: "+91-9454400001" },
-      { name: "श्री सुहास एल. वाई.", designation: "जिलाधिकारी (DM)", dept: "प्रशासन", district: "Gautam Buddha Nagar", location: "Surajpur", phone: "+91-9454417560" },
-      { name: "श्री संजय प्रसाद", designation: "प्रमुख सचिव (गृह)", dept: "गृह विभाग", district: "Lucknow", location: "Secretariat", phone: "+91-9454400111" },
-      { name: "फायर ऑफिसर (CFO)", designation: "मुख्य अग्निशमन अधिकारी", dept: "फायर सर्विस", district: "Varanasi", location: "Fire Station", phone: "+91-9454402222" },
-      { name: "एस.डी.एम. (SDM)", designation: "उप जिलाधिकारी", dept: "राजस्व विभाग", district: "Kanpur Nagar", location: "Tehsil HQ", phone: "+91-9454403333" },
-      { name: "श्री नवनीत सहगल", designation: "अपर मुख्य सचिव", dept: "सूचना विभाग", district: "Lucknow", location: "Lok Bhawan", phone: "+91-9454404444" },
-      { name: "कंट्रोल रूम (Emergency)", designation: "प्रभारी अधिकारी", dept: "आपदा प्रबंधन", district: "Allahabad", location: "Sangam Marg", phone: "+91-9454405555" }
-    ];
-
-    function renderContacts() {
-      const wrap = document.getElementById('contactsTableWrap');
-      const filterVal = document.getElementById('filterContacts')?.value.toLowerCase() || '';
-      
-      const filtered = VIP_CONTACTS.filter(c => {
-        if (!filterVal) return true;
-        return (c.name.toLowerCase().includes(filterVal) || 
-                c.district.toLowerCase().includes(filterVal) || 
-                c.dept.toLowerCase().includes(filterVal) ||
-                c.designation.toLowerCase().includes(filterVal) ||
-                c.location.toLowerCase().includes(filterVal));
-      });
-
-      if (filtered.length === 0) {
-        wrap.innerHTML = '<p style="color:var(--text-muted);font-size:14px;padding:20px">कोई संपर्क नहीं मिला।</p>';
-        return;
       }
 
-      wrap.innerHTML = `<table>
+      function runAI() {
+        const emps = getEmployees();
+        if (emps.length === 0) { showToast('⚠️ पहले कर्मचारी रजिस्टर करें!'); return; }
+        const assigns = window.AIScheduler.assign(emps);
+        saveAssignments(assigns);
+        renderAll();
+        showToast('✅ AI ने शिफ्ट असाइनमेंट पूरा किया!');
+      }
+
+      function triggerSOS() {
+        if (!confirm("क्या आप इमरजेंसी (SOS) डिप्लॉयमेंट करना चाहते हैं? यह तुरंत 5 कर्मचारियों को इमरजेंसी ड्यूटी पर भेज देगा!")) return;
+        const emps = getEmployees();
+        if (emps.length < 5) return showToast('⚠️ पर्याप्त कर्मचारी नहीं हैं!');
+
+        const assigns = getAssignments();
+        const shuffled = [...emps].sort(() => 0.5 - Math.random());
+        const selected = shuffled.slice(0, 5);
+        const date = new Date().toISOString().split('T')[0];
+
+        selected.forEach(emp => {
+          assigns.unshift({
+            id: 'SOS-' + Date.now() + Math.random().toString(36).substr(2, 5),
+            employeeId: emp.id,
+            employeeName: emp.rank ? `${emp.rank} ${emp.fullName}` : emp.fullName,
+            shift: 'morning',
+            shiftLabel: '🚨 EMERGENCY',
+            shiftIcon: '🚨',
+            shiftTime: 'IMMEDIATE',
+            day: 'sunday',
+            date: date,
+            location: '🔴 CRITICAL HOTSPOT',
+            aiScore: 100,
+            status: 'assigned',
+            manualOverride: true
+          });
+        });
+        saveAssignments(assigns);
+        renderAll();
+        showToast('🚨 इमरजेंसी डिप्लॉयमेंट सफल! 5 कर्मचारी भेजे गए।');
+      }
+
+      function openEdit(id) {
+        const assigns = getAssignments();
+        const a = assigns.find(x => x.id === id);
+        if (!a) return;
+        editingId = id;
+        document.getElementById('editName').value = a.employeeName;
+        document.getElementById('editShift').value = a.shift;
+        document.getElementById('editStatus').value = a.status;
+        document.getElementById('editModal').style.display = 'flex';
+      }
+
+      function closeModal() { document.getElementById('editModal').style.display = 'none'; editingId = null; }
+
+      function saveEdit() {
+        const assigns = getAssignments();
+        const idx = assigns.findIndex(x => x.id === editingId);
+        if (idx === -1) return;
+        const shift = document.getElementById('editShift').value;
+        const shiftMap = { morning: { label: 'Morning Shift', icon: '🌅', time: '6AM–2PM' }, afternoon: { label: 'Afternoon Shift', icon: '☀️', time: '2PM–10PM' }, night: { label: 'Night Shift', icon: '🌙', time: '10PM–6AM' } };
+        assigns[idx].employeeName = document.getElementById('editName').value;
+        assigns[idx].shift = shift;
+        assigns[idx].shiftLabel = shiftMap[shift].label;
+        assigns[idx].shiftIcon = shiftMap[shift].icon;
+        assigns[idx].shiftTime = shiftMap[shift].time;
+        assigns[idx].status = document.getElementById('editStatus').value;
+        assigns[idx].manualOverride = true;
+        saveAssignments(assigns);
+        closeModal();
+        renderAll();
+        showToast('✅ असाइनमेंट अपडेट हो गया!');
+      }
+
+      function deleteEmployee(id) {
+        if (!confirm('क्या आप इस कर्मचारी को हटाना चाहते हैं?')) return;
+        let emps = getEmployees().filter(e => e.id !== id);
+        saveEmployees(emps);
+        let assigns = getAssignments().filter(a => a.employeeId !== id);
+        saveAssignments(assigns);
+        renderAll();
+        showToast('🗑️ कर्मचारी हटा दिया गया।');
+      }
+
+      function clearAll() {
+        if (!confirm('सभी डेटा क्लियर करें? यह पूर्ववत नहीं होगा।')) return;
+        saveEmployees([]); saveAssignments([]);
+        renderAll();
+        showToast('🗑️ सभी डेटा क्लियर।');
+      }
+
+      function exportCSV() {
+        const assigns = getAssignments();
+        if (assigns.length === 0) { showToast('कोई डेटा नहीं!'); return; }
+        const header = ['Date', 'Day', 'Shift', 'Location', 'Employee', 'Status', 'AI Score', 'Manual'];
+        const rows = assigns.map(a => [a.date, a.day, a.shiftLabel, a.location || '-', a.employeeName, a.status, a.aiScore, a.manualOverride]);
+        const csv = [header, ...rows].map(r => r.join(',')).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url; link.download = 'shift-schedule.csv'; link.click();
+        showToast('📥 CSV डाउनलोड हो रहा है...');
+      }
+
+      function exportPDF() { window.print(); }
+
+      function handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          try {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const firstSheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[firstSheetName];
+            const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+            if (json.length < 2) {
+              showToast('⚠️ फाइल खाली है!', 'error');
+              return;
+            }
+
+            const headers = json[0].map(h => String(h).toLowerCase().trim());
+            const nameIdx = headers.findIndex(h => h.includes('name') || h.includes('नाम'));
+            const pnoIdx = headers.findIndex(h => h.includes('pno') || h.includes('badge') || h.includes('id'));
+            const deptIdx = headers.findIndex(h => h.includes('dept') || h.includes('department') || h.includes('विभाग'));
+            const rankIdx = headers.findIndex(h => h.includes('rank') || h.includes('post') || h.includes('पद') || h.includes('designation'));
+
+            if (nameIdx === -1) {
+              showToast('⚠️ "Name" कॉलम नहीं मिला!', 'error');
+              return;
+            }
+
+            let added = 0;
+            const emps = getEmployees();
+
+            for (let i = 1; i < json.length; i++) {
+              const row = json[i];
+              if (!row[nameIdx]) continue;
+
+              const newEmp = {
+                id: 'EMP-' + Date.now() + Math.random().toString(36).substr(2, 5),
+                fullName: row[nameIdx],
+                employeeId: pnoIdx !== -1 && row[pnoIdx] ? row[pnoIdx] : `PNO-U${Math.floor(Math.random() * 1000)}`,
+                department: deptIdx !== -1 && row[deptIdx] ? row[deptIdx] : 'patrol',
+                rank: rankIdx !== -1 && row[rankIdx] ? row[rankIdx] : 'कांस्टेबल',
+                email: `officer${Math.floor(Math.random() * 10000)}@police.in`,
+                phone: '9999999999',
+                experience: 5,
+                days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
+                timeSlots: ['morning', 'afternoon', 'night'],
+                hoursPerWeek: 48,
+                preferredShift: 'any',
+                skills: ['first_aid'],
+                registeredAt: new Date().toISOString(),
+                assignedShifts: 0
+              };
+              emps.push(newEmp);
+              added++;
+            }
+
+            saveEmployees(emps);
+            renderAll();
+            showToast(`✅ ${added} पुलिस अधिकारी / कर्मचारी अपलोड किए गए!`);
+          } catch (err) {
+            console.error(err);
+            showToast('❌ फाइल रीड करने में त्रुटि!', 'error');
+          }
+          // Reset input
+          document.getElementById('fileUpload').value = '';
+        };
+        reader.readAsArrayBuffer(file);
+      }
+
+      const VIP_CONTACTS = [
+        { name: "श्री सूर्यपाल गंगवार", designation: "जिलाधिकारी (DM)", dept: "प्रशासन", district: "Lucknow", location: "Collectorate", phone: "+91-9454417555" },
+        { name: "डॉ. मनोज अग्रवाल", designation: "मुख्य चिकित्सा अधिकारी (CMO)", dept: "स्वास्थ्य विभाग", district: "Lucknow", location: "Civil Hospital", phone: "+91-9454455222" },
+        { name: "श्री भानु चंद्र गोस्वामी", designation: "जिलाधिकारी (DM)", dept: "प्रशासन", district: "Agra", location: "Collectorate", phone: "+91-9454417556" },
+        { name: "श्री प्रशांत कुमार", designation: "अपर पुलिस महानिदेशक", dept: "गृह विभाग", district: "Lucknow", location: "Police HQ", phone: "+91-9454400001" },
+        { name: "श्री सुहास एल. वाई.", designation: "जिलाधिकारी (DM)", dept: "प्रशासन", district: "Gautam Buddha Nagar", location: "Surajpur", phone: "+91-9454417560" },
+        { name: "श्री संजय प्रसाद", designation: "प्रमुख सचिव (गृह)", dept: "गृह विभाग", district: "Lucknow", location: "Secretariat", phone: "+91-9454400111" },
+        { name: "फायर ऑफिसर (CFO)", designation: "मुख्य अग्निशमन अधिकारी", dept: "फायर सर्विस", district: "Varanasi", location: "Fire Station", phone: "+91-9454402222" },
+        { name: "एस.डी.एम. (SDM)", designation: "उप जिलाधिकारी", dept: "राजस्व विभाग", district: "Kanpur Nagar", location: "Tehsil HQ", phone: "+91-9454403333" },
+        { name: "श्री नवनीत सहगल", designation: "अपर मुख्य सचिव", dept: "सूचना विभाग", district: "Lucknow", location: "Lok Bhawan", phone: "+91-9454404444" },
+        { name: "कंट्रोल रूम (Emergency)", designation: "प्रभारी अधिकारी", dept: "आपदा प्रबंधन", district: "Allahabad", location: "Sangam Marg", phone: "+91-9454405555" }
+      ];
+
+      function renderContacts() {
+        const wrap = document.getElementById('contactsTableWrap');
+        const filterVal = document.getElementById('filterContacts')?.value.toLowerCase() || '';
+
+        const filtered = VIP_CONTACTS.filter(c => {
+          if (!filterVal) return true;
+          return (c.name.toLowerCase().includes(filterVal) ||
+            c.district.toLowerCase().includes(filterVal) ||
+            c.dept.toLowerCase().includes(filterVal) ||
+            c.designation.toLowerCase().includes(filterVal) ||
+            c.location.toLowerCase().includes(filterVal));
+        });
+
+        if (filtered.length === 0) {
+          wrap.innerHTML = '<p style="color:var(--text-muted);font-size:14px;padding:20px">कोई संपर्क नहीं मिला।</p>';
+          return;
+        }
+
+        wrap.innerHTML = `<table>
         <thead><tr><th>नाम</th><th>पद (Designation)</th><th>विभाग</th><th>ज़िला (District)</th><th>स्थान</th><th>फ़ोन नंबर</th></tr></thead>
         <tbody>${filtered.map(c => `
           <tr>
@@ -527,21 +569,22 @@
           </tr>`).join('')}
         </tbody>
       </table>`;
-    }
+      }
 
-    function renderAll() {
-      updateNavCount();
-      renderStats();
-      renderAlerts();
-      renderEmployees();
-      renderAssignments();
-      renderContacts();
-    }
+      function renderAll() {
+        updateNavCount();
+        renderStats();
+        renderAlerts();
+        renderEmployees();
+        renderAssignments();
+        renderContacts();
+      }
 
-    renderAll();
+      renderAll();
 
-    function toggleMenu(){const h=document.getElementById('hamburger');const n=document.getElementById('mobileNav');h.classList.toggle('open');n.classList.toggle('open');}
-    function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('mobileNav').classList.remove('open');}
-  </script>
-</body>
-</html>
+      function toggleMenu() { const h = document.getElementById('hamburger'); const n = document.getElementById('mobileNav'); h.classList.toggle('open'); n.classList.toggle('open'); }
+      function closeMenu() { document.getElementById('hamburger').classList.remove('open'); document.getElementById('mobileNav').classList.remove('open'); }
+    </script>
+  </body>
+
+  </html>
