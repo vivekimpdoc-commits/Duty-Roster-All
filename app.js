@@ -64,7 +64,9 @@ function validateStep1() {
   const name = document.getElementById('fullName').value.trim();
   const email = document.getElementById('email').value.trim();
   const phone = document.getElementById('phone').value.trim();
-  const setErr = (id, msg) => { document.getElementById(id).textContent = msg; };
+  const dept = document.getElementById('department').value;
+  const pno = document.getElementById('employeeId').value.trim();
+  const setErr = (id, msg) => { const el = document.getElementById(id); if (el) el.textContent = msg; };
 
   if (!name || name.length < 2) { setErr('err-name', 'कृपया पूरा नाम दर्ज करें'); ok = false; }
   else setErr('err-name', '');
@@ -80,6 +82,16 @@ function validateStep1() {
   const phoneRx = /^[+]?[\d\s-]{10,13}$/;
   if (!phoneRx.test(phone)) { setErr('err-phone', 'वैध मोबाइल नंबर दर्ज करें'); ok = false; }
   else setErr('err-phone', '');
+
+  if (!dept) { setErr('err-dept', 'कृपया विभाग चुनें'); ok = false; }
+  else setErr('err-dept', '');
+
+  if (!pno || pno.length < 4) { setErr('err-pno', 'वैध PNO दर्ज करें'); ok = false; }
+  else {
+    const exists = getEmployees().some(e => e.employeeId && e.employeeId.toLowerCase() === pno.toLowerCase());
+    if (exists) { setErr('err-pno', '⚠️ यह PNO पहले से रजिस्टर्ड है!'); ok = false; }
+    else setErr('err-pno', '');
+  }
 
   return ok;
 }

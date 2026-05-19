@@ -36,14 +36,14 @@ window.AIScheduler = (function () {
 
   function scoreEmployee(emp, shift, day, currentLoad, lastShift) {
     let score = 0;
-    if (!emp.days.includes(day)) return -1;
-    if (!emp.timeSlots.includes(shift.id)) return -1;
+    if (!emp.days.includes(day)) score -= 20;
+    if (!emp.timeSlots.includes(shift.id)) score -= 20;
 
     // Shift Rotation Rules (cyclic transition & rest periods):
     const prev = lastShift[emp.id];
     if (prev) {
       // 1. Safety Rest Rule: Cannot work Morning shift right after Night shift! (sleep constraint)
-      if (prev === 'night' && shift.id === 'morning') return -1;
+      if (prev === 'night' && shift.id === 'morning') score -= 50;
       
       // 2. Continuous Shift Rotation: High penalty for working the same shift consecutively
       if (prev === shift.id) score -= 25;

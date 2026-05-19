@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+  <title>Police Roster Pro – Employee Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div class="bg-animated"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+
+  <nav class="navbar">
+    <div class="nav-brand"><span class="nav-logo">🚓</span><span class="nav-title">Police Roster <span class="accent">Pro</span></span></div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">रजिस्ट्रेशन</a>
+      <a href="login.html" class="nav-link active">लॉगिन</a>
+      <a href="admin.html" class="nav-link">Admin</a>
+      <a href="schedule.html" class="nav-link">शेड्यूल</a>
+    </div>
+    <div class="nav-badge"><span class="pulse-dot"></span><span id="nav-user-count">0 कर्मचारी</span></div>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html" class="nav-link" onclick="closeMenu()">📝 रजिस्ट्रेशन</a>
+    <a href="login.html" class="nav-link active" onclick="closeMenu()">🔑 लॉगिन</a>
+    <a href="admin.html" class="nav-link" onclick="closeMenu()">🛡️ Admin डैशबोर्ड</a>
+    <a href="schedule.html" class="nav-link" onclick="closeMenu()">📅 शेड्यूल</a>
+  </div>
+
+  <div id="loginSection" style="position:relative;z-index:2;min-height:80vh;display:flex;align-items:center;justify-content:center;">
+    <div class="glass-card" style="max-width:400px;width:90%;text-align:center;">
+      <div style="font-size:48px;margin-bottom:20px;">👮</div>
+      <h2 style="margin-bottom:8px;">Employee <span class="gradient-text">Login</span></h2>
+      <p style="color:var(--text-muted);font-size:14px;margin-bottom:24px;">अपनी ड्यूटी और शेड्यूल देखने के लिए लॉगिन करें</p>
+      
+      <div class="form-group" style="margin-bottom:24px;text-align:left;">
+        <label>PNO नंबर या ईमेल</label>
+        <div class="inp-wrap"><span class="inp-icon">🪪</span><input type="text" id="empId" placeholder="उदा: PNO-12345"/></div>
+      </div>
+      
+      <button class="btn-next" onclick="handleEmpLogin()" style="width:100%;margin-bottom:16px;">🔑 लॉगिन करें</button>
+      
+      <p style="color:var(--text-muted);font-size:13px;margin-top:20px;">
+        रजिस्टर नहीं किया? <a href="index.html" style="color:var(--primary);font-weight:600;">यहाँ रजिस्टर करें</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"><span id="toast-msg"></span></div>
+  <footer class="footer"><div class="container"><p>🚓 Police Roster Pro – Employee Portal</p></div></footer>
+
+  <script src="app.js"></script>
+  <script>
+    function handleEmpLogin() {
+      const pno = document.getElementById('empId').value.trim().toLowerCase();
+      if (!pno) {
+        return showToast('⚠️ PNO नंबर या ईमेल दर्ज करें!', 'warning');
+      }
+      
+      const emps = getEmployees();
+      const emp = emps.find(e => 
+        (e.employeeId && e.employeeId.toLowerCase() === pno) || 
+        (e.email && e.email.toLowerCase() === pno)
+      );
+      
+      if (emp) {
+        sessionStorage.setItem('isEmpLoggedIn', 'true');
+        sessionStorage.setItem('loggedInEmpId', emp.id);
+        showToast('✅ लॉगिन सफल!');
+        setTimeout(() => {
+          window.location.href = 'schedule.html';
+        }, 1000);
+      } else {
+        showToast('❌ कर्मचारी नहीं मिला! कृपया सही PNO दर्ज करें।', 'error');
+      }
+    }
+
+    function toggleMenu(){const h=document.getElementById('hamburger');const n=document.getElementById('mobileNav');h.classList.toggle('open');n.classList.toggle('open');}
+    function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('mobileNav').classList.remove('open');}
+    
+    window.addEventListener('DOMContentLoaded', () => {
+      updateNavCount();
+    });
+  </script>
+</body>
+</html>

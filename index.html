@@ -15,6 +15,7 @@
     <div class="nav-brand"><span class="nav-logo">🚓</span><span class="nav-title">Police Roster <span class="accent">Pro</span></span></div>
     <div class="nav-links">
       <a href="index.html" class="nav-link active">रजिस्ट्रेशन</a>
+      <a href="login.html" class="nav-link">लॉगिन</a>
       <a href="admin.html" class="nav-link">Admin</a>
       <a href="schedule.html" class="nav-link">शेड्यूल</a>
       <a href="#" class="nav-link" onclick="handleLogout()" style="color:var(--danger)">लॉगआउट</a>
@@ -26,6 +27,7 @@
   </nav>
   <div class="mobile-nav" id="mobileNav">
     <a href="index.html" class="nav-link active" onclick="closeMenu()">📝 रजिस्ट्रेशन</a>
+    <a href="login.html" class="nav-link" onclick="closeMenu()">🔑 लॉगिन</a>
     <a href="admin.html" class="nav-link" onclick="closeMenu()">🛡️ Admin डैशबोर्ड</a>
     <a href="schedule.html" class="nav-link" onclick="closeMenu()">📅 शेड्यूल</a>
   </div>
@@ -102,7 +104,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label>विभाग / विंग</label>
+                <label>विभाग / विंग <span class="req">*</span></label>
                 <div class="inp-wrap"><span class="inp-icon">🏢</span>
                   <select id="department" onchange="updateSubDepartments()">
                     <option value="">-- विंग चुनें --</option>
@@ -114,6 +116,7 @@
                     <option value="admin">प्रशासन / कंट्रोल रूम (Admin)</option>
                   </select>
                 </div>
+                <span class="err" id="err-dept"></span>
               </div>
               <div class="form-group">
                 <label>सब-विभाग / यूनिट</label>
@@ -136,8 +139,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label>बैज नं. / PNO</label>
-                <div class="inp-wrap"><span class="inp-icon">🪪</span><input type="text" id="employeeId" placeholder="PNO-12345"/></div>
+                <label>बैज नं. / PNO <span class="req">*</span></label>
+                <div class="inp-wrap"><span class="inp-icon">🪪</span><input type="text" id="employeeId" placeholder="PNO-12345" required/></div>
+                <span class="err" id="err-pno"></span>
               </div>
               <div class="form-group">
                 <label>अनुभव (वर्ष)</label>
